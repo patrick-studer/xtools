@@ -1,0 +1,10 @@
+OPTION psf_version = 2.1;
+
+BEGIN DRIVER <DRIVER_NAME>
+	OPTION supported_peripherals = (<IP_NAME>);
+    OPTION driver_state          = ACTIVE;
+	OPTION copyfiles             = all;
+	OPTION VERSION               = <DRIVER_VERSION>;
+	OPTION NAME                  = <DRIVER_NAME>;
+    OPTION DESC                  = <DRIVER_DESCRIPTION>;
+END DRIVER

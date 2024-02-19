@@ -1,0 +1,8 @@
+<: #Component and file information :>
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName "${ComponentName}_utils" :>
+<: setFileExtension ".tcl" :>
+
+<: set currentNamespace [namespace current] :>
+<: print "puts DEBUG: _utils.tcl sourced now into namespace ${currentNamespace}" :>

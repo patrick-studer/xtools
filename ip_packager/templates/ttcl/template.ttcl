@@ -1,0 +1,72 @@
+<: #Component and file information :>
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName "exdes" :>
+<: setFileExtension ".tcl" :>
+
+#setFileArchiveFile
+#setFileDescription
+#setFileEncryptAlgorithm
+#setFileEncryptForVendors
+#setFileExportedName
+#setFileExtension
+#setFileIsInclude
+#setFileLogicalName
+#setFileName
+#setFilePath
+#setFileProcessingOrder
+#setFileScopedToCells
+#setFileScopedToRef
+#setFileType
+#setFileUsedIn
+#setFileUsedInConstant
+#setOutputDirectory
+#setFileNetlistSimulation
+
+#getStringValue
+#getProjectDevice
+#getFileIsInclude
+#getFileType
+#getFileEncryptAlgorithm
+#getFamily
+#getIntValue
+#getFileProcessingOrder
+#getFileArchiveFile
+#getFileEncryptForVendors
+#getFileLogicalName
+#getFileNetlistSimulation
+#getProjectFlowVendor
+#getXCoreInfo
+#getFilePath
+#getFileName
+#getFileExtension
+#getSimCoreName
+#getFileHandle
+#getSystemProperty
+#getFileUsedIn
+#getProjectFamily
+#getBooleanValue
+#getComponentNameString
+#getProjectSpeedGrade
+#getProjectPackage
+#getOutputDirectory
+#getFileDescription
+#getFileExportedName
+#getFileScopedToRef
+#getElaborationDirectory
+#getCoreGenerationInfo
+#getLicenseKeys
+#getFileScopedToCells
+#getFileUsedInConstant
+#getCheckLicenseType
+#getCoreName
+
+#isPlatformWindows
+#coreIsLicensed
+#isPlatformUnix
+#isDefined
+#isVHDLOutputRequired
+#isVerilogOutputRequired
+
+<: set wd [ file dirname [ get_property xml_file_name [ current_ipbom ] ] ] :>
+
