@@ -3,7 +3,7 @@
 ###################################################################################################
 
 set currentNamespace [namespace current]
-puts "DEBUG: bd.tcl sourced now into namespace ${currentNamespace}" 
+puts "DEBUG: bd.tcl sourced now into namespace ${currentNamespace}"
 
 ###################################################################################################
 # Init (create_bd_cell)
@@ -40,14 +40,14 @@ proc post_propagate {cellpath otherInfo} {
     
     set cell_handle [get_bd_cells $cellpath]
     ##set intf_handle [get_bd_intf_pins $cellpath/aclk]
-   
-    ## Assign AXI clock frequency to parameter 
+    
+    ## Assign AXI clock frequency to parameter
     set clk_pin_handle [get_bd_pins $cellpath/Clk]
     set freq [get_property CONFIG.FREQ_HZ $clk_pin_handle]
     if { $freq == "" } {
       set_property MSG.ERROR "Clk CLOCK Frequency is not propagated from Clock Interface" $cell_handle
     } else {
-      set freq_Hz [expr int($freq)] 
+      set freq_Hz [expr int($freq)]
       set_property CONFIG.Clk_FreqHz_g $freq_Hz $cell_handle
     }
 }
