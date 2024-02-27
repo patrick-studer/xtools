@@ -42,7 +42,7 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -taxonomy       "/XTools/IP_Packager_Testbench"
                                         
 ###################################################################################################
-# Compartibility
+# Compatibility
 ###################################################################################################
 
 # ip_packager::set_supported_families      {artix7 Production zynq Beta}

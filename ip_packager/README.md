@@ -34,7 +34,7 @@ The only required change, to be ready for the TCL Store, is renaming the package
 
 This would distribute the IP-Packager directly within Vivado and allow to access in with only minor steps (after installing the application).
 
-## Compartibility
+## Compatibility
 The basis implementation was made with **Vivado 2020.1**. It is required to use a Vivado version equal or higher than 2020.1.
 
 ## Installation

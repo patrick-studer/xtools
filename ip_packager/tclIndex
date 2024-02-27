@@ -6,9 +6,9 @@
 # element name is the name of a command and the value is
 # a script that loads the command.
 
-set auto_index(::xtools::ip_packager::set_supported_families) [list source [file join $dir compartibility.tcl]]
-set auto_index(::xtools::ip_packager::set_auto_family_support) [list source [file join $dir compartibility.tcl]]
-set auto_index(::xtools::ip_packager::set_unsupported_simulators) [list source [file join $dir compartibility.tcl]]
+set auto_index(::xtools::ip_packager::set_supported_families) [list source [file join $dir compatibility.tcl]]
+set auto_index(::xtools::ip_packager::set_auto_family_support) [list source [file join $dir compatibility.tcl]]
+set auto_index(::xtools::ip_packager::set_unsupported_simulators) [list source [file join $dir compatibility.tcl]]
 set auto_index(::xtools::ip_packager::add_design_sources) [list source [file join $dir files.tcl]]
 set auto_index(::xtools::ip_packager::add_design_simulation) [list source [file join $dir files.tcl]]
 set auto_index(::xtools::ip_packager::add_design_constraints) [list source [file join $dir files.tcl]]
