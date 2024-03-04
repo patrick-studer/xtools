@@ -3,7 +3,7 @@
 This document shows what PsiIpPackage functions are related to which ip_packager functions.
 
 
-Also check [Migration Guide](./doc/PsiIpPackage_MigrationsGuide.md) for 1:1 mapping of PsiIpPackage functions to ip_packager functions.
+Also check [Migration Guide](./PsiIpPackage_MigrationGuide.md) for 1:1 mapping of PsiIpPackage functions to ip_packager functions.
 
 ## Project Control
 

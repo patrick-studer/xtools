@@ -4,7 +4,7 @@ This document shows for every PsiIpPackage function how it may be translated int
 
 **Note:** The ip_packager arguments/options are not position-sensitive. You may alternate the order and also combine/split single commands which are applied on the same target.
 
-Check first [Relations Overview](./doc/PsiIpPackage_RelationsOverview.md) to get an overview of related functions from PsiIpPackage and ip_packager.
+Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an overview of related functions from PsiIpPackage and ip_packager.
 
 ## Project Control
 

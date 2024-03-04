@@ -65,7 +65,7 @@ This section will follow soon and highlight some important aspects when packagin
 
 ### Migration from PsiIpPackage
 - [Relations Overview](./doc/PsiIpPackage_RelationsOverview.md)
-- [Migration Guide](./doc/PsiIpPackage_MigrationsGuide.md)
+- [Migration Guide](./doc/PsiIpPackage_MigrationGuide.md)
 
 ## Documentation (doc)
 The documentation of procedures is embedded in the source code and can be directly accessed through Vivado's help system.
