@@ -2,8 +2,15 @@
 
 This document shows what PsiIpPackage functions are related to which ip_packager functions.
 
-
 Also check [Migration Guide](./PsiIpPackage_MigrationGuide.md) for 1:1 mapping of PsiIpPackage functions to ip_packager functions.
+
+### Argument Notation
+- `<arg>`: Required argument
+- `[<arg>=<default>]`: Optional argument with default value
+- `-<option> <arg>`: Required option-flag and parameter pair
+- `[-<option> <arg>]`: Optional option-flag and parameter pair
+
+**Note:** option-flag and parameter must always occur in pairs. Their position in the function call is variable, since all options are parsed. Only provided options have impact and are applied, others are ignored or a default value is assumed.
 
 ## Project Control
 

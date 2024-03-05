@@ -10,14 +10,14 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 
 * `remove_autodetected_interface "ALL"`
   * Automatically applied.
-* `set_target_language <lang>`
+* `set_target_language LANGUAGE`
   * Not supported.
-* `set_top_entity top_file`
+* `set_top_entity TOP_FILE`
 * `package_ip ROOT_DIR EDIT SYNTH PART`
   * `create_package_project -top_file TOP_FILE -root_dir ROOT_DIR -part PART`
-  * if synth == true:
+  * if SYNTH == true:
     * `synth_package_project`
-  * if edit == false:
+  * if EDIT == false:
     * `save_package_project`
     * `close_package_project`
     
@@ -25,7 +25,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 
   * `simulate_package_project`
   * `impl_package_project`
-
+  
 ## Identification
 
 ### PsiIpPackage
@@ -37,7 +37,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 * `set_vendor_url COMPANY_URL`
 * `set_taxonomy TAXONOMY`
   * `set_identification -vendor VENDOR -library LIBRARY -name [string map {\  _} DISPLAY_NAME] -version VERSION -core_revision CORE_REVISION -display_name DISPLAY_NAME -description DESCRIPTION -display_vendor DISPLAY_VENDOR -company_url COMPANY_URL -taxonomy TAXONOMY`
-
+  
 ## Compatibility
 
 ### New ip_packager features
@@ -45,7 +45,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `set_auto_family_support`
   * `set_supported_families`
   * `set_unsupported_simulators`
-
+  
 ## File Groups
 
 * `set_constrs_settings NAMES USED_IN PROCESSING_ORDER SCOPED_TO_CELLS`
@@ -56,7 +56,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
     * `add_design_constraints -files FILES -used_in USED_IN -processing_order PROCESSING_ORDER -scoped_to_cells SCOPED_TO_CELLS`
   * if FILESET == "sim_1":
     * `add_design_simulation -files FILES -library LIBRARY -file_type FILE_TYPE`
-
+    
 * `add_lib_relative PATH FILES LIBRARY FILE_TYPE FILESET`
   * if FILESET == "sources_1":
     * `add_design_sources -files PATH/FILES -library LIBRARY -file_type FILE_TYPE`
@@ -65,7 +65,12 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * if FILESET == "sim_1":
     * `add_design_simulation -files PATH/FILES -library LIBRARY -file_type FILE_TYPE`
 * `add_lib_copied COPY_TO PATH FILES LIBRARY FILE_TYPE FILESET`
-  * `add_design_sources -files PATH/FILES -copy_to COPY_TO -library LIBRARY -file_type FILE_TYPE`
+  * if FILESET == "sources_1":
+    * `add_design_sources -files PATH/FILES -copy_to COPY_TO -library LIBRARY -file_type FILE_TYPE`
+  * if FILESET == "constrs_1":
+    * `add_design_constraints -files PATH/FILES -copy_to COPY_TO -used_in USED_IN -processing_order PROCESSING_ORDER -scoped_to_cells SCOPED_TO_CELLS`
+  * if FILESET == "sim_1":
+    * `add_design_simulation -files PATH/FILES -copy_to COPY_TO -library LIBRARY -file_type FILE_TYPE`
 * `add_sub_core_reference VLNV`
   * `add_design_subcores -vlnv VLNV`
 * `set_logo_relative LOGO`
@@ -81,7 +86,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `add_software_driver -driver_dir DRIVER_DIR -parameters PARAMETERS` (**Note:** FILES must not be defined anymore. All sources in src folder are added automatically.)
 * `remove_file_from_ip FILE`
   * Not supported.
-
+  
 ### New ip_packager features
 
   * `add_exdes_sources`
@@ -94,7 +99,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `add_readme`
   * `add_bd_tcl`
   * `add_upgrade_tcl`
-
+  
 ## Customization Paramenters
 
 * `gui_create_user_parameter PARAM_NAME FORMAT VALUE DISPLAY_NAME`
@@ -114,7 +119,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `set_param_config -param_name PARAM_NAME -value_tcl_expr VALUE_TCL_EXPR`
 * `gui_parameter_set_enablement ENABLEMENT_TCL_EXPR VALUE`
   * `set_param_config -param_name PARAM_NAME -value VALUE -enablement_tcl_expr ENABLEMENT_TCL_EXPR`
-
+  
 ## Ports and Interfaces
 
 ### PsiIpPackage
@@ -139,7 +144,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `set_interface_enablement -interface_name INTERFACE_NAME -dependency DEPENDENCY`
 * `add_port_enablement_condition PORT_NAME DEPENDENCY`
   * `set_port_enablement -port_name PORT_NAME -dependency DEPENDENCY -driver_value DRIVER_VALUE` (**Note:** DRIVER_VALUE defines the default driver value of an optional port and must be defined.)
-
+  
 ### New ip_packager features
 
   * `auto_infer_interface`
@@ -148,7 +153,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
   * `add_clockenable_interface`
   * `add_data_interface`
   * `associate_clock_reset`
-
+  
 ## Adressing and Memory
 
 No functions available.
@@ -169,7 +174,8 @@ No functions available.
   * Not supported. Use -tooltip option of `gui_add_page`, `gui_add_group`, `gui_add_param`, and `gui_add_text`.
 * `gui_parameter_text_below TEXT`
   * `gui_add_text -text_name TEXT_NAME -text TEXT`
-
+  
 ### ip_packager
 
   * `gui_set_parent`
+  
