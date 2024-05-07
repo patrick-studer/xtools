@@ -148,6 +148,9 @@ proc ::xtools::ip_packager::_impl_checks {} {
     report_timing_summary -file "${rpt_dir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
     report_drc            -file "${rpt_dir}/[current_run -implementation]_drc.rpt"
     report_methodology    -file "${rpt_dir}/[current_run -implementation]_methodology.rpt"
+
+    # Close the implemented design
+    close_design
 }
 
 proc ::xtools::ip_packager::_find_unique_bus_abstraction {vlnv} {
@@ -210,6 +213,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Argument Usage:
     # -top_file <arg>:                      Top-level HDL file for packaging
+    # [-copy_to <arg>]:                     Path to folder, where to copy/import the added Top-level HDL file
     # [-root_dir <arg> = ./..]:             IP output root directory
     # [-prj_name  <arg> = package_prj]:     Temporary package project name
     # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project
@@ -231,6 +235,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -top_file   {incr i; set top_file [lindex $args $i]}
+            -copy_to    {incr i; set copy_to  [lindex $args $i]}
             -root_dir   {incr i; set root_dir [lindex $args $i]}
             -prj_name   {incr i; set prj_name [lindex $args $i]}
             -part       {incr i; set part     [lindex $args $i]}
@@ -249,12 +254,15 @@ proc ::xtools::ip_packager::create_package_project {args} {
     _overwritte_msg_config
 
     # Update global RootDir variable
-    if {[info exists root_dir]} {set RootDir [file normalize $root_dir]}
+    if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to_pwd $root_dir]]}
 
     # Create package project
     create_project -part $part -force -quiet $prj_name $prj_name
-    set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $RootDir]] [path_relative_to_pwd $top_file]]
-
+    if {[info exists copy_to]} {
+        set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $top_file]]
+    } else {
+        set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $top_file]]
+    }
     # Create reports directory
     set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
     file delete -force $rpt_dir
