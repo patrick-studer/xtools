@@ -49,6 +49,7 @@ proc ::xtools::ip_packager::_overwritte_msg_config {} {
     set_msg_config   -id  {[Vivado 12-180]}     -new_severity "ERROR"
     set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
     set_msg_config   -id  {[Vivado 12-3631]}    -new_severity "INFO"
+    set_msg_config   -id  {[Vivado 12-1348]}    -new_severity "INFO"
     set_msg_config   -id  {[Ipptcl 7-1550]}     -new_severity "INFO"
     set_msg_config   -id  {[IP_Flow 19-234]}    -suppress
     set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
