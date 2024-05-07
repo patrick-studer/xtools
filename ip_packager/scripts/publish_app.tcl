@@ -11,7 +11,7 @@ cd [file join $file_dir ..]
 
 lint_files [glob ip_packager.tcl]
 lint_files [glob addressing.tcl]
-lint_files [glob compartibility.tcl]
+lint_files [glob compatibility.tcl]
 lint_files [glob files.tcl]
 lint_files [glob gui.tcl]
 lint_files [glob identification.tcl]
