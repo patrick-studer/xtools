@@ -83,6 +83,10 @@ proc ::xtools::ip_packager::_synth_checks {} {
         puts "INFO: \[_synth_checks\] No latches found."
     }
 
+    # Export reports
+    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
+    report_utilization    -file "${rpt_dir}/[current_run -synthesis]_utilization.rpt" -hierarchical
+
     # Close the synthesized design
     close_design
 }
@@ -96,25 +100,26 @@ proc ::xtools::ip_packager::_impl_checks {} {
 
     # Categories: xilinxtclstore, ip_packager
 
-    # Check implementation result
-    set implRun [current_run -implementation]
+    # Open the synthesized design
+    open_run [current_run -implementation]
 
-    set implStatus      [get_property STATUS            [get_runs $implRun]]
-    set implProgress    [get_property PROGRESS          [get_runs $implRun]]
-    set implStep        [get_property CURRENT_STEP      [get_runs $implRun]]
-    set implTime        [get_property STATS.ELAPSED     [get_runs $implRun]]
-    set implWns         [get_property STATS.WNS         [get_runs $implRun]]
-    set implWhs         [get_property STATS.WHS         [get_runs $implRun]]
-    set implFailedNets  [get_property STATS.FAILED_NETS [get_runs $implRun]]
-    
+    # Check implementation result
+    set implStatus      [get_property STATUS            [current_run -implementation]]
+    set implProgress    [get_property PROGRESS          [current_run -implementation]]
+    set implStep        [get_property CURRENT_STEP      [current_run -implementation]]
+    set implTime        [get_property STATS.ELAPSED     [current_run -implementation]]
+    set implWns         [get_property STATS.WNS         [current_run -implementation]]
+    set implWhs         [get_property STATS.WHS         [current_run -implementation]]
+    set implFailedNets  [get_property STATS.FAILED_NETS [current_run -implementation]]
+
     if {$implProgress != "100%"} {
         if {[string match "Running*..." $implStatus]} {
-            error "ERROR: \[_impl_checks\] Timeout in ${implRun} (current step = ${implStep}, elapsed time = ${implTime}). Check if applied timeout is still enough."
+            error "ERROR: \[_impl_checks\] Timeout in [current_run -implementation] (current step = ${implStep}, elapsed time = ${implTime}). Check if applied timeout is still enough."
         } else {
-            error "ERROR: \[_impl_checks\] Failed in ${implRun} with status \"${implStatus}\" (current step = ${implStep}, elapsed time = ${implTime}). Please check the logfile for further information."
+            error "ERROR: \[_impl_checks\] Failed in [current_run -implementation] with status \"${implStatus}\" (current step = ${implStep}, elapsed time = ${implTime}). Please check the logfile for further information."
         }
     } else {
-        puts "INFO: \[_impl_checks\] Finished ${implRun} sucessfully (elapsed time = ${implTime})."
+        puts "INFO: \[_impl_checks\] Finished [current_run -implementation] sucessfully (elapsed time = ${implTime})."
     }
 
     # Check setup timing
@@ -137,6 +142,12 @@ proc ::xtools::ip_packager::_impl_checks {} {
     } else {
         puts "INFO: \[_impl_checks\] All nets are routed."
     }
+
+    # Export reports
+    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
+    report_timing_summary -file "${rpt_dir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
+    report_drc            -file "${rpt_dir}/[current_run -implementation]_drc.rpt"
+    report_methodology    -file "${rpt_dir}/[current_run -implementation]_methodology.rpt"
 }
 
 proc ::xtools::ip_packager::_find_unique_bus_abstraction {vlnv} {
@@ -243,6 +254,11 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Create package project
     create_project -part $part -force -quiet $prj_name $prj_name
     set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $RootDir]] [path_relative_to_pwd $top_file]]
+
+    # Create reports directory
+    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
+    file delete -force $rpt_dir
+    file mkdir $rpt_dir
 
     # Create new IPI component
     ipx::package_project -root_dir [file normalize $RootDir] -quiet
