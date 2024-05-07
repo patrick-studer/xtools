@@ -17,7 +17,7 @@ namespace eval ::xtools::ip_packager {
 
 proc ::xtools::ip_packager::set_identification {args} {
     # Summary: Set packaged IP-core identification values.
-    
+
     # Argument Usage:
     # [-vendor <arg>]:                  Vendor sting of VLNV identifier (no white-spaces allowed)
     # [-library <arg>]:                 Library sting of VLNV identifier (no white-spaces allowed)
@@ -29,14 +29,14 @@ proc ::xtools::ip_packager::set_identification {args} {
     # [-display_vendor <arg>]:          Displayed vendor sting.
     # [-company_url <arg>]:             Company homepage URL.
     # [-taxonomy <arg>]:                Taxonomy sting. Separate subgroups with "/" and underscores are represented as white-spaces (e.g. "/MY_CORES/Ip_Packager").
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Default values
     set core_revision [clock seconds]
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -65,7 +65,7 @@ proc ::xtools::ip_packager::set_identification {args} {
     if {[info exists display_vendor]} {set_property vendor_display_name $display_vendor [ipx::current_core]}
     if {[info exists company_url   ]} {set_property company_url         $company_url    [ipx::current_core]}
     if {[info exists taxonomy      ]} {set_property taxonomy            $taxonomy       [ipx::current_core]}
-    
+
 }
 
 ###################################################################################################

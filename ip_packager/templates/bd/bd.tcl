@@ -38,12 +38,12 @@ proc demo {cellpath otherInfo} {
     # Define handles
     set CellHandle      [get_bd_cells $cellpath]
     set PinHandle       [get_bd_pins "${cellpath}/Clk"]
-    
+
     # Load IP parameters
     set AnyParameter_p  [get_property CONFIG.AnyParameter_p $Cell_Handle]
     set AnyGeneric_g    [get_property CONFIG.AnyGeneric_g $Cell_Handle]
 
     # Get interface parameters
     set Pin_FreqHz      [get_property CONFIG.FREQ_HZ $PinHandle]
-    set Pin_ClkDomain   [get_property CONFIG.CLK_DOMAIN $PinHandle] 
+    set Pin_ClkDomain   [get_property CONFIG.CLK_DOMAIN $PinHandle]
 }

@@ -101,7 +101,7 @@ The IP-Packager provides some useful templates for basic and advanced usage:
   - Allows automatic parameter propagation from block design (BD) parameters into the IP configuration and finally to HDL parameters (generics).
 - [TTCL](./templates/ttcl/template.ttcl)
   - Creating files (HDL, XDC, ...) on-the-fly with generic, design dependent content.
-  
+
 ## Snippets
 Snippets are used by the IP-Packager itself to create specific files efficiently. They include tags, which are automatically replaced by package project specific content.
 

@@ -21,7 +21,7 @@ namespace eval ::xtools::ip_packager {
 
 proc ::xtools::ip_packager::create_user_param {args} {
     # Summary: Create new parameter which is not already in the MODELPARAM space (generics).
-    
+
     # Argument Usage:
     # -param_name <arg>:            Parameter name (e.g. User_p)
     # [-format <arg> = string]:     Parameter format (bitString, bool, float, long and string)
@@ -32,15 +32,15 @@ proc ::xtools::ip_packager::create_user_param {args} {
     # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"])
     # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...])
     # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2)
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Default values
     set value_resolve_type "user"
     set format "string"
-    
+
     # Parse optional arguments
     set configArgs [list]
     set num [llength $args]
@@ -60,15 +60,15 @@ proc ::xtools::ip_packager::create_user_param {args} {
 
     # Ensure value_bit_string_length is defined for bitString parameters
     if {$format == "bitString" && ![info exists bit_string_length]} {error "ERROR: \[create_user_param\] Invalid configuration, -format = bitString requires -bit_string_length > 0."}
-    
+
     # Add user parameter to IPI
     set addedParam [ipx::add_user_parameter $param_name [ipx::current_core]]
-    
+
     # Call individual helper funcitons
     if {[info exists value_resolve_type]} {set_property value_resolve_type      $value_resolve_type  $addedParam}
     if {[info exists format            ]} {set_property value_format            $format              $addedParam}
     if {[info exists bit_string_length ]} {set_property value_bit_string_length $bit_string_length   $addedParam}
-    
+
     if {[llength configArgs] != 0} {
         set_param_config -param_name $param_name {*}$configArgs
     }
@@ -76,7 +76,7 @@ proc ::xtools::ip_packager::create_user_param {args} {
 
 proc ::xtools::ip_packager::set_param_config {args} {
     # Summary: Configure existing MODELPARAM (generic) or added user parameter.
-    
+
     # Argument Usage:
     # -param_name <arg>:            Parameter name (e.g. User_p)
     # [-value <arg>]:               Optional parameter default value. Only use -value and -value_tcl_expr exclusively.
@@ -85,11 +85,11 @@ proc ::xtools::ip_packager::set_param_config {args} {
     # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"])
     # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...])
     # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2)
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -115,16 +115,16 @@ proc ::xtools::ip_packager::set_param_config {args} {
 
 proc ::xtools::ip_packager::set_param_validation {args} {
     # Summary: Set value validation condition for existing MODELPARAM (generic) or added user parameter.
-    
+
     # Argument Usage:
     # -param_name <arg>:    Parameter name (e.g. User_p)
     # -type <arg>:          Validation type (e.g. range, list or pairs)
     # -value <arg>:         Validation value dependend on -type argument
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -139,7 +139,7 @@ proc ::xtools::ip_packager::set_param_validation {args} {
     set hdlParam    [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam   [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
     set valueFormat [get_property value_format $userParam]
-    
+
     # Set validation type and related values
     foreach param [concat $hdlParam $userParam] {
         switch -glob -- "${type}-${valueFormat}" {
@@ -170,15 +170,15 @@ proc ::xtools::ip_packager::set_param_validation {args} {
 
 proc ::xtools::ip_packager::set_param_enablement {args} {
     # Summary: Set parameter enablement expression for existing MODELPARAM (generic) or added user parameter.
-    
+
     # Argument Usage:
     # -param_name <arg>:    Parameter name (e.g. User_p)
     # -tcl_expr <arg>:      Parameter enablement expression (e.g. "\$i > 2)
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -198,16 +198,16 @@ proc ::xtools::ip_packager::set_param_enablement {args} {
 
 proc ::xtools::ip_packager::set_param_value {args} {
     # Summary: Set parameter value expression for existing MODELPARAM (generic) or added user parameter.
-    
+
     # Argument Usage:
     # -param_name <arg>:    Parameter name (e.g. User_p)
     # [-value <arg>]:       Parameter default value. Only use -value and -tcl_expr exclusively.
     # [-tcl_expr <arg>]:    Parameter value expression (e.g. "\$User_p * 2). Only use -value and -tcl_expr exclusively.
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {

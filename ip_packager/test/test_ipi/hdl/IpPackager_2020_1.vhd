@@ -8,7 +8,7 @@
 library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all;
-    
+
 library work;
 
 ---------------------------------------------------------------------------------------------------
@@ -32,24 +32,24 @@ entity IpPackager_2020_1 is
         -------------------------------------------------------------------------------------------
         Clk             : in  std_logic;
         Rst             : in  std_logic;
-        
+
         Axi_Clk         : in  std_logic;
         Axi_ResetN      : in  std_logic;
-        
+
         Axis_Clk        : in  std_logic;
         Axis_ResetN     : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- Interrupt [Clk]
         -------------------------------------------------------------------------------------------
         Interrupt       : out std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- UART [Clk]
         -------------------------------------------------------------------------------------------
         Uart_Tx         : out std_logic;
         Uart_Rx         : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Master Interface [Axi_Clk]
         -------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ entity IpPackager_2020_1 is
         M_Axi_RLast     : in  std_logic;
         M_Axi_RValid    : in  std_logic;
         M_Axi_RReady    : out std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Slave Interface [Axi_Clk]
         -------------------------------------------------------------------------------------------
@@ -103,19 +103,19 @@ entity IpPackager_2020_1 is
         S_Axi_AwProt    : in  std_logic_vector(2 downto 0);
         S_Axi_AwValid   : in  std_logic;
         S_Axi_AwReady   : out std_logic;
-        
+
         -- AXI Write Data Channel
         S_Axi_WData     : in  std_logic_vector(S_Axi_DataWidth_g-1 downto 0);
         S_Axi_WStrb     : in  std_logic_vector(S_Axi_DataWidth_g/8-1 downto 0);
         S_Axi_WLast     : in  std_logic;
         S_Axi_WValid    : in  std_logic;
         S_Axi_WReady    : out std_logic;
-        
+
         -- AXI Write Response Channel
         S_Axi_BResp     : out std_logic_vector(1 downto 0);
         S_Axi_BValid    : out std_logic;
         S_Axi_BReady    : in  std_logic;
-        
+
         -- AXI Read Address Channel
         S_Axi_ArAddr    : in  std_logic_vector(S_Axi_AddrWidth_g-1 downto 0);
         S_Axi_ArLen     : in  std_logic_vector(7 downto 0);
@@ -126,14 +126,14 @@ entity IpPackager_2020_1 is
         S_Axi_ArProt    : in  std_logic_vector(2 downto 0);
         S_Axi_ArValid   : in  std_logic;
         S_Axi_ArReady   : out std_logic;
-        
+
         -- AXI Read Data Channel
         S_Axi_RData     : out std_logic_vector(S_Axi_DataWidth_g-1 downto 0);
         S_Axi_RResp     : out std_logic_vector(1 downto 0);
         S_Axi_RLast     : out std_logic;
         S_Axi_RValid    : out std_logic;
         S_Axi_RReady    : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Stream Master Interface [Axis_Clk]
         -------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ entity IpPackager_2020_1 is
         M_Axis_TLast    : out std_logic;
         M_Axis_TValid   : out std_logic;
         M_Axis_TReady   : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Stream Slave Interface [Axis_Clk]
         -------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ begin
 
         -- Misc [Clk]
         Interrupt       <= '0';
-        
+
         -- AXI Master Interface [Axi_Clk]
         M_Axi_AwAddr    <= S_Axi_AwAddr;
         M_Axi_AwLen     <= S_Axi_AwLen;
@@ -191,7 +191,7 @@ begin
         M_Axi_ArProt    <= S_Axi_ArProt;
         M_Axi_ArValid   <= S_Axi_ArValid;
         M_Axi_RReady    <= S_Axi_RReady;
-        
+
         -- AXI Slave Interface [Axi_Clk]
         S_Axi_AwReady   <= M_Axi_AwReady;
         S_Axi_WReady    <= M_Axi_WReady;
@@ -202,7 +202,7 @@ begin
         S_Axi_RResp     <= M_Axi_RResp;
         S_Axi_RLast     <= M_Axi_RLast;
         S_Axi_RValid    <= M_Axi_RValid;
-        
+
         -- AXI Stream Master Interface [Axis_Clk]
         M_Axis_TData    <= S_Axis_TData;
         M_Axis_TStrb    <= S_Axis_TStrb;
@@ -210,10 +210,10 @@ begin
         M_Axis_TUser    <= S_Axis_TUser;
         M_Axis_TLast    <= S_Axis_TLast;
         M_Axis_TValid   <= S_Axis_TValid;
-        
+
         -- AXI Stream Slave Interface [Axis_Clk]
         S_Axis_TReady   <= M_Axis_TReady;
-        
+
         i_sub : entity work.IpPackager_2020_1_sub
         port map(
             Clk         => Clk,
@@ -221,7 +221,7 @@ begin
             Uart_Tx     => Uart_Tx,
             Uart_Rx     => Uart_Rx
         );
-        
+
 end architecture rtl;
 
 ---------------------------------------------------------------------------------------------------

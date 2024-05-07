@@ -8,7 +8,7 @@
 library ieee;
     use ieee.std_logic_1164.all;
     use ieee.numeric_std.all;
-    
+
 library work;
 
 ---------------------------------------------------------------------------------------------------
@@ -32,24 +32,24 @@ entity IpPackager_2020_1_ipi is
         -------------------------------------------------------------------------------------------
         Clk             : in  std_logic;
         Rst             : in  std_logic;
-        
+
         Axi_Clk         : in  std_logic;
         Axi_ResetN      : in  std_logic;
-        
+
         Axis_Clk        : in  std_logic;
         Axis_ResetN     : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- Interrupt [Clk]
         -------------------------------------------------------------------------------------------
         Interrupt       : out std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- UART [Clk]
         -------------------------------------------------------------------------------------------
         Uart_Tx         : out std_logic;
         Uart_Rx         : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Master Interface [Axi_Clk]
         -------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ entity IpPackager_2020_1_ipi is
         M_Axi_RLast     : in  std_logic;
         M_Axi_RValid    : in  std_logic;
         M_Axi_RReady    : out std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Slave Interface [Axi_Clk]
         -------------------------------------------------------------------------------------------
@@ -103,19 +103,19 @@ entity IpPackager_2020_1_ipi is
         S_Axi_AwProt    : in  std_logic_vector(2 downto 0);
         S_Axi_AwValid   : in  std_logic;
         S_Axi_AwReady   : out std_logic;
-        
+
         -- AXI Write Data Channel
         S_Axi_WData     : in  std_logic_vector(S_Axi_DataWidth_g-1 downto 0);
         S_Axi_WStrb     : in  std_logic_vector(S_Axi_DataWidth_g/8-1 downto 0);
         S_Axi_WLast     : in  std_logic;
         S_Axi_WValid    : in  std_logic;
         S_Axi_WReady    : out std_logic;
-        
+
         -- AXI Write Response Channel
         S_Axi_BResp     : out std_logic_vector(1 downto 0);
         S_Axi_BValid    : out std_logic;
         S_Axi_BReady    : in  std_logic;
-        
+
         -- AXI Read Address Channel
         S_Axi_ArAddr    : in  std_logic_vector(S_Axi_AddrWidth_g-1 downto 0);
         S_Axi_ArLen     : in  std_logic_vector(7 downto 0);
@@ -126,14 +126,14 @@ entity IpPackager_2020_1_ipi is
         S_Axi_ArProt    : in  std_logic_vector(2 downto 0);
         S_Axi_ArValid   : in  std_logic ;
         S_Axi_ArReady   : out std_logic;
-        
+
         -- AXI Read Data Channel
         S_Axi_RData     : out std_logic_vector(S_Axi_DataWidth_g-1 downto 0);
         S_Axi_RResp     : out std_logic_vector(1 downto 0);
         S_Axi_RLast     : out std_logic;
         S_Axi_RValid    : out std_logic;
         S_Axi_RReady    : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Stream Master Interface [Axis_Clk]
         -------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ entity IpPackager_2020_1_ipi is
         M_Axis_TLast    : out std_logic;
         M_Axis_TValid   : out std_logic;
         M_Axis_TReady   : in  std_logic;
-        
+
         -------------------------------------------------------------------------------------------
         -- AXI Stream Slave Interface [Axis_Clk]
         -------------------------------------------------------------------------------------------
@@ -281,7 +281,7 @@ begin
         S_Axis_TValid   => S_Axis_TValid,
         S_Axis_TReady   => S_Axis_TReady
     );
-    
+
 end architecture struct;
 
 ---------------------------------------------------------------------------------------------------

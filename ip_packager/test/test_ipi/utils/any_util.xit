@@ -1,2 +1,2 @@
 set currentNamespace [namespace current]
-puts "any_util.xit sourced now - here (namespace = $currentNamespace)" 
+puts "any_util.xit sourced now - here (namespace = $currentNamespace)"

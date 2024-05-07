@@ -22,7 +22,7 @@ namespace eval ::xtools::ip_packager {
     variable GuiSupportTcl      [list]
     variable RootDir            "."
     variable VivadoVersion      [version -short]
-    
+
      # Allow Tcl to find tclIndex
     if {[lsearch -exact $::auto_path $Home] == -1} {
         lappend ::auto_path $Home

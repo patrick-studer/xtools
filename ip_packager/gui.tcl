@@ -21,21 +21,21 @@ namespace eval ::xtools::ip_packager {
 
 proc ::xtools::ip_packager::gui_add_page {args} {
     # Summary: Add new page to configuration GUI.
-    
+
     # Argument Usage:
     # -page_name <arg>:             GUI page identifier/name
     # -display_name <arg>:          Display name
     # [-tooltip <arg>]:             Tooltip (on hoover)
     # [-layout <arg> = vertical]:   Page layout (e.g. horizontal or vertical)
     # [-parent <arg>]:              New GUI page's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Load global variables
     variable CurrentGuiParent
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -61,21 +61,21 @@ proc ::xtools::ip_packager::gui_add_page {args} {
 
 proc ::xtools::ip_packager::gui_add_group {args} {
     # Summary: Add new group to configuration GUI.
-    
+
     # Argument Usage:
     # -group_name <arg>:            GUI group identifier/name
     # -display_name <arg>:          Display name
     # [-parent <arg>]:              New GUI group's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
     # [-tooltip <arg>]:             Tooltip (on hoover)
     # [-layout <arg> = vertical]:   Group layout (e.g. horizontal or vertical)
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Load global variables
     variable CurrentGuiParent
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -101,7 +101,7 @@ proc ::xtools::ip_packager::gui_add_group {args} {
 
 proc ::xtools::ip_packager::gui_add_param {args} {
     # Summary: Add existing MODELPARAM (generic) or user parameter to configuration GUI.
-    
+
     # Argument Usage:
     # -param_name <arg>:            GUI parameter identifier/name
     # -display_name <arg>:          Display name
@@ -111,14 +111,14 @@ proc ::xtools::ip_packager::gui_add_param {args} {
     # [-widget <arg>]:              Parameter widget (e.g. radioGroup, textEdit, checkBox or comboBox)
     # [-show_label <arg> = true]:   Boolean to hide -display_name string
     # [-show_range <arg> = true]:   Boolean to hide -validation_range
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Load global variables
     variable CurrentGuiParent
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -149,20 +149,20 @@ proc ::xtools::ip_packager::gui_add_param {args} {
 
 proc ::xtools::ip_packager::gui_add_text {args} {
     # Summary: Add static text below to configuration GUI.
-    
+
     # Argument Usage:
     # -text_name <arg>:     GUI text identifier/name
     # -text <arg>:          Static text string
     # [-parent <arg>]:      New GUI group's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
     # [-tooltip <arg>]:     Tooltip (on hoover)
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Load global variables
     variable CurrentGuiParent
-    
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -184,17 +184,17 @@ proc ::xtools::ip_packager::gui_add_text {args} {
 
 proc ::xtools::ip_packager::gui_set_parent {{parent_name "root"}} {
     # Summary: Change current GUI parent. This will define the canvas to which the next parameter/group/page/text will be added.
-    
+
     # Argument Usage:
     # [parent_name = root]:     GUI parent identifier/name. Use "root" to define the main window.
-    
+
     # Return Value: TCL_OK
-    
+
     # Categories: xilinxtclstore, ip_packager
-    
+
     # Load global variables
     variable CurrentGuiParent
-    
+
     # Define new parent container to place new components on the IP GUI
     if {[string match -nocase "root" $parent_name]} {
         set CurrentGuiParent nullptr

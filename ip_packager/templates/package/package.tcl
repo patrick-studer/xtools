@@ -25,7 +25,7 @@ lappend auto_path                       [file join $pkg_path "xtools"]
 ip_packager::create_package_project     -prj_name       "packager_prj" \
                                         -root_dir       $root_dir \
                                         -top_file       "<TOP-FILE>"
-                                        
+
 ###################################################################################################
 # Identification
 ###################################################################################################
@@ -34,7 +34,7 @@ ip_packager::set_identification         -vendor         "<VENDOR>" \
                                         -name           "<NAME>" \
                                         -library        "<LIBRARY>" \
                                         -version        <VERSION>
-                                        
+
 ###################################################################################################
 # Compatibility
 ###################################################################################################
@@ -48,7 +48,7 @@ ip_packager::set_identification         -vendor         "<VENDOR>" \
 ip_packager::add_design_sources         -files          <LIST-OF-DESIGN-SOURCES>
 
 ip_packager::add_design_constraints     -files          <LIST-OF-DESIGN-CONSTRAINTS>
-                                        
+
 # Example Design Files ----------------------------------------------------------------------------
 
 
@@ -69,10 +69,10 @@ ip_packager::add_design_constraints     -files          <LIST-OF-DESIGN-CONSTRAI
 ip_packager::create_user_param          -param_name             "<PARAM-NAME_p>" \
                                         -format                 "<PARAM-FORMAT" \
                                         -value                  <PARAM-VALUE>
-                                        
+
 # HDL Parameters ----------------------------------------------------------------------------------
 ip_packager::set_param_config           -param_name             "<GENERIC-NAME_g>"
-                                        
+
 ###################################################################################################
 # Ports and Interfaces
 ###################################################################################################
@@ -83,7 +83,7 @@ ip_packager::set_param_config           -param_name             "<GENERIC-NAME_g
 # Auto-Infer Interfaces ---------------------------------------------------------------------------
 ip_packager::auto_infer_interface       -interface_name         "<INTERFACE-NAME>" \
                                         -vlnv                   "<INTERFACE-VLNV>"
-                                        
+
 # Manually-Mapped Interfaces ----------------------------------------------------------------------
 ip_packager::add_bus_interface          -interface_name         "<INTERFACE-NAME>" \
                                         -vlnv                   "<INTERFACE-VLNV>" \
@@ -93,14 +93,14 @@ ip_packager::add_bus_interface          -interface_name         "<INTERFACE-NAME
 # Associate Clock/Reset ---------------------------------------------------------------------------
 ip_packager::associate_interface_clock  -interface_name         "<INTERFACE-NAME>" \
                                         -clock                  "<CLOCK-NAME>"
-                                        
+
 ip_packager::associate_clock_reset      -interface_name         "<CLOCK-NAME>" \
                                         -reset                  "<RESET-NAME>"
-                                        
+
 # Enablement Control ------------------------------------------------------------------------------
 ip_packager::set_interface_enablement   -interface_name         "<INTERFACE-NAME>" \
                                         -dependency             "<ENABLEMENT-DEPENDENCY>"
-                                        
+
 ###################################################################################################
 # Adressing and Memory
 ###################################################################################################
@@ -115,15 +115,15 @@ ip_packager::set_interface_enablement   -interface_name         "<INTERFACE-NAME
 ip_packager::gui_set_parent     "root"
 ip_packager::gui_add_page       -page_name      "<PAGE-NAME>" \
                                 -display_name   "<PAGE-DISPLAY-NAME>"
-                                
+
     # PAGE ----------------------------------------------------------------------------------------
     ip_packager::gui_add_group      -group_name     "<GROUP-NAME>" \
                                     -display_name   "<GROUP-DISPLAY-NAME>"
-                                    
+
         # GROUP Horizontal Example ----------------------------------------------------------------
         ip_packager::gui_add_param      -param_name     "<PARAM-NAME>" \
                                         -display_name   "<PARAM-DISPLAY-NAME>"
-                                    
+
 # -------------------------------------------------------------------------------------------------
 
 ###################################################################################################

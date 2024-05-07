@@ -11,7 +11,7 @@
 
 # Start the unit tests
 set test_dir [file normalize [file dirname [info script]]]
-puts "== Test directory: ${test_dir}"
+puts "== Test directory: ${test_dir}"
 source [file join $test_dir "test_ipi" "scripts" "package.tcl"]
 
 # Uninstall the app

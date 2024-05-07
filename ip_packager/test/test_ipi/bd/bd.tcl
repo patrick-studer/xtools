@@ -10,7 +10,7 @@ puts "DEBUG: bd.tcl sourced now into namespace ${currentNamespace}"
 ###################################################################################################
 proc init {cellpath otherInfo } {
     puts "DEBUG: Call init()"
-    
+
     set paramList "Clk_FreqHz_g"
     set cell_handle [get_bd_cells $cellpath]
     bd::mark_propagate_overrideable $cell_handle $paramList
@@ -37,10 +37,10 @@ proc propagate {cellpath otherInfo} {
 ###################################################################################################
 proc post_propagate {cellpath otherInfo} {
     puts "DEBUG: Call post_propagate()"
-    
+
     set cell_handle [get_bd_cells $cellpath]
     ##set intf_handle [get_bd_intf_pins $cellpath/aclk]
-    
+
     ## Assign AXI clock frequency to parameter
     set clk_pin_handle [get_bd_pins $cellpath/Clk]
     set freq [get_property CONFIG.FREQ_HZ $clk_pin_handle]
