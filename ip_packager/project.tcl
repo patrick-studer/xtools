@@ -244,6 +244,9 @@ proc ::xtools::ip_packager::create_package_project {args} {
     create_project -part $part -force -quiet $prj_name $prj_name
     set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $RootDir]] [path_relative_to_pwd $top_file]]
 
+    # Create new IPI component
+    ipx::package_project -root_dir [file normalize $RootDir] -quiet
+
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
 
@@ -251,9 +254,6 @@ proc ::xtools::ip_packager::create_package_project {args} {
     set_property ip_repo_paths $RootDir [current_project]
     update_ip_catalog
 
-    # Create new IPI component
-    ipx::package_project -root_dir [file normalize $RootDir] -quiet
-    
     # Apply default family support
     set_property auto_family_support_level "level_2" [ipx::current_core]
 
