@@ -242,7 +242,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Create package project
     create_project -part $part -force -quiet $prj_name $prj_name
-    set addedFiles [add_files -norecurse [file normalize [path_relative_to_pwd $top_file]]]
+    set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $RootDir]] [path_relative_to_pwd $top_file]]
 
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
