@@ -242,7 +242,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Create package project
     create_project -part $part -force -quiet $prj_name $prj_name
     set addedFiles [add_files -norecurse [file normalize [path_relative_to_pwd $top_file]]]
-    
+
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
 
@@ -445,13 +445,16 @@ proc ::xtools::ip_packager::save_package_project {args} {
 
     # Convert all IPI file paths to relative (except URLs => type=unknown)
     puts "INFO: \[save_package_project\] Following files are refered by the packaged IP-core:"
-    foreach file [ipx::get_files -of_objects [ipx::get_file_groups * -of_objects [ipx::current_core]]] {
-        if {[get_property type $file] != "unknown"} {
+    foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
+        puts "      - [get_property name $fileGroup]:"
+        foreach file [ipx::get_files -of_objects $fileGroup] {
+            if {[get_property type $file] != "unknown"} {
                 set relative_file_path [path_relative_to_root [get_property name ${file}]]
                 puts "        - ${relative_file_path}"
                 set_property name $relative_file_path $file
             }
         }
+     }
 
     # Update XGUI file and delete default file
     ipx::create_xgui_files  [ipx::current_core]
