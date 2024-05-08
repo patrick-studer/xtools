@@ -444,9 +444,10 @@ proc ::xtools::ip_packager::impl_package_project {args} {
 }
 
 proc ::xtools::ip_packager::save_package_project {args} {
-    # Summary: Save package project and generate IP-core.
+    # Summary: Save package project and generate IP-core. Optionally, archive to zip.
 
     # Argument Usage:
+    # [-archive_to <arg>]:  Define path to archive the final IPI to.
 
     # Return Value: TCL_OK
 
@@ -461,6 +462,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -archive_to {incr i; set archive_to [lindex $args $i]}
         }
     }
 
@@ -509,6 +511,12 @@ proc ::xtools::ip_packager::save_package_project {args} {
 
     # Update IP catalog to show newly packaged IP core
     update_ip_catalog -rebuild
+
+    # Archive core if needed
+    if {[info exists archive_to]} {
+        set archiveName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].zip"
+        ipx::archive_core [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
+    }
 }
 
 proc ::xtools::ip_packager::close_package_project {args} {
