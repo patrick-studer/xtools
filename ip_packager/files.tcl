@@ -73,7 +73,7 @@ proc ::xtools::ip_packager::add_design_sources {args} {
     } else {
         set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $files]]
     }
-    if {[info exists library       ]} {set_property library        $library        [filter $addedFiles {file_type == "VHDL*"}]}
+    if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
     if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
     if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
     if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
@@ -119,7 +119,7 @@ proc ::xtools::ip_packager::add_design_simulation {args} {
     } else {
         set addedFiles [add_files -fileset "sim_1" -norecurse -force [path_relative_to_pwd $files]]
     }
-    if {[info exists library       ]} {set_property library        $library        [filter $addedFiles {file_type == "VHDL*"}]}
+    if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
     if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
     if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
     if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
@@ -296,7 +296,7 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
-            if {[info exists library  ]} {set_property library_name $library   [filter $addedFile {type == "VHDL*"}]}
+            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
     }
@@ -345,7 +345,7 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
-            if {[info exists library  ]} {set_property library_name $library   [filter $addedFile {type == "VHDL*"}]}
+            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
     }
