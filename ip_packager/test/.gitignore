@@ -1,0 +1,10 @@
+test_ipi_externally
+
+test_ipi/drivers/*/data
+test_ipi/drivers/*/doc
+test_ipi/drivers/*/examples
+test_ipi/drivers/*/src/Makefile
+
+test_ipi/component.xml
+test_ipi/xgui
+test_ipi/gui/*.gtcl
