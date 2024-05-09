@@ -38,7 +38,7 @@ proc ::xtools::ip_packager::import_bus_definition {definition} {
     # Summary: Import existing interface/bus definition into packaged IP-core.
 
     # Argument Usage:
-    # definition:       File-path to the interface/bus definition XML
+    # definition:       File-path to the interface/bus definition XML.
 
     # Return Value: TCL_OK
 
@@ -59,9 +59,9 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
 
     # Argument Usage:
     # -interface_name <arg>:    Define the interface name.
-    # -vlnv <arg>:              Name or fully qualified VLNV identifier of bus interface (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0")
-    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -vlnv <arg>:              Name or fully qualified VLNV identifier of bus interface (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0").
+    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -108,9 +108,9 @@ proc ::xtools::ip_packager::add_axi_interface {args} {
     # Summary: Auto-infer AXI4 interface for all ports with a given pattern.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. M_Axi)
-    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. M_Axi).
+    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -140,9 +140,9 @@ proc ::xtools::ip_packager::add_axis_interface {args} {
     # Summary: Auto-infer AXI4-Stream interface for all ports with a given pattern.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. M_Axis)
-    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. M_Axis).
+    # [-port_pattern <arg>]:    Optionally overwrite default wildcard pattern of infered ports (default = <interface_name>_*).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -172,9 +172,9 @@ proc ::xtools::ip_packager::add_clock_interface {args} {
     # Summary: Auto-infer Clock interface for single-bit port with same name.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_Clk)
-    # [-freq_hz <arg>]:         Optionally add FREQ_HZ value to bus_param list (only define if the clock interface requires a specific frequency)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. User_Clk).
+    # [-freq_hz <arg>]:         Optionally add FREQ_HZ value to bus_param list (only define if the clock interface requires a specific frequency).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -200,8 +200,8 @@ proc ::xtools::ip_packager::add_clockenable_interface {args} {
     # Summary: Auto-infer Clock-Enable interface for single-bit port with same name.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_ClkEna)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. User_ClkEna).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -225,8 +225,8 @@ proc ::xtools::ip_packager::add_data_interface {args} {
     # Summary: Auto-infer Data interface for single port with same name.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_Data)
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. User_Data).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -250,9 +250,9 @@ proc ::xtools::ip_packager::add_reset_interface {args} {
     # Summary: Auto-infer Reset interface for single-bit port with same name.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_Rst)
-    # [-polarity <arg>]:        Optionally add POLARITY value to bus_param list
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. User_Rst).
+    # [-polarity <arg>]:        Optionally add POLARITY value to bus_param list.
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -278,9 +278,9 @@ proc ::xtools::ip_packager::add_interrupt_interface {args} {
     # Summary: Auto-infer Reset interface for single-bit port with same name.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_Irq)
-    # [-sensitivity <arg>]:     Optionally add SENSITIVITY value to bus_param list
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
+    # -interface_name <arg>:    Define the interface name (e.g. User_Irq).
+    # [-sensitivity <arg>]:     Optionally add SENSITIVITY value to bus_param list.
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
 
     # Return Value: TCL_OK
 
@@ -308,13 +308,13 @@ proc ::xtools::ip_packager::add_bus_interface {args} {
     # Summary: Manually map bus interface.
 
     # Argument Usage:
-    # -interface_name <arg>:    Define the interface name (e.g. User_Rst)
-    # -vlnv <arg>:              Name or fully qualified VLNV identifier of bus interface (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0")
-    # -interface_mode <arg>:    Interface mode (e.g. master, slave, system, mirroredMaster, mirroredSlave, mirroredSystem or monitor)
-    # -port_map <arg>:          List of portmap pairs (e.g. [list [list physicalName abstractionName] [...]])
-    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]])
-    # [-clock <arg>]:           Optionally define associated interface clock
-    # [-reset <arg>]:           Optionally define associated reset for interface clock (only in combination with -clock <arg>)
+    # -interface_name <arg>:    Define the interface name (e.g. User_Rst).
+    # -vlnv <arg>:              Name or fully qualified VLNV identifier of bus interface (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0").
+    # -interface_mode <arg>:    Interface mode (e.g. master, slave, system, mirroredMaster, mirroredSlave, mirroredSystem or monitor).
+    # -port_map <arg>:          List of portmap pairs (e.g. [list [list physicalName abstractionName] [...]]).
+    # [-bus_params <arg>]:      Optionally add list of bus parameters and values (e.g. [list [list PARAM_1 1] [list PARAM_2 2]]).
+    # [-clock <arg>]:           Optionally define associated interface clock.
+    # [-reset <arg>]:           Optionally define associated reset for interface clock (only in combination with -clock <arg>).
 
     # Return Value: TCL_OK
 
@@ -377,8 +377,8 @@ proc ::xtools::ip_packager::associate_interface_clock {args} {
     # Summary: Associate clock to interface.
 
     # Argument Usage:
-    # -interface_name <arg>:    List of interface names
-    # -clock <arg>:             Name of clock interface
+    # -interface_name <arg>:    List of interface names.
+    # -clock <arg>:             Name of clock interface.
 
     # Return Value: TCL_OK
 
@@ -405,8 +405,8 @@ proc ::xtools::ip_packager::associate_clock_reset {args} {
     # Summary: Associate reset to clock.
 
     # Argument Usage:
-    # -interface_name <arg>:    List of clock interface names
-    # -reset <arg>:             Name of reset interface
+    # -interface_name <arg>:    List of clock interface names.
+    # -reset <arg>:             Name of reset interface.
 
     # Return Value: TCL_OK
 
@@ -433,8 +433,8 @@ proc ::xtools::ip_packager::set_interface_enablement {args} {
     # Summary: Define interface enablement dependency.
 
     # Argument Usage:
-    # -interface_name <arg>:    List of interface names
-    # -dependency <arg>:        Dependency condition (e.g. "\$i > 2")
+    # -interface_name <arg>:    List of interface names.
+    # -dependency <arg>:        Dependency condition (e.g. "\$i > 2").
 
     # Return Value: TCL_OK
 
@@ -457,9 +457,9 @@ proc ::xtools::ip_packager::set_port_enablement {args} {
     # Summary: Define port enablement dependency.
 
     # Argument Usage:
-    # -port_name <arg>:         List of port names
-    # -dependency <arg>:        Dependency condition (e.g. "\$i > 2")
-    # [-driver_value <arg>]:    Default driver value if input is not connected
+    # -port_name <arg>:         List of port names.
+    # -dependency <arg>:        Dependency condition (e.g. "\$i > 2").
+    # [-driver_value <arg>]:    Default driver value if input is not connected.
 
     # Return Value: TCL_OK
 

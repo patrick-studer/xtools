@@ -23,10 +23,10 @@ proc ::xtools::ip_packager::gui_add_page {args} {
     # Summary: Add new page to configuration GUI.
 
     # Argument Usage:
-    # -page_name <arg>:             GUI page identifier/name
-    # -display_name <arg>:          Display name
-    # [-tooltip <arg>]:             Tooltip (on hoover)
-    # [-layout <arg> = vertical]:   Page layout (e.g. horizontal or vertical)
+    # -page_name <arg>:             GUI page identifier/name.
+    # -display_name <arg>:          Display name.
+    # [-tooltip <arg>]:             Tooltip (on hoover).
+    # [-layout <arg> = vertical]:   Page layout (e.g. horizontal or vertical).
     # [-parent <arg>]:              New GUI page's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
 
     # Return Value: TCL_OK
@@ -63,11 +63,11 @@ proc ::xtools::ip_packager::gui_add_group {args} {
     # Summary: Add new group to configuration GUI.
 
     # Argument Usage:
-    # -group_name <arg>:            GUI group identifier/name
-    # -display_name <arg>:          Display name
+    # -group_name <arg>:            GUI group identifier/name.
+    # -display_name <arg>:          Display name.
     # [-parent <arg>]:              New GUI group's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
-    # [-tooltip <arg>]:             Tooltip (on hoover)
-    # [-layout <arg> = vertical]:   Group layout (e.g. horizontal or vertical)
+    # [-tooltip <arg>]:             Tooltip (on hoover).
+    # [-layout <arg> = vertical]:   Group layout (e.g. horizontal or vertical).
 
     # Return Value: TCL_OK
 
@@ -103,14 +103,14 @@ proc ::xtools::ip_packager::gui_add_param {args} {
     # Summary: Add existing MODELPARAM (generic) or user parameter to configuration GUI.
 
     # Argument Usage:
-    # -param_name <arg>:            GUI parameter identifier/name
-    # -display_name <arg>:          Display name
+    # -param_name <arg>:            GUI parameter identifier/name.
+    # -display_name <arg>:          Display name.
     # [-parent <arg>]:              New GUI group's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
-    # [-tooltip <arg>]:             Tooltip (on hoover)
-    # [-layout <arg> = vertical]:   Group layout (e.g. horizontal or vertical)
-    # [-widget <arg>]:              Parameter widget (e.g. radioGroup, textEdit, checkBox or comboBox)
-    # [-show_label <arg> = true]:   Boolean to hide -display_name string
-    # [-show_range <arg> = true]:   Boolean to hide -validation_range
+    # [-tooltip <arg>]:             Tooltip (on hoover).
+    # [-layout <arg> = vertical]:   Group layout (e.g. horizontal or vertical).
+    # [-widget <arg>]:              Parameter widget (e.g. radioGroup, textEdit, checkBox or comboBox).
+    # [-show_label <arg> = true]:   Boolean to hide -display_name string.
+    # [-show_range <arg> = true]:   Boolean to hide -validation_range.
 
     # Return Value: TCL_OK
 
@@ -151,10 +151,10 @@ proc ::xtools::ip_packager::gui_add_text {args} {
     # Summary: Add static text below to configuration GUI.
 
     # Argument Usage:
-    # -text_name <arg>:     GUI text identifier/name
-    # -text <arg>:          Static text string
+    # -text_name <arg>:     GUI text identifier/name.
+    # -text <arg>:          Static text string.
     # [-parent <arg>]:      New GUI group's parent (default = current GUI page or group). Define name of GUI page or group to change current element's parent.
-    # [-tooltip <arg>]:     Tooltip (on hoover)
+    # [-tooltip <arg>]:     Tooltip (on hoover).
 
     # Return Value: TCL_OK
 

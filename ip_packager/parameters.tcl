@@ -23,15 +23,15 @@ proc ::xtools::ip_packager::create_user_param {args} {
     # Summary: Create new parameter which is not already in the MODELPARAM space (generics).
 
     # Argument Usage:
-    # -param_name <arg>:            Parameter name (e.g. User_p)
-    # [-format <arg> = string]:     Parameter format (bitString, bool, float, long and string)
-    # [-bit_string_length <arg>]:   Mandatory length for bitString parameters
+    # -param_name <arg>:            Parameter name (e.g. User_p).
+    # [-format <arg> = string]:     Parameter format (bitString, bool, float, long and string).
+    # [-bit_string_length <arg>]:   Mandatory length for bitString parameters.
     # [-value <arg>]:               Optional parameter default value. Only use -value and -value_tcl_expr exclusively.
     # [-value_tcl_expr <arg>]:      Optional parameter value expression (e.g. \$User_p * 8). Only use -value and -value_tcl_expr exclusively.
-    # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -])
-    # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"])
-    # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...])
-    # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2)
+    # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -]).
+    # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"]).
+    # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...]).
+    # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2).
 
     # Return Value: TCL_OK
 
@@ -78,13 +78,13 @@ proc ::xtools::ip_packager::set_param_config {args} {
     # Summary: Configure existing MODELPARAM (generic) or added user parameter.
 
     # Argument Usage:
-    # -param_name <arg>:            Parameter name (e.g. User_p)
+    # -param_name <arg>:            Parameter name (e.g. User_p).
     # [-value <arg>]:               Optional parameter default value. Only use -value and -value_tcl_expr exclusively.
     # [-value_tcl_expr <arg>]:      Optional parameter value expression (e.g. \$User_p * 8). Only use -value and -value_tcl_expr exclusively.
-    # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -])
-    # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"])
-    # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...])
-    # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2)
+    # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -]).
+    # [-validation_list <arg>]:     Optional validation list (e.g. [list 1 3 5] or ["100" "010" "001"]).
+    # [-validation_pairs <arg>]:    Optional validation pairs (e.g. [list key1 1 key2 2 ...]).
+    # [-enablement_tcl_expr <arg>]: Optional parameter enablement expression (e.g. "\$i > 2).
 
     # Return Value: TCL_OK
 
@@ -117,9 +117,9 @@ proc ::xtools::ip_packager::set_param_validation {args} {
     # Summary: Set value validation condition for existing MODELPARAM (generic) or added user parameter.
 
     # Argument Usage:
-    # -param_name <arg>:    Parameter name (e.g. User_p)
-    # -type <arg>:          Validation type (e.g. range, list or pairs)
-    # -value <arg>:         Validation value dependend on -type argument
+    # -param_name <arg>:    Parameter name (e.g. User_p).
+    # -type <arg>:          Validation type (e.g. range, list or pairs).
+    # -value <arg>:         Validation value dependend on -type argument.
 
     # Return Value: TCL_OK
 
@@ -172,8 +172,8 @@ proc ::xtools::ip_packager::set_param_enablement {args} {
     # Summary: Set parameter enablement expression for existing MODELPARAM (generic) or added user parameter.
 
     # Argument Usage:
-    # -param_name <arg>:    Parameter name (e.g. User_p)
-    # -tcl_expr <arg>:      Parameter enablement expression (e.g. "\$i > 2)
+    # -param_name <arg>:    Parameter name (e.g. User_p).
+    # -tcl_expr <arg>:      Parameter enablement expression (e.g. "\$i > 2).
 
     # Return Value: TCL_OK
 
@@ -200,7 +200,7 @@ proc ::xtools::ip_packager::set_param_value {args} {
     # Summary: Set parameter value expression for existing MODELPARAM (generic) or added user parameter.
 
     # Argument Usage:
-    # -param_name <arg>:    Parameter name (e.g. User_p)
+    # -param_name <arg>:    Parameter name (e.g. User_p).
     # [-value <arg>]:       Parameter default value. Only use -value and -tcl_expr exclusively.
     # [-tcl_expr <arg>]:    Parameter value expression (e.g. "\$User_p * 2). Only use -value and -tcl_expr exclusively.
 

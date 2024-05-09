@@ -86,12 +86,12 @@ proc ::xtools::ip_packager::add_design_simulation {args} {
     # Summary: Add simulation sources (sim_1) to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:            List of simulation sources file-paths to be added to the packaged IP-core
-    # [-copy_to <arg>]:        Path to folder, where to copy/import the added simulation sources
-    # [-library <arg>]:        VHDL library to compile the added simulation sources to
-    # [-file_type <arg>]:      Overwrite simulation source file type (e.g. "VHDL 2008")
-    # [-global_include <arg>]: Boolean to mark the Verilog files as global includes
-    # [-enabled <arg>]:        Boolean to define enabled state of a source file
+    # -files <arg>:            List of simulation sources file-paths to be added to the packaged IP-core.
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added simulation sources.
+    # [-library <arg>]:        VHDL library to compile the added simulation sources to.
+    # [-file_type <arg>]:      Overwrite simulation source file type (e.g. "VHDL 2008").
+    # [-global_include <arg>]: Boolean to mark the Verilog files as global includes.
+    # [-enabled <arg>]:        Boolean to define enabled state of a source file.
 
     # Return Value: TCL_OK
 
@@ -132,11 +132,11 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
     # Summary: Add constraint sources (constrs_1) to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:              List of constraints file-paths to be added to the packaged IP-core
-    # [-copy_to <arg>]:          Path to folder, where to copy/import the added constraints sources
-    # [-used_in <arg>]:          List with design-step identifiers (useful for constraints)
-    # [-processing_order <arg>]: Processing-order identifier (e.g. "EARLY", "NORMAL", "LATE")
-    # [-scoped_to_cells <arg>]:  Scope constraints to specific cells relative to the IP-core top-level
+    # -files <arg>:              List of constraints file-paths to be added to the packaged IP-core.
+    # [-copy_to <arg>]:          Path to folder, where to copy/import the added constraints sources.
+    # [-used_in <arg>]:          List with design-step identifiers (useful for constraints).
+    # [-processing_order <arg>]: Processing-order identifier (e.g. "EARLY", "NORMAL", "LATE").
+    # [-scoped_to_cells <arg>]:  Scope constraints to specific cells relative to the IP-core top-level.
 
     # Return Value: TCL_OK
 
@@ -180,7 +180,7 @@ proc ::xtools::ip_packager::add_design_subcores {args} {
     # Summary: Add IP subcore-reference to the packaged IP-core.
 
     # Argument Usage:
-    # -vlnv <arg>:      List of subcore-reference VLNV identifiers to be added to the packaged IP-core (synthesis and simulation)
+    # -vlnv <arg>:      List of subcore-reference VLNV identifiers to be added to the packaged IP-core (synthesis and simulation).
 
     # Return Value: TCL_OK
 
@@ -214,8 +214,8 @@ proc ::xtools::ip_packager::add_exdes_script {args} {
     # Summary: Add Example Design creation script to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:         List of example-design creation scripts to be added to the packaged IP-core (synthesis and simulation)
-    # [-copy_to <arg>]:     Path to folder, where to copy/import the added example-design creation scripts
+    # -files <arg>:         List of example-design creation scripts to be added to the packaged IP-core (synthesis and simulation).
+    # [-copy_to <arg>]:     Path to folder, where to copy/import the added example-design creation scripts.
 
     # Return Value: TCL_OK
 
@@ -257,10 +257,10 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
     # Summary: Add Example Design sources to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core
-    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design sources
-    # [-library <arg>]:        VHDL library to compile the added design sources to
-    # [-file_type <arg>]:      Overwrite design source file type (e.g. "VHDL 2008")
+    # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core.
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design sources.
+    # [-library <arg>]:        VHDL library to compile the added design sources to.
+    # [-file_type <arg>]:      Overwrite design source file type (e.g. "VHDL 2008").
 
     # Return Value: TCL_OK
 
@@ -306,10 +306,10 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
     # Summary: Add Example Design simulation sources to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core
-    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design simulation sources
-    # [-library <arg>]:        VHDL library to compile the added simulation sources to
-    # [-file_type <arg>]:      Overwrite simulation source file type (e.g. "VHDL 2008")
+    # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core.
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design simulation sources.
+    # [-library <arg>]:        VHDL library to compile the added simulation sources to.
+    # [-file_type <arg>]:      Overwrite simulation source file type (e.g. "VHDL 2008").
 
     # Return Value: TCL_OK
 
@@ -355,8 +355,8 @@ proc ::xtools::ip_packager::add_exdes_constraints {args} {
     # Summary: Add Example Design constraints sources to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:     List of constraints file-paths to be added as example-design to the packaged IP-core
-    # [-copy_to <arg>]: Path to folder, where to copy/import the added example-design constraints
+    # -files <arg>:     List of constraints file-paths to be added as example-design to the packaged IP-core.
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added example-design constraints.
 
     # Return Value: TCL_OK
 
@@ -398,7 +398,7 @@ proc ::xtools::ip_packager::add_exdes_subcores {args} {
     # Summary: Add Example Design IP subcore-references to the packaged IP-core.
 
     # Argument Usage:
-    # -vlnv <arg>:      List of subcore-reference VLNV identifiers to be added to the packaged IP-core example-design (synthesis and simulation)
+    # -vlnv <arg>:      List of subcore-reference VLNV identifiers to be added to the packaged IP-core example-design (synthesis and simulation).
 
     # Return Value: TCL_OK
 
@@ -432,7 +432,7 @@ proc ::xtools::ip_packager::add_logo {args} {
     # Summary: Add custom logo to the packaged IP-core.
 
     # Argument Usage:
-    # -file <arg>:      File-path to logo file
+    # -file <arg>:      File-path to logo file.
     # [-copy_to <arg>]: Path to folder, where to copy/import the added logo. Supported file extension is png.
 
     # Return Value: TCL_OK
@@ -476,7 +476,7 @@ proc ::xtools::ip_packager::add_readme {args} {
     # Summary: Add readme file to the packaged IP-core.
 
     # Argument Usage:
-    # -file <arg>:      File-path to readme file
+    # -file <arg>:      File-path to readme file.
     # [-copy_to <arg>]: Path to folder, where to copy/import the added readme. Supported file extensions are pdf, txt, md, htm(l) and http(s).
 
     # Return Value: TCL_OK
@@ -523,7 +523,7 @@ proc ::xtools::ip_packager::add_product_guide {args} {
     # Summary: Add product-guide file to the packaged IP-core.
 
     # Argument Usage:
-    # -file <arg>:      File-path to product guide file
+    # -file <arg>:      File-path to product guide file.
     # [-copy_to <arg>]: Path to folder, where to copy/import the added product guide. Supported file extensions are pdf, txt, md, htm(l) and http(s).
 
     # Return Value: TCL_OK
@@ -570,7 +570,7 @@ proc ::xtools::ip_packager::add_changelog {args} {
     # Summary: Add changelog file to the packaged IP-core.
 
     # Argument Usage:
-    # -file <arg>:      File-path to changelog file
+    # -file <arg>:      File-path to changelog file.
     # [-copy_to <arg>]: Path to folder, where to copy/import the added changelog. Supported file extensions are txt and md.
 
     # Return Value: TCL_OK
@@ -700,7 +700,7 @@ proc ::xtools::ip_packager::add_utility_scripts {args} {
     # Summary: Add utility scripts to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:     List of utility script file-paths to be added to the packaged IP-core
+    # -files <arg>:     List of utility script file-paths to be added to the packaged IP-core.
     # [-copy_to <arg>]: Path to folder, where to copy/import the added utility scripts. Supported file extensions are xit, gtcl, tcl and ttcl.
 
     # Return Value: TCL_OK
@@ -766,7 +766,7 @@ proc ::xtools::ip_packager::add_upgrade_tcl {args} {
     # Summary: Add IP upgrade TCL scripts to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:         List of IP upgrade TCL script file-paths
+    # -files <arg>:         List of IP upgrade TCL script file-paths.
     # [-copy_to <arg>]:     Path to folder, where to copy/import the added upgrade scripts.
     # [-versions <arg>]:    List of handled/upgradable IP-core versions.
 
@@ -832,7 +832,7 @@ proc ::xtools::ip_packager::add_bd_tcl {args} {
     # Summary: Add IP BD-TCL scripts to the packaged IP-core.
 
     # Argument Usage:
-    # -file <arg>:          BD-TCL script file-path
+    # -file <arg>:          BD-TCL script file-path.
     # [-copy_to <arg>]:     Path to folder, where to copy/import the added BD-TCL script.
 
     # Return Value: TCL_OK

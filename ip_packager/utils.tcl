@@ -19,9 +19,9 @@ proc ::xtools::ip_packager::path_relative_to {from_dir to_files {to_files_prefix
     # Summary: Get relative to "fromDir" paths pointing to "toFiles".
 
     # Argument Usage:
-    # from_dir: 			    Directory the path should be relative to
-    # to_files:			        List of files the relative paths point to
-    # [to_files_prefix = ""]:   Path prefix to add to every to_files
+    # from_dir: 			    Directory the path should be relative to.
+    # to_files:			        List of files the relative paths point to.
+    # [to_files_prefix = ""]:   Path prefix to add to every to_files.
 
     # Return Value: TCL_OK
 
@@ -58,7 +58,7 @@ proc ::xtools::ip_packager::path_relative_to_pwd {to_files} {
     # Summary: Get relative paths from current working directory pointing to "toFiles".
 
     # Argument Usage:
-    # to_files:			List of files the relative paths point to
+    # to_files:			List of files the relative paths point to.
 
     # Return Value: TCL_OK
 
@@ -72,7 +72,7 @@ proc ::xtools::ip_packager::path_relative_to_root {to_files} {
     # Summary: Get relative paths from IP root directory pointing to "toFiles".
 
     # Argument Usage:
-    # to_files:			List of files the relative paths point to
+    # to_files:			List of files the relative paths point to.
 
     # Return Value: TCL_OK
 
@@ -86,9 +86,9 @@ proc ::xtools::ip_packager::copy_and_replace_tags {from_path to_path tags} {
     # Summary: Copy a template file and replace one or more tags within this file.
 
     # Argument Usage:
-    # from_path:		Source path of the file (template)
-    # to_path:	        Destination path to write the modified file to
-    # tags:			    A dictonary containing tags as keys and their replacements as values
+    # from_path:		Source path of the file (template).
+    # to_path:	        Destination path to write the modified file to.
+    # tags:			    A dictonary containing tags as keys and their replacements as values.
 
     # Return Value: TCL_OK
 
@@ -100,9 +100,11 @@ proc ::xtools::ip_packager::copy_and_replace_tags {from_path to_path tags} {
     close $fp
 
     # replace tags
+    puts "INFO: \[copy_and_replace_tags\] Replace following tags in file ${to_path}:"
     foreach item [dict keys $tags] {
         set val [dict get $tags $item]
         set content [regsub -all $item $content $val]
+        puts "      - ${item} <= ${val}"
     }
 
     # write file

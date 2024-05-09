@@ -157,7 +157,7 @@ proc ::xtools::ip_packager::_find_unique_bus_abstraction {vlnv} {
     # Summary: Internal procedure to find unique bus-abstraction from vlnv-identifier.
 
     # Argument Usage:
-    # vlnv:             VLNV identifier
+    # vlnv:             VLNV identifier.
 
     # Return Value: TCL_OK
 
@@ -184,7 +184,7 @@ proc ::xtools::ip_packager::_find_unique_ip_core {vlnv} {
     # Summary: Internal procedure to find unique ip-core from vlnv-identifier.
 
     # Argument Usage:
-    # vlnv:             VLNV identifier
+    # vlnv:             VLNV identifier.
 
     # Return Value: TCL_OK
 
@@ -212,11 +212,11 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Create a new IP package project for the specified top-level HDL file.
 
     # Argument Usage:
-    # -top_file <arg>:                      Top-level HDL file for packaging
-    # [-copy_to <arg>]:                     Path to folder, where to copy/import the added Top-level HDL file
-    # [-root_dir <arg> = ./..]:             IP output root directory
-    # [-prj_name  <arg> = package_prj]:     Temporary package project name
-    # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project
+    # -top_file <arg>:                      Top-level HDL file for packaging.
+    # [-copy_to <arg>]:                     Path to folder, where to copy/import the added Top-level HDL file.
+    # [-root_dir <arg> = ./..]:             IP output root directory.
+    # [-prj_name  <arg> = package_prj]:     Temporary package project name.
+    # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project.
 
     # Return Value: TCL_OK
 
@@ -332,9 +332,9 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # Summary: Run test synthesis on package project.
 
     # Argument Usage:
-    # [-part <arg>]:        Define specific part used for synthesis
-    # [-jobs <arg> = 4]:    Define number of jobs used for synthesis run
-    # [-timeout <arg>]:     Define synthesis run timeout in seconds
+    # [-part <arg>]:        Define specific part used for synthesis.
+    # [-jobs <arg> = 4]:    Define number of jobs used for synthesis run.
+    # [-timeout <arg>]:     Define synthesis run timeout in seconds.
 
     # Return Value: TCL_OK
 
@@ -397,9 +397,9 @@ proc ::xtools::ip_packager::impl_package_project {args} {
     # Summary: Run test implementation on package project.
 
     # Argument Usage:
-    # [-part <arg>]:        Define specific part used for implementation
-    # [-jobs <arg> = 4]:    Define number of jobs used for implementation run
-    # [-timeout <arg>]:     Define implementation run timeout in seconds
+    # [-part <arg>]:        Define specific part used for implementation.
+    # [-jobs <arg> = 4]:    Define number of jobs used for implementation run.
+    # [-timeout <arg>]:     Define implementation run timeout in seconds.
 
     # Return Value: TCL_OK
 
@@ -472,6 +472,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
 
     # Convert all IPI file paths to relative (except URLs => type=unknown)
     puts "INFO: \[save_package_project\] Following files are refered by the packaged IP-core:"
+        puts "      All paths relative to root directory (${RootDir})"
     foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
         puts "      - [get_property name $fileGroup]:"
         foreach file [ipx::get_files -of_objects $fileGroup] {
@@ -523,7 +524,7 @@ proc ::xtools::ip_packager::close_package_project {args} {
     # Summary: Finally close the temporary package project.
 
     # Argument Usage:
-    # [-delete <arg> = false]:  When set to true, delete the temporary package project after closing
+    # [-delete <arg> = false]:  When set to true, delete the temporary package project after closing.
 
     # Return Value: TCL_OK
 

@@ -19,10 +19,10 @@ proc ::xtools::ip_packager::set_identification {args} {
     # Summary: Set packaged IP-core identification values.
 
     # Argument Usage:
-    # [-vendor <arg>]:                  Vendor sting of VLNV identifier (no white-spaces allowed)
-    # [-library <arg>]:                 Library sting of VLNV identifier (no white-spaces allowed)
-    # [-name <arg>]:                    Name sting of VLNV identifier (no white-spaces allowed)
-    # [-version <arg>]:                 Version number of VLNV identifier (e.g. 1.0)
+    # [-vendor <arg>]:                  Vendor sting of VLNV identifier (no white-spaces allowed).
+    # [-library <arg>]:                 Library sting of VLNV identifier (no white-spaces allowed).
+    # [-name <arg>]:                    Name sting of VLNV identifier (no white-spaces allowed).
+    # [-version <arg>]:                 Version number of VLNV identifier (e.g. 1.0).
     # [-core_revision <arg>]:           Revision number. If not overwritten by the user, the revision identifier is set to seconds passed since 1 January 1970, 00:00 UTC (tcl: [clock seconds]).
     # [-display_name <arg>]:            Displayed name sting.
     # [-description <arg>]:             Description string.
