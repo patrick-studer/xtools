@@ -377,7 +377,7 @@ proc ::xtools::ip_packager::associate_interface_clock {args} {
     # Summary: Associate clock to interface.
 
     # Argument Usage:
-    # -interface_name <arg>:    List of interface names.
+    # -interface_name <arg>:    List of interface names (supports wildcards).
     # -clock <arg>:             Name of clock interface.
 
     # Return Value: TCL_OK
@@ -389,14 +389,19 @@ proc ::xtools::ip_packager::associate_interface_clock {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -interface_name     {incr i; set interface_name [lindex $args $i]}
-            -clock              {incr i; set clk            [lindex $args $i]}
+            -clock              {incr i; set clock          [lindex $args $i]}
         }
     }
 
     # Associate clock to interface
     foreach interface $interface_name {
-        foreach foundInterface [get_property name [ipx::get_bus_interfaces $interface -of_objects [ipx::current_core]]] {
-            ipx::associate_bus_interfaces -busif $foundInterface -clock $clk [ipx::current_core]
+        foreach foundInterface [get_property name [ipx::get_bus_interfaces -of_objects [ipx::current_core] -filter "name =~ ${interface} && bus_type_name !~ reset && bus_type_name !~ clock"]] {
+            foreach clk $clock {
+                if {[get_property bus_type_name [ipx::get_bus_interfaces $clk -of_objects [ipx::current_core]]] != "clock"} {
+                    error "ERROR: \[associate_interface_clock\] Option -clock must include interfaces of type clock."
+                }
+                ipx::associate_bus_interfaces -busif $foundInterface -clock $clk [ipx::current_core]
+            }
         }
     }
 }
@@ -405,8 +410,8 @@ proc ::xtools::ip_packager::associate_clock_reset {args} {
     # Summary: Associate reset to clock.
 
     # Argument Usage:
-    # -interface_name <arg>:    List of clock interface names.
-    # -reset <arg>:             Name of reset interface.
+    # -clock <arg>:     List of clock interface names.
+    # -reset <arg>:     List of reset interface names.
 
     # Return Value: TCL_OK
 
@@ -416,14 +421,22 @@ proc ::xtools::ip_packager::associate_clock_reset {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact [set option [string trim [lindex $args $i]]] {
-            -interface_name     {incr i; set interface_name [lindex $args $i]}
-            -reset              {incr i; set reset          [lindex $args $i]}
+            -clock      {incr i; set clock  [lindex $args $i]}
+            -reset      {incr i; set reset  [lindex $args $i]}
         }
     }
 
     # Associate reset to clock-interface
-    foreach interface $interface_name {
-        ipx::associate_bus_interfaces -clock $interface -reset $reset [ipx::current_core]
+    foreach clk $clock {
+        if {[get_property bus_type_name [ipx::get_bus_interfaces $clk -of_objects [ipx::current_core]]] != "clock"} {
+            error "ERROR: \[associate_clock_reset\] Option -clock must include interfaces of type clock."
+        }
+        foreach rst $reset {
+            if {[get_property bus_type_name [ipx::get_bus_interfaces $rst -of_objects [ipx::current_core]]] != "reset"} {
+                error "ERROR: \[associate_clock_reset\] Option -reset must include interfaces of type reset."
+            }
+            ipx::associate_bus_interfaces -clock $clk -reset $rst [ipx::current_core]
+        }
     }
 }
 

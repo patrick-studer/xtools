@@ -266,16 +266,19 @@ ip_packager::associate_interface_clock  -interface_name         "*_Axis" \
 ip_packager::associate_interface_clock  -interface_name         "*_Axi" \
                                         -clock                  "Axi_Clk" \
 
-ip_packager::associate_interface_clock  -interface_name         [list "Interrupt" "UART"] \
+ip_packager::associate_interface_clock  -interface_name         [list \
+                                                                    "Interrupt" \
+                                                                    "UART" \
+                                                                ] \
                                         -clock                  "Clk" \
 
-ip_packager::associate_clock_reset      -interface_name         "Axis_Clk" \
+ip_packager::associate_clock_reset      -clock                  "Axis_Clk" \
                                         -reset                  "Axis_ResetN" \
 
-ip_packager::associate_clock_reset      -interface_name         "Axi_Clk" \
+ip_packager::associate_clock_reset      -clock                  "Axi_Clk" \
                                         -reset                  "Axi_ResetN" \
 
-ip_packager::associate_clock_reset      -interface_name         "Clk" \
+ip_packager::associate_clock_reset      -clock                  "Clk" \
                                         -reset                  "Rst" \
 
 # Enablement Control ------------------------------------------------------------------------------
@@ -499,32 +502,33 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 
 ip_packager::simulate_package_project
 
-# ip_packager::simulate_package_project   -generics   [list   "Clk_FreqHz_g=100e6" \
-                                                            # "M_Axi_DataWidth_g=16" \
-                                                            # "M_Axi_AddrWidth_g=16" \
-                                                            # "S_Axi_DataWidth_g=16" \
-                                                            # "S_Axi_AddrWidth_g=16" \
-                                                            # "M_Axis_TDataWidth_g=16" \
-                                                            # "M_Axis_TUserWidth_g=16" \
-                                                            # "S_Axis_TDataWidth_g=16" \
-                                                            # "S_Axis_TUserWidth_g=16" \
-                                                    # ] \
+# ip_packager::simulate_package_project   -generics       [list \
+                                                            "Clk_FreqHz_g=100e6" \
+                                                            "M_Axi_DataWidth_g=16" \
+                                                            "M_Axi_AddrWidth_g=16" \
+                                                            "S_Axi_DataWidth_g=16" \
+                                                            "S_Axi_AddrWidth_g=16" \
+                                                            "M_Axis_TDataWidth_g=16" \
+                                                            "M_Axis_TUserWidth_g=16" \
+                                                            "S_Axis_TDataWidth_g=16" \
+                                                            "S_Axis_TUserWidth_g=16" \
+                                                        ] \
 
 ip_packager::synth_package_project
 
-# ip_packager::synth_package_project      -part       "xczu11eg-ffvb1517-2-e" \
+# ip_packager::synth_package_project      -part           "xczu11eg-ffvb1517-2-e" \
 
-# ip_packager::synth_package_project      -part       "xc7z030ifbg484-2L" \
+# ip_packager::synth_package_project      -part           "xc7z030ifbg484-2L" \
 
 ip_packager::impl_package_project
 
-# ip_packager::impl_package_project       -part       "xczu11eg-ffvb1517-2-e" \
+# ip_packager::impl_package_project       -part           "xczu11eg-ffvb1517-2-e" \
 
-# ip_packager::impl_package_project       -part       "xc7z030ifbg484-2L" \
+# ip_packager::impl_package_project       -part           "xc7z030ifbg484-2L" \
 
 ip_packager::save_package_project
 
-# ip_packager::close_package_project      -delete     "true"
+ip_packager::close_package_project      -delete         "true"
 
 ###################################################################################################
 # EOF
