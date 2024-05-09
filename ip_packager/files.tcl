@@ -40,12 +40,12 @@ proc ::xtools::ip_packager::add_design_sources {args} {
     # Summary: Add design sources (sources_1) to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:            List of design sources file-paths to be added to the packaged IP-core
-    # [-copy_to <arg>]:        Path to folder, where to copy/import the added design sources
-    # [-library <arg>]:        VHDL library to compile the added design sources to
-    # [-file_type <arg>]:      Overwrite design source file type (e.g. "VHDL 2008")
-    # [-global_include <arg>]: Boolean to mark the Verilog files as global includes
-    # [-enabled <arg>]:        Boolean to define enabled state of a source file
+    # -files <arg>:            List of design sources file-paths to be added to the packaged IP-core.
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added design sources.
+    # [-library <arg>]:        VHDL library to compile the added design sources to.
+    # [-file_type <arg>]:      Overwrite design source file type (e.g. "VHDL 2008").
+    # [-global_include <arg>]: Boolean to mark the Verilog files as global includes.
+    # [-enabled <arg>]:        Boolean to define enabled state of a source file.
 
     # Return Value: TCL_OK
 
@@ -214,7 +214,8 @@ proc ::xtools::ip_packager::add_exdes_script {args} {
     # Summary: Add Example Design creation script to the packaged IP-core.
 
     # Argument Usage:
-    # -files <arg>:     List of example-design creation scripts to be added to the packaged IP-core (synthesis and simulation)
+    # -files <arg>:         List of example-design creation scripts to be added to the packaged IP-core (synthesis and simulation)
+    # [-copy_to <arg>]:     Path to folder, where to copy/import the added example-design creation scripts
 
     # Return Value: TCL_OK
 
@@ -227,15 +228,27 @@ proc ::xtools::ip_packager::add_exdes_script {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -files      {incr i; set files [lindex $args $i]}
+            -files      {incr i; set files     [lindex $args $i]}
+            -copy_to    {incr i; set copy_to   [lindex $args $i]}
         }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
 
     # Add files to IPI file sets
     foreach {fgType fgName} {"examples_script" "xilinx_examplesscript"} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
-            set addedFile [ipx::add_file $file $fileGroup]
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
         }
     }
 }
@@ -245,6 +258,7 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
 
     # Argument Usage:
     # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design sources
     # [-library <arg>]:        VHDL library to compile the added design sources to
     # [-file_type <arg>]:      Overwrite design source file type (e.g. "VHDL 2008")
 
@@ -260,16 +274,28 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -files      {incr i; set files     [lindex $args $i]}
+            -copy_to    {incr i; set copy_to   [lindex $args $i]}
             -library    {incr i; set library   [lindex $args $i]}
             -file_type  {incr i; set file_type [lindex $args $i]}
         }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
 
     # Add files to IPI file sets
     foreach {fgType fgName} {"examples_synthesis" "xilinx_examplessynthesis" "examples_simulation" "xilinx_examplessimulation"} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
-            set addedFile [ipx::add_file $file $fileGroup]
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
             if {[info exists library  ]} {set_property library_name $library   [filter $addedFile {type == "VHDL*"}]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
@@ -281,6 +307,7 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
 
     # Argument Usage:
     # -files <arg>:            List of source file-paths to be added as example-design to the packaged IP-core
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added example-design simulation sources
     # [-library <arg>]:        VHDL library to compile the added simulation sources to
     # [-file_type <arg>]:      Overwrite simulation source file type (e.g. "VHDL 2008")
 
@@ -296,16 +323,28 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -files      {incr i; set files     [lindex $args $i]}
+            -copy_to    {incr i; set copy_to   [lindex $args $i]}
             -library    {incr i; set library   [lindex $args $i]}
             -file_type  {incr i; set file_type [lindex $args $i]}
         }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
 
     # Add files to IPI file sets
     foreach {fgType fgName} {"examples_simulation" "xilinx_examplessimulation"} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
-            set addedFile [ipx::add_file $file $fileGroup]
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
             if {[info exists library  ]} {set_property library_name $library   [filter $addedFile {type == "VHDL*"}]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
@@ -317,6 +356,7 @@ proc ::xtools::ip_packager::add_exdes_constraints {args} {
 
     # Argument Usage:
     # -files <arg>:     List of constraints file-paths to be added as example-design to the packaged IP-core
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added example-design constraints
 
     # Return Value: TCL_OK
 
@@ -329,15 +369,27 @@ proc ::xtools::ip_packager::add_exdes_constraints {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -files      {incr i; set files [lindex $args $i]}
+            -files      {incr i; set files     [lindex $args $i]}
+            -copy_to    {incr i; set copy_to   [lindex $args $i]}
         }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
 
     # Add files to IPI file sets
     foreach {fgType fgName} {"examples_synthesis" "xilinx_examplessynthesis" "examples_implementation" "xilinx_implementation"} {
         set fileGroup  [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
-            set addedFile [ipx::add_file $file $fileGroup]
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
         }
     }
 }
@@ -376,11 +428,12 @@ proc ::xtools::ip_packager::add_exdes_subcores {args} {
 
 # Documentation Files -----------------------------------------------------------------------------
 
-proc ::xtools::ip_packager::add_logo {logo} {
+proc ::xtools::ip_packager::add_logo {args} {
     # Summary: Add custom logo to the packaged IP-core.
 
     # Argument Usage:
-    # logo:             Path to logo file
+    # -file <arg>:      File-path to logo file
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added logo. Supported file extension is png.
 
     # Return Value: TCL_OK
 
@@ -389,23 +442,42 @@ proc ::xtools::ip_packager::add_logo {logo} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -file       {incr i; set file       [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+    # Verify that only a single file is provided
+    if {[llength $file] != 1} {error "ERROR: \[add_logo\] Option -file must define a single file path."}
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force $file $copyToDir
+        set file [file join $copyToDir [file tail $file]]
+    }
+
     # Verify file type support
-    switch -glob -- $logo {
+    switch -glob -- $file {
         *.png                   {set type "LOGO"}
         default                 {error "ERROR: \[add_logo\] File type not allowed. Supported file extensions are png."}
     }
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "utility" "xilinx_utilityxitfiles" [ipx::current_core]]
-    set addedFile [ipx::add_file $logo $fileGroup]
+    set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
     set_property type $type $addedFile
 }
 
-proc ::xtools::ip_packager::add_readme {readme} {
+proc ::xtools::ip_packager::add_readme {args} {
     # Summary: Add readme file to the packaged IP-core.
 
     # Argument Usage:
-    # readme:           Path to readme file. Supported file extensions are pdf, txt, md, htm(l) and http(s).
+    # -file <arg>:      File-path to readme file
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added readme. Supported file extensions are pdf, txt, md, htm(l) and http(s).
 
     # Return Value: TCL_OK
 
@@ -414,8 +486,26 @@ proc ::xtools::ip_packager::add_readme {readme} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -file       {incr i; set file       [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+    # Verify that only a single file is provided
+    if {[llength $file] != 1} {error "ERROR: \[add_readme\] Option -file must define a single file path."}
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force $file $copyToDir
+        set file [file join $copyToDir [file tail $file]]
+    }
+
     # Verify file type support
-    switch -glob -- $readme {
+    switch -glob -- $file {
         https://*   - http://*  {set type "unknown"}
         *.pdf                   {set type "pdf"}
         *.txt       - *.md      {set type "text"}
@@ -425,15 +515,16 @@ proc ::xtools::ip_packager::add_readme {readme} {
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "readme" "xilinx_readme" [ipx::current_core]]
-    set addedFile [ipx::add_file $readme $fileGroup]
+    set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
     set_property type $type $addedFile
 }
 
-proc ::xtools::ip_packager::add_product_guide {guide} {
+proc ::xtools::ip_packager::add_product_guide {args} {
     # Summary: Add product-guide file to the packaged IP-core.
 
     # Argument Usage:
-    # guide:            Path to product-guide file. Supported file extensions are pdf, txt, md, htm(l) and http(s).
+    # -file <arg>:      File-path to product guide file
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added product guide. Supported file extensions are pdf, txt, md, htm(l) and http(s).
 
     # Return Value: TCL_OK
 
@@ -442,8 +533,26 @@ proc ::xtools::ip_packager::add_product_guide {guide} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -file       {incr i; set file       [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+    # Verify that only a single file is provided
+    if {[llength $file] != 1} {error "ERROR: \[add_product_guide\] Option -file must define a single file path."}
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force $file $copyToDir
+        set file [file join $copyToDir [file tail $file]]
+    }
+
     # Verify file type support
-    switch -glob -- $guide {
+    switch -glob -- $file {
         https://*   - http://*  {set type "unknown"}
         *.pdf                   {set type "pdf"}
         *.txt       - *.md      {set type "text"}
@@ -453,15 +562,16 @@ proc ::xtools::ip_packager::add_product_guide {guide} {
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "product_guide" "xilinx_productguide" [ipx::current_core]]
-    set addedFile [ipx::add_file $guide $fileGroup]
+    set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
     set_property type $type $addedFile
 }
 
-proc ::xtools::ip_packager::add_changelog {changelog} {
+proc ::xtools::ip_packager::add_changelog {args} {
     # Summary: Add changelog file to the packaged IP-core.
 
     # Argument Usage:
-    # changelog:        Path to changelog file. Supported file extensions are txt and md.
+    # -file <arg>:      File-path to changelog file
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added changelog. Supported file extensions are txt and md.
 
     # Return Value: TCL_OK
 
@@ -470,15 +580,33 @@ proc ::xtools::ip_packager::add_changelog {changelog} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -file       {incr i; set file       [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+    # Verify that only a single file is provided
+    if {[llength $file] != 1} {error "ERROR: \[add_changelog\] Option -file must define a single file path."}
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force $file $copyToDir
+        set file [file join $copyToDir [file tail $file]]
+    }
+
     # Verify file type support
-    switch -glob -- $changelog {
+    switch -glob -- $file {
         *.txt       - *.md      {set type "text"}
         default                 {error "ERROR: \[add_changelog\] File type not allowed. Supported file extensions are txt and md."}
     }
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "version_info" "xilinx_versioninformation" [ipx::current_core]]
-    set addedFile [ipx::add_file $changelog $fileGroup]
+    set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
     set_property type $type $addedFile
 }
 
@@ -489,6 +617,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
 
     # Argument Usage:
     # -driver_dir <arg>:            Output directory path for software-driver. Existing src-files (e.g. *.h or *.c) needs to be locaded inside the "src" subfolder and are added automatically.
+    # [-copy_to <arg>]:             Path to folder, where to copy/import the added softwar driver sources.
     # [-parameters <arg>]:          Add a list of IP parameters which values are exported to the xparameters.h file.
     # [-driver_name <arg>]:         Optionally, overwrite default driver name (default = <IP-Name>).
     # [-driver_version <arg>]:      Optionally, overwrite default driver version (default = 1.0).
@@ -514,6 +643,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -driver_dir             {incr i; set driver_dir         [lindex $args $i]}
+            -copy_to                {incr i; set copy_to            [lindex $args $i]}
             -parameters             {incr i; set parameters         [lindex $args $i]}
             -driver_name            {incr i; set driver_name        [lindex $args $i]}
             -driver_version         {incr i; set driver_version     [lindex $args $i]}
@@ -521,7 +651,16 @@ proc ::xtools::ip_packager::add_software_driver {args} {
         }
     }
 
+    # Verify that only a single directory is provided
+    if {[llength $driver_dir] != 1 || ![string match [file type [path_relative_to_pwd $driver_dir]] "directory"]} {error "ERROR: \[add_bd_tcl\] Option -driver_dir must define a single directory path."}
 
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        set driverDirPaths [glob -directory $driver_dir *]
+        file copy -force {*}$driverDirPaths $copyToDir
+        set driver_dir $copyToDir
+    }
     # Create required driver folder structure
     set driver_dir [path_relative_to_pwd $driver_dir]
     file mkdir [file join $driver_dir $driver_name "data"]
@@ -557,11 +696,12 @@ proc ::xtools::ip_packager::add_software_driver {args} {
 
 # Advanced Scripting Files ------------------------------------------------------------------------
 
-proc ::xtools::ip_packager::add_utility_scripts {utility_script} {
+proc ::xtools::ip_packager::add_utility_scripts {args} {
     # Summary: Add utility scripts to the packaged IP-core.
 
     # Argument Usage:
-    # utility_script:   List with paths to utility-scripts. Supported file extensions are xit, gtcl, tcl and ttcl.
+    # -files <arg>:     List of utility script file-paths to be added to the packaged IP-core
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added utility scripts. Supported file extensions are xit, gtcl, tcl and ttcl.
 
     # Return Value: TCL_OK
 
@@ -570,19 +710,41 @@ proc ::xtools::ip_packager::add_utility_scripts {utility_script} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -files      {incr i; set files     [lindex $args $i]}
+            -copy_to    {incr i; set copy_to   [lindex $args $i]}
+        }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
+    }
+
     # Verify file type support
-    switch -glob -- $utility_script {
-        *.xit   {set type "xit"}
-        *.gtcl  {set type "GTCL"}
-        *.tcl   {set type "tclSource"}
-        *.ttcl  {set type "ttcl"}
-        default {error "ERROR: \[add_utility_scripts\] File type not allowed. Supported file extensions are xit, gtcl, tcl and ttcl."}
+    foreach file $files {
+        switch -glob -- $file {
+            *.xit   {set type "xit"}
+            *.gtcl  {set type "GTCL"}
+            *.tcl   {set type "tclSource"}
+            *.ttcl  {set type "ttcl"}
+            default {error "ERROR: \[add_utility_scripts\] File type not allowed (${file}). Supported file extensions are xit, gtcl, tcl and ttcl."}
+        }
     }
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "utility" "xilinx_utilityxitfiles" [ipx::current_core]]
-    foreach file $utility_script {
-        set addedFile [ipx::add_file $file $fileGroup]
+    foreach file $files {
+        set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
         set_property type $type $addedFile
     }
 }
@@ -600,12 +762,13 @@ proc ::xtools::ip_packager::create_upgrade_tcl_template {} {
     error "ERROR: \[create_upgrade_tcl_template\] This function is not implemented yet."
 }
 
-proc ::xtools::ip_packager::add_upgrade_tcl {upgrade_script previous_versions} {
+proc ::xtools::ip_packager::add_upgrade_tcl {args} {
     # Summary: Add IP upgrade TCL scripts to the packaged IP-core.
 
     # Argument Usage:
-    # upgrade_script:       List of IP upgrade TCL script file-paths
-    # previous_versions:    List of handled/upgradable IP-core versions
+    # -files <arg>:         List of IP upgrade TCL script file-paths
+    # [-copy_to <arg>]:     Path to folder, where to copy/import the added upgrade scripts.
+    # [-versions <arg>]:    List of handled/upgradable IP-core versions.
 
     # Return Value: TCL_OK
 
@@ -614,19 +777,42 @@ proc ::xtools::ip_packager::add_upgrade_tcl {upgrade_script previous_versions} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -files      {incr i; set files      [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+            -versions   {incr i; set versions   [lindex $args $i]}
+        }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
+    }
+
     # Verify file type support
-    switch -glob -- $upgrade_script {
-        *.tcl   {set type "tclSource"}
-        default {error "ERROR: \[add_upgrade_tcl\] File type not allowed. Supported file extention is tcl."}
+    foreach file $files {
+        switch -glob -- $file {
+            *.tcl   {set type "tclSource"}
+            default {error "ERROR: \[add_upgrade_tcl\] File type not allowed (${file}). Supported file extention is tcl."}
+        }
     }
 
     # Add file to IPI file sets
     set fileGroup  [ipx::add_file_group -type "upgrade_script" "xilinx_upgradescripts" [ipx::current_core]]
-    foreach file $upgrade_script {
-        set addedFile [ipx::add_file $file $fileGroup]
+    foreach file $files {
+        set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
         set_property type $type $addedFile
     }
-    set_property PREVIOUS_VERSION_FOR_UPGRADE $previous_versions [ipx::current_core]
+    set_property PREVIOUS_VERSION_FOR_UPGRADE $versions [ipx::current_core]
 }
 
 proc ::xtools::ip_packager::create_bd_tcl_template {} {
@@ -642,11 +828,12 @@ proc ::xtools::ip_packager::create_bd_tcl_template {} {
     error "ERROR: \[create_bd_tcl_template\] This function is not implemented yet."
 }
 
-proc ::xtools::ip_packager::add_bd_tcl {bd_script} {
+proc ::xtools::ip_packager::add_bd_tcl {args} {
     # Summary: Add IP BD-TCL scripts to the packaged IP-core.
 
     # Argument Usage:
-    # bd_script:        BD-TCL script file-path
+    # -file <arg>:          BD-TCL script file-path
+    # [-copy_to <arg>]:     Path to folder, where to copy/import the added BD-TCL script.
 
     # Return Value: TCL_OK
 
@@ -655,23 +842,43 @@ proc ::xtools::ip_packager::add_bd_tcl {bd_script} {
     # Load global variables
     variable RootDir
 
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -file       {incr i; set file       [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+
+    # Verify that only a single file is provided
+    if {[llength $file] != 1} {error "ERROR: \[add_bd_tcl\] Option -file must define a single file path."}
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force $file $copyToDir
+        set file [file join $copyToDir [file tail $file]]
+    }
+
     # Verify file type support
-    switch -glob -- $bd_script {
+    switch -glob -- $file {
         *.tcl   {set type "tclSource"}
         default {error "ERROR: \[add_bd_tcl\] File type not allowed. Supported file extention is tcl."}
     }
 
     # Add file to IPI file sets
     set fileGroup [ipx::add_file_group -type "blockdiagram" "xilinx_blockdiagram" [ipx::current_core]]
-    set addedFile [ipx::add_file $bd_script $fileGroup]
+    set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
     set_property type $type $addedFile
 }
 
-proc ::xtools::ip_packager::add_gui_support_tcl {tcl_scripts} {
+proc ::xtools::ip_packager::add_gui_support_tcl {args} {
     # Summary:  Add GUI Support TCL scripts to the packaged IP-core. They might provide implemented procedures to calculate complex value dependencies for parameters.
 
     # Argument Usage:
-    # tcl_scripts:      List of file paths to GUI support TCLs
+    # -files <arg>:         List of file paths to GUI support TCLs.
+    # [-copy_to <arg>]:     Path to folder, where to copy/import the added GUI support TCL scripts.
 
     # Return Value: TCL_OK
 
@@ -680,19 +887,40 @@ proc ::xtools::ip_packager::add_gui_support_tcl {tcl_scripts} {
     # Load global variables
     variable GuiSupportTcl
     variable RootDir
+
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -files      {incr i; set files      [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+        }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}$files $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
+    }
+
     # Add files to XIT/Utility fileset
-    add_utility_scripts $tcl_scripts
+    add_utility_scripts -files $files
 
     # Make GUI support procedures available to current Vivado instance.
-	foreach script $tcl_scripts {
-		set ::script [file join $RootDir $script]
+	foreach file $files {
+		set ::gui_support_tcl [file join $RootDir $file]
 		namespace eval "::" {
-			source $script
+			source $gui_support_tcl
 		}
 	}
 
     # Store paths for later processing (see save_package_project)
-    lappend GuiSupportTcl {*}$tcl_scripts
+    lappend GuiSupportTcl {*}$files
 
 }
 
