@@ -6,15 +6,14 @@
 # IP Packager Configuraton
 ###################################################################################################
 
-set src_dir     [file normalize [file join [file dirname [info script]] ".."]];     # IPI source directory.
-set root_dir    [file normalize [file join $src_dir]];                              # path to root-directory of the IPI.
+set root_dir [file normalize [file join [file dirname [info script]] ".."]];    # IPI root directory.
 
 ###################################################################################################
 # Import IP Packager Package (including Xilinx Help infrastructure)
 ###################################################################################################
 
 # pkg_path must point to the app directory (folder which contains the "xtools" directory).
-set pkg_path                            [file normalize [file join $src_dir "../../../.."]];
+set pkg_path                            [file normalize [file join $root_dir "../../../.."]];
 lappend auto_path                       [file join $pkg_path "xtools"]
 ::tclapp::support::appinit::load_app    $pkg_path "::xtools::ip_packager" "ip_packager"
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
@@ -33,7 +32,7 @@ ip_packager::create_package_project     -prj_name       "packager_prj" \
 ###################################################################################################
 
 ip_packager::set_identification         -vendor         "xtools.ch" \
-                                        -name           "IpPackager_2020_1" \
+                                        -name           "IpPackager_2020_1_Internally" \
                                         -library        "IpPackagerTb" \
                                         -version        1.0 \
                                         -display_name   "IP Packager 2020.1 Testbench" \
@@ -46,49 +45,78 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
 # Compatibility
 ###################################################################################################
 
-# ip_packager::set_supported_families      {artix7 Production zynq Beta}
-# ip_packager::set_auto_family_support     "level_1"
-ip_packager::set_unsupported_simulators  {xcelium vcs riviera activehdl}
+# ip_packager::set_supported_families                     {artix7 Production zynq Beta}
+# ip_packager::set_auto_family_support                    "level_1"
+ip_packager::set_unsupported_simulators                 {xcelium vcs riviera activehdl}
 
 ###################################################################################################
 # File Groups
 ###################################################################################################
 
 # IP Core Design Files ----------------------------------------------------------------------------
-ip_packager::add_design_sources         -files          "hdl/IpPackager_2020_1.vhd" \
+ip_packager::add_design_sources         -files          [list \
+                                                            "hdl/IpPackager_2020_1.vhd" \
+                                                        ] \
                                         -file_type      "VHDL 2008"
 
-ip_packager::add_design_sources         -files          "hdl/IpPackager_2020_1_sub.v"
+ip_packager::add_design_sources         -files          [list \
+                                                            "hdl/IpPackager_2020_1_sub.v"\
+                                                        ] \
 
-ip_packager::add_design_simulation      -files          "tb/IpPackager_2020_1_ipi_tb.vhd"
+ip_packager::add_design_simulation      -files          [list \
+                                                            "tb/IpPackager_2020_1_ipi_tb.vhd"\
+                                                        ] \
 
-ip_packager::add_design_constraints     -files          "xdc/ooc.xdc" \
+ip_packager::add_design_constraints     -files          [list \
+                                                            "xdc/ooc.xdc"\
+                                                        ] \
                                         -used_in        "out_of_context"
 
-ip_packager::add_design_constraints     -files          "xdc/synth.xdc"\
+ip_packager::add_design_constraints     -files          [list \
+                                                            "xdc/synth.xdc" \
+                                                        ] \
                                         -used_in        "synthesis"
 
-ip_packager::add_design_constraints     -files          "xdc/impl.xdc" \
+ip_packager::add_design_constraints     -files          [list \
+                                                            "xdc/impl.xdc" \
+                                                        ] \
                                         -used_in        "implementation"
 
 # Example Design Files ----------------------------------------------------------------------------
-# ip_packager::add_exdes_script            "exdes/IpPackager_2020_1_exdes.tcl"
-# ip_packager::add_exdes_sources           "exdes/IpPackager_2020_1_exdes.vhd"
+# ip_packager::add_exdes_script           -Files          [list \
+                                                            "${src_dir}/exdes/IpPackager_2020_1_exdes.tcl" \
+                                                        ]
+
+# ip_packager::add_exdes_sources          -files          [list \
+                                                            "${src_dir}/exdes/IpPackager_2020_1_exdes.vhd" \
+                                                        ]
 
 # Documentation Files -----------------------------------------------------------------------------
-ip_packager::add_logo                   "doc/logo.png"
-ip_packager::add_readme                 "doc/readme.pdf"
-ip_packager::add_product_guide          "doc/product_guide.htm"
-ip_packager::add_changelog              "doc/changelog.txt"
+ip_packager::add_logo                   -file           "doc/logo.png"
+ip_packager::add_readme                 -file           "doc/readme.pdf"
+ip_packager::add_product_guide          -file           "doc/product_guide.htm"
+ip_packager::add_changelog              -file           "doc/changelog.txt"
 
 # Software Driver Files ---------------------------------------------------------------------------
-ip_packager::add_software_driver        -driver_dir        "drivers"
+ip_packager::add_software_driver        -driver_dir     "drivers" \
+                                        -driver_name    "IpPackager_2020_1"
 
 # Advanced Scripting Files ------------------------------------------------------------------------
-ip_packager::add_utility_scripts         "utils/any_util.xit"
-ip_packager::add_upgrade_tcl             "utils/ip_upgrade.tcl" [list 0.1]
-ip_packager::add_bd_tcl                  "bd/bd.tcl"
-ip_packager::add_gui_support_tcl         [list "gui/gui_support.tcl" "gui/gui_support2.tcl"]
+ip_packager::add_bd_tcl                 -file           "bd/bd.tcl"
+
+ip_packager::add_utility_scripts        -files          [list \
+                                                            "utils/any_util.xit" \
+                                                        ]
+
+ip_packager::add_upgrade_tcl            -files          [list \
+                                                            "utils/ip_upgrade.tcl" \
+                                                        ] \
+                                        -versions       [list 0.1]
+
+ip_packager::add_gui_support_tcl        -files          [list \
+                                                            "gui/gui_support.tcl" \
+                                                            "gui/gui_support2.tcl" \
+                                                        ]
 
 ###################################################################################################
 # Customization Paramenters
@@ -456,7 +484,7 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # Review and Package
 ###################################################################################################
 
-# ip_packager::simulate_package_project
+ip_packager::simulate_package_project
 
 # ip_packager::simulate_package_project   -generics   [list   "Clk_FreqHz_g=100e6" \
                                                             # "M_Axi_DataWidth_g=16" \
