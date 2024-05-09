@@ -669,12 +669,12 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     file mkdir [file join $driver_dir $driver_name "examples"]
 
     # Makefile Snipped
-    set replaceTags [dict create "<IP_NAME>" $ipName "<DRIVER_NAME>" $driver_name "<DRIVER_VERSION>" $driver_version "<DRIVER_DESCRIPTION>" $driver_description]
+    set replaceTags [dict create "<IP_NAME>" $ipName]
     copy_and_replace_tags [file join $Home "snippets" "driver" "Makefile"] [file join $driver_dir $driver_name "src" "Makefile"] $replaceTags
 
     # .MDD File Snipped
-    set replaceTags [dict create "<IP_NAME>" $ipName]
-    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.mdd"] [file join $driver_dir $driver_name "data" "${ipName}.mdd"] $replaceTags
+    set replaceTags [dict create "<IP_NAME>" $ipName "<DRIVER_NAME>" $driver_name "<DRIVER_VERSION>" $driver_version "<DRIVER_DESCRIPTION>" $driver_description]
+    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.mdd"] [file join $driver_dir $driver_name "data" "${driver_name}.mdd"] $replaceTags
 
     # .TCL File Snipped
     set paramList ""
@@ -683,7 +683,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     }
     set paramList [string trim $paramList]
     set replaceTags [dict create "<DRIVER_NAME>" $driver_name "<PARAM_LIST>" $paramList]
-    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.tcl"] [file join $driver_dir $driver_name "data" "${ipName}.tcl"] $replaceTags
+    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.tcl"] [file join $driver_dir $driver_name "data" "${driver_name}.tcl"] $replaceTags
 
     # Add files to IPI file sets
     set fileGroup  [ipx::add_file_group -type "software_driver" "xilinx_softwaredriver" [ipx::current_core]]
