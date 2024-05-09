@@ -163,6 +163,15 @@ end entity IpPackager_2020_1;
 ---------------------------------------------------------------------------------------------------
 architecture rtl of IpPackager_2020_1 is
 
+    component IpPackager_2020_1_sub is
+    port(
+        Clk         : in std_logic;
+        Rst         : in std_logic;
+        Uart_Tx     : out std_logic;
+        Uart_Rx     : in std_logic
+    );
+    end component;
+    
 begin
 
         -- Misc [Clk]
@@ -214,7 +223,7 @@ begin
         -- AXI Stream Slave Interface [Axis_Clk]
         S_Axis_TReady   <= M_Axis_TReady;
 
-        i_sub : entity work.IpPackager_2020_1_sub
+        i_sub : component IpPackager_2020_1_sub
         port map(
             Clk         => Clk,
             Rst         => Rst,

@@ -214,6 +214,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Argument Usage:
     # -top_file <arg>:                      Top-level HDL file for packaging.
     # [-copy_to <arg>]:                     Path to folder, where to copy/import the added Top-level HDL file.
+    # [-library <arg>]:                     VHDL library to compile the Top-Level HDL file to.
     # [-root_dir <arg> = ./..]:             IP output root directory.
     # [-prj_name  <arg> = package_prj]:     Temporary package project name.
     # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project.
@@ -236,6 +237,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -top_file   {incr i; set top_file [lindex $args $i]}
             -copy_to    {incr i; set copy_to  [lindex $args $i]}
+            -library    {incr i; set library  [lindex $args $i]}
             -root_dir   {incr i; set root_dir [lindex $args $i]}
             -prj_name   {incr i; set prj_name [lindex $args $i]}
             -part       {incr i; set part     [lindex $args $i]}
@@ -263,6 +265,8 @@ proc ::xtools::ip_packager::create_package_project {args} {
     } else {
         set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $top_file]]
     }
+    if {[info exists library]} {set_property library $library $addedFiles}
+
     # Create reports directory
     set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
     file delete -force $rpt_dir
