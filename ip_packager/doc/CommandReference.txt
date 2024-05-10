@@ -1,0 +1,1977 @@
+===================================================================================================
+= Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+===================================================================================================
+
+===================================================================================================
+= Overview
+===================================================================================================
+
+Topic                                     Description
+ip_packager::add_axi_interface            (User-written application)
+                                          Auto-infer AXI4 interface for all ports with a given pattern.
+                                          
+ip_packager::add_axis_interface           (User-written application)
+                                          Auto-infer AXI4-Stream interface for all ports with a given pattern.
+                                          
+ip_packager::add_bd_tcl                   (User-written application)
+                                          Add IP BD-TCL scripts to the packaged IP-core.
+                                          
+ip_packager::add_bus_interface            (User-written application)
+                                          Manually map bus interface.
+                                          
+ip_packager::add_changelog                (User-written application)
+                                          Add changelog file to the packaged IP-core.
+                                          
+ip_packager::add_clock_interface          (User-written application)
+                                          Auto-infer Clock interface for single-bit port with same name.
+                                          
+ip_packager::add_clockenable_interface    (User-written application)
+                                          Auto-infer Clock-Enable interface for single-bit port with same name.
+                                          
+ip_packager::add_data_interface           (User-written application)
+                                          Auto-infer Data interface for single port with same name.
+                                          
+ip_packager::add_design_constraints       (User-written application)
+                                          Add constraint sources (constrs_1) to the packaged IP-core.
+                                          
+ip_packager::add_design_simulation        (User-written application)
+                                          Add simulation sources (sim_1) to the packaged IP-core.
+                                          
+ip_packager::add_design_sources           (User-written application)
+                                          Add design sources (sources_1) to the packaged IP-core.
+                                          
+ip_packager::add_design_subcores          (User-written application)
+                                          Add IP subcore-reference to the packaged IP-core.
+                                          
+ip_packager::add_exdes_constraints        (User-written application)
+                                          Add Example Design constraints sources to the packaged IP-core.
+                                          
+ip_packager::add_exdes_script             (User-written application)
+                                          Add Example Design creation script to the packaged IP-core.
+                                          
+ip_packager::add_exdes_simulation         (User-written application)
+                                          Add Example Design simulation sources to the packaged IP-core.
+                                          
+ip_packager::add_exdes_sources            (User-written application)
+                                          Add Example Design sources to the packaged IP-core.
+                                          
+ip_packager::add_exdes_subcores           (User-written application)
+                                          Add Example Design IP subcore-references to the packaged IP-core.
+                                          
+ip_packager::add_gui_support_tcl          (User-written application)
+                                          Add GUI Support TCL scripts to the packaged IP-core. They might provide implemented procedures to calculate complex value dependencies for parameters.
+                                          
+ip_packager::add_interrupt_interface      (User-written application)
+                                          Auto-infer Reset interface for single-bit port with same name.
+                                          
+ip_packager::add_logo                     (User-written application)
+                                          Add custom logo to the packaged IP-core.
+                                          
+ip_packager::add_product_guide            (User-written application)
+                                          Add product-guide file to the packaged IP-core.
+                                          
+ip_packager::add_readme                   (User-written application)
+                                          Add readme file to the packaged IP-core.
+                                          
+ip_packager::add_reset_interface          (User-written application)
+                                          Auto-infer Reset interface for single-bit port with same name.
+                                          
+ip_packager::add_software_driver          (User-written application)
+                                          Add software driver template and custom src-files to the packaged IP-core.
+                                          
+ip_packager::add_upgrade_tcl              (User-written application)
+                                          Add IP upgrade TCL scripts to the packaged IP-core.
+                                          
+ip_packager::add_utility_scripts          (User-written application)
+                                          Add utility scripts to the packaged IP-core.
+                                          
+ip_packager::associate_clock_reset        (User-written application)
+                                          Associate reset to clock.
+                                          
+ip_packager::associate_interface_clock    (User-written application)
+                                          Associate clock to interface.
+                                          
+ip_packager::auto_infer_interface         (User-written application)
+                                          Auto-infer bus interface for all ports with a given pattern.
+                                          
+ip_packager::close_package_project        (User-written application)
+                                          Finally close the temporary package project.
+                                          
+ip_packager::create_bd_tcl_template       (User-written application)
+                                          Not implemented!
+                                          
+ip_packager::create_package_project       (User-written application)
+                                          Create a new IP package project for the specified top-level HDL file.
+                                          
+ip_packager::create_upgrade_tcl_template  (User-written application)
+                                          Not implemented!
+                                          
+ip_packager::create_user_param            (User-written application)
+                                          Create new parameter which is not already in the MODELPARAM space (generics).
+                                          
+ip_packager::gui_add_group                (User-written application)
+                                          Add new group to configuration GUI.
+                                          
+ip_packager::gui_add_page                 (User-written application)
+                                          Add new page to configuration GUI.
+                                          
+ip_packager::gui_add_param                (User-written application)
+                                          Add existing MODELPARAM (generic) or user parameter to configuration GUI.
+                                          
+ip_packager::gui_add_text                 (User-written application)
+                                          Add static text below to configuration GUI.
+                                          
+ip_packager::gui_set_parent               (User-written application)
+                                          Change current GUI parent. This will define the canvas to which the next parameter/group/page/text will be added.
+                                          
+ip_packager::impl_package_project         (User-written application)
+                                          Run test implementation on package project.
+                                          
+ip_packager::import_bus_definition        (User-written application)
+                                          Import existing interface/bus definition into packaged IP-core.
+                                          
+ip_packager::save_package_project         (User-written application)
+                                          Save package project and generate IP-core. Optionally, archive to zip.
+                                          
+ip_packager::set_auto_family_support      (User-written application)
+                                          Set automated family support level for this packaged IP-core.
+                                          
+ip_packager::set_identification           (User-written application)
+                                          Set packaged IP-core identification values.
+                                          
+ip_packager::set_interface_enablement     (User-written application)
+                                          Define interface enablement dependency.
+                                          
+ip_packager::set_param_config             (User-written application)
+                                          Configure existing MODELPARAM (generic) or added user parameter.
+                                          
+ip_packager::set_param_enablement         (User-written application)
+                                          Set parameter enablement expression for existing MODELPARAM (generic) or added user parameter.
+                                          
+ip_packager::set_param_validation         (User-written application)
+                                          Set value validation condition for existing MODELPARAM (generic) or added user parameter.
+                                          
+ip_packager::set_param_value              (User-written application)
+                                          Set parameter value expression for existing MODELPARAM (generic) or added user parameter.
+                                          
+ip_packager::set_port_enablement          (User-written application)
+                                          Define port enablement dependency.
+                                          
+ip_packager::set_supported_families       (User-written application)
+                                          Set supported families for this packaged IP-core.
+                                          
+ip_packager::set_unsupported_simulators   (User-written application)
+                                          Define unsupported simulators for this packaged IP-core.
+                                          
+ip_packager::simulate_package_project     (User-written application)
+                                          Launch Xilinx Simulator (xsim) on the package project.
+                                          
+ip_packager::synth_package_project        (User-written application)
+                                          Run test synthesis on package project.
+                                          
+
+For help on an individual topic, type 'help <topic>'. For example:
+% help create_project
+
+NOTE: Type "ip_packager::<any-command> -help" to see detailed description of a command.
+
+===================================================================================================
+
+===================================================================================================
+= Detailed Command Reference
+===================================================================================================
+
+ip_packager::add_axi_interface
+
+Description: 
+(User-written application)
+Auto-infer AXI4 interface for all ports with a given pattern.
+
+
+Syntax: 
+ip_packager::add_axi_interface  -interface_name <arg> [-port_pattern <arg>]
+                                [-bus_params <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. M_Axi).
+  [-port_pattern]  Optionally overwrite default wildcard pattern of infered 
+                   ports (default = <interface_name>_*).
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_axis_interface
+
+Description: 
+(User-written application)
+Auto-infer AXI4-Stream interface for all ports with a given pattern.
+
+
+Syntax: 
+ip_packager::add_axis_interface  -interface_name <arg> [-port_pattern <arg>]
+                                 [-bus_params <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. M_Axis).
+  [-port_pattern]  Optionally overwrite default wildcard pattern of infered 
+                   ports (default = <interface_name>_*).
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_bd_tcl
+
+Description: 
+(User-written application)
+Add IP BD-TCL scripts to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_bd_tcl  -file <arg> [-copy_to <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -file       BD-TCL script file-path.
+  [-copy_to]  Path to folder, where to copy/import the added BD-TCL script.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_bus_interface
+
+Description: 
+(User-written application)
+Manually map bus interface.
+
+
+Syntax: 
+ip_packager::add_bus_interface  -interface_name <arg> -vlnv <arg>
+                                -interface_mode <arg> -port_map <arg>
+                                [-bus_params <arg>] [-clock <arg>]
+                                [-reset <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_Rst).
+  -vlnv            Name or fully qualified VLNV identifier of bus interface 
+                   (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0")
+                   .
+  -interface_mode  Interface mode (e.g. master, slave, system, 
+                   mirroredMaster, mirroredSlave, mirroredSystem or monitor).
+  -port_map        List of portmap pairs (e.g. [list [list physicalName 
+                   abstractionName] [...]]).
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-clock]         Optionally define associated interface clock.
+                   Default: None
+  [-reset]         Optionally define associated reset for interface clock 
+                   (only in combination with -clock <arg>).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_changelog
+
+Description: 
+(User-written application)
+Add changelog file to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_changelog  -file <arg> [-copy_to <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -file       File-path to changelog file.
+  [-copy_to]  Path to folder, where to copy/import the added changelog. 
+              Supported file extensions are txt and md.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_clock_interface
+
+Description: 
+(User-written application)
+Auto-infer Clock interface for single-bit port with same name.
+
+
+Syntax: 
+ip_packager::add_clock_interface  -interface_name <arg> [-freq_hz <arg>]
+                                  [-bus_params <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_Clk).
+  [-freq_hz]       Optionally add FREQ_HZ value to bus_param list (only 
+                   define if the clock interface requires a specific 
+                   frequency).
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_clockenable_interface
+
+Description: 
+(User-written application)
+Auto-infer Clock-Enable interface for single-bit port with same name.
+
+
+Syntax: 
+ip_packager::add_clockenable_interface  -interface_name <arg>
+                                        [-bus_params <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_ClkEna).
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_data_interface
+
+Description: 
+(User-written application)
+Auto-infer Data interface for single port with same name.
+
+
+Syntax: 
+ip_packager::add_data_interface  -interface_name <arg> [-bus_params <arg>]
+                                 [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_Data).
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_design_constraints
+
+Description: 
+(User-written application)
+Add constraint sources (constrs_1) to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_design_constraints  -files <arg> [-copy_to <arg>]
+                                     [-used_in <arg>] [-processing_order <arg>]
+                                     [-scoped_to_cells <arg>] [-quiet]
+                                     [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                 Description
+  --------------------------------
+  -files               List of constraints file-paths to be added to the 
+                       packaged IP-core.
+  [-copy_to]           Path to folder, where to copy/import the added 
+                       constraints sources.
+                       Default: None
+  [-used_in]           List with design-step identifiers (useful for 
+                       constraints).
+                       Default: None
+  [-processing_order]  Processing-order identifier (e.g. "EARLY", "NORMAL", 
+                       "LATE").
+                       Default: None
+  [-scoped_to_cells]   Scope constraints to specific cells relative to the 
+                       IP-core top-level.
+                       Default: None
+  [-quiet]             Ignore command errors
+  [-verbose]           Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_design_simulation
+
+Description: 
+(User-written application)
+Add simulation sources (sim_1) to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_design_simulation  -files <arg> [-copy_to <arg>]
+                                    [-library <arg>] [-file_type <arg>]
+                                    [-global_include <arg>] [-enabled <arg>]
+                                    [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name               Description
+  ------------------------------
+  -files             List of simulation sources file-paths to be added to the
+                     packaged IP-core.
+  [-copy_to]         Path to folder, where to copy/import the added 
+                     simulation sources.
+                     Default: None
+  [-library]         VHDL library to compile the added simulation sources to.
+                     Default: None
+  [-file_type]       Overwrite simulation source file type (e.g. "VHDL 
+                     2008").
+                     Default: None
+  [-global_include]  Boolean to mark the Verilog files as global includes.
+                     Default: None
+  [-enabled]         Boolean to define enabled state of a source file.
+                     Default: None
+  [-quiet]           Ignore command errors
+  [-verbose]         Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_design_sources
+
+Description: 
+(User-written application)
+Add design sources (sources_1) to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_design_sources  -files <arg> [-copy_to <arg>] [-library <arg>]
+                                 [-file_type <arg>] [-global_include <arg>]
+                                 [-enabled <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name               Description
+  ------------------------------
+  -files             List of design sources file-paths to be added to the 
+                     packaged IP-core.
+  [-copy_to]         Path to folder, where to copy/import the added design 
+                     sources.
+                     Default: None
+  [-library]         VHDL library to compile the added design sources to.
+                     Default: None
+  [-file_type]       Overwrite design source file type (e.g. "VHDL 2008").
+                     Default: None
+  [-global_include]  Boolean to mark the Verilog files as global includes.
+                     Default: None
+  [-enabled]         Boolean to define enabled state of a source file.
+                     Default: None
+  [-quiet]           Ignore command errors
+  [-verbose]         Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_design_subcores
+
+Description: 
+(User-written application)
+Add IP subcore-reference to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_design_subcores  -vlnv <arg> [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -vlnv       List of subcore-reference VLNV identifiers to be added to the 
+              packaged IP-core (synthesis and simulation).
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_exdes_constraints
+
+Description: 
+(User-written application)
+Add Example Design constraints sources to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_exdes_constraints  -files <arg> [-copy_to <arg>] [-quiet]
+                                    [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -files      List of constraints file-paths to be added as example-design to
+              the packaged IP-core.
+  [-copy_to]  Path to folder, where to copy/import the added example-design 
+              constraints.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_exdes_script
+
+Description: 
+(User-written application)
+Add Example Design creation script to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_exdes_script  -files <arg> [-copy_to <arg>] [-quiet]
+                               [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -files      List of example-design creation scripts to be added to the 
+              packaged IP-core (synthesis and simulation).
+  [-copy_to]  Path to folder, where to copy/import the added example-design 
+              creation scripts.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_exdes_simulation
+
+Description: 
+(User-written application)
+Add Example Design simulation sources to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_exdes_simulation  -files <arg> [-copy_to <arg>]
+                                   [-library <arg>] [-file_type <arg>] [-quiet]
+                                   [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name          Description
+  -------------------------
+  -files        List of source file-paths to be added as example-design to 
+                the packaged IP-core.
+  [-copy_to]    Path to folder, where to copy/import the added example-design
+                simulation sources.
+                Default: None
+  [-library]    VHDL library to compile the added simulation sources to.
+                Default: None
+  [-file_type]  Overwrite simulation source file type (e.g. "VHDL 2008").
+                Default: None
+  [-quiet]      Ignore command errors
+  [-verbose]    Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_exdes_sources
+
+Description: 
+(User-written application)
+Add Example Design sources to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_exdes_sources  -files <arg> [-copy_to <arg>] [-library <arg>]
+                                [-file_type <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name          Description
+  -------------------------
+  -files        List of source file-paths to be added as example-design to 
+                the packaged IP-core.
+  [-copy_to]    Path to folder, where to copy/import the added example-design
+                sources.
+                Default: None
+  [-library]    VHDL library to compile the added design sources to.
+                Default: None
+  [-file_type]  Overwrite design source file type (e.g. "VHDL 2008").
+                Default: None
+  [-quiet]      Ignore command errors
+  [-verbose]    Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_exdes_subcores
+
+Description: 
+(User-written application)
+Add Example Design IP subcore-references to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_exdes_subcores  -vlnv <arg> [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -vlnv       List of subcore-reference VLNV identifiers to be added to the 
+              packaged IP-core example-design (synthesis and simulation).
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_gui_support_tcl
+
+Description: 
+(User-written application)
+Add GUI Support TCL scripts to the packaged IP-core. They might provide implemented procedures to calculate complex value dependencies for parameters.
+
+
+Syntax: 
+ip_packager::add_gui_support_tcl  -files <arg> [-copy_to <arg>] [-quiet]
+                                  [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -files      List of file paths to GUI support TCLs.
+  [-copy_to]  Path to folder, where to copy/import the added GUI support TCL 
+              scripts.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_interrupt_interface
+
+Description: 
+(User-written application)
+Auto-infer Reset interface for single-bit port with same name.
+
+
+Syntax: 
+ip_packager::add_interrupt_interface  -interface_name <arg>
+                                      [-sensitivity <arg>] [-bus_params <arg>]
+                                      [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_Irq).
+  [-sensitivity]   Optionally add SENSITIVITY value to bus_param list.
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_logo
+
+Description: 
+(User-written application)
+Add custom logo to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_logo  -file <arg> [-copy_to <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -file       File-path to logo file.
+  [-copy_to]  Path to folder, where to copy/import the added logo. Supported 
+              file extension is png.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_product_guide
+
+Description: 
+(User-written application)
+Add product-guide file to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_product_guide  -file <arg> [-copy_to <arg>] [-quiet]
+                                [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -file       File-path to product guide file.
+  [-copy_to]  Path to folder, where to copy/import the added product guide. 
+              Supported file extensions are pdf, txt, md, htm(l) and http(s).
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_readme
+
+Description: 
+(User-written application)
+Add readme file to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_readme  -file <arg> [-copy_to <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -file       File-path to readme file.
+  [-copy_to]  Path to folder, where to copy/import the added readme. 
+              Supported file extensions are pdf, txt, md, htm(l) and http(s).
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_reset_interface
+
+Description: 
+(User-written application)
+Auto-infer Reset interface for single-bit port with same name.
+
+
+Syntax: 
+ip_packager::add_reset_interface  -interface_name <arg> [-polarity <arg>]
+                                  [-bus_params <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name (e.g. User_Rst).
+  [-polarity]      Optionally add POLARITY value to bus_param list.
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_software_driver
+
+Description: 
+(User-written application)
+Add software driver template and custom src-files to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_software_driver  -driver_dir <arg> [-copy_to <arg>]
+                                  [-parameters <arg>] [-driver_name <arg>]
+                                  [-driver_version <arg>]
+                                  [-driver_description <arg>] [-quiet]
+                                  [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                   Description
+  ----------------------------------
+  -driver_dir            Output directory path for software-driver. Existing 
+                         src-files (e.g. *.h or *.c) needs to be locaded 
+                         inside the "src" subfolder and are added 
+                         automatically.
+  [-copy_to]             Path to folder, where to copy/import the added 
+                         softwar driver sources.
+                         Default: None
+  [-parameters]          Add a list of IP parameters which values are 
+                         exported to the xparameters.h file.
+                         Default: None
+  [-driver_name]         Optionally, overwrite default driver name (default =
+                         <IP-Name>).
+                         Default: None
+  [-driver_version]      Optionally, overwrite default driver version 
+                         (default = 1.0).
+                         Default: None
+  [-driver_description]  Optionally, overwrite default driver description 
+                         (default = "<IP-Name> specific driver").
+                         Default: None
+  [-quiet]               Ignore command errors
+  [-verbose]             Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_upgrade_tcl
+
+Description: 
+(User-written application)
+Add IP upgrade TCL scripts to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_upgrade_tcl  -files <arg> [-copy_to <arg>] [-versions <arg>]
+                              [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  -files       List of IP upgrade TCL script file-paths.
+  [-copy_to]   Path to folder, where to copy/import the added upgrade 
+               scripts.
+               Default: None
+  [-versions]  List of handled/upgradable IP-core versions.
+               Default: None
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::add_utility_scripts
+
+Description: 
+(User-written application)
+Add utility scripts to the packaged IP-core.
+
+
+Syntax: 
+ip_packager::add_utility_scripts  -files <arg> [-copy_to <arg>] [-quiet]
+                                  [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -files      List of utility script file-paths to be added to the packaged 
+              IP-core.
+  [-copy_to]  Path to folder, where to copy/import the added utility scripts.
+              Supported file extensions are xit, gtcl, tcl and ttcl.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::associate_clock_reset
+
+Description: 
+(User-written application)
+Associate reset to clock.
+
+
+Syntax: 
+ip_packager::associate_clock_reset  -clock <arg> -reset <arg> [-quiet]
+                                    [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -clock      List of clock interface names.
+  -reset      List of reset interface names.
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::associate_interface_clock
+
+Description: 
+(User-written application)
+Associate clock to interface.
+
+
+Syntax: 
+ip_packager::associate_interface_clock  -interface_name <arg> -clock <arg>
+                                        [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  List of interface names (supports wildcards).
+  -clock           Name of clock interface.
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::auto_infer_interface
+
+Description: 
+(User-written application)
+Auto-infer bus interface for all ports with a given pattern.
+
+
+Syntax: 
+ip_packager::auto_infer_interface  -interface_name <arg> -vlnv <arg>
+                                   [-port_pattern <arg>] [-bus_params <arg>]
+                                   [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  Define the interface name.
+  -vlnv            Name or fully qualified VLNV identifier of bus interface 
+                   (e.g. "aximm_rtl" or "xilinx.com:interface:aximm_rtl:1.0")
+                   .
+  [-port_pattern]  Optionally overwrite default wildcard pattern of infered 
+                   ports (default = <interface_name>_*).
+                   Default: None
+  [-bus_params]    Optionally add list of bus parameters and values (e.g. 
+                   [list [list PARAM_1 1] [list PARAM_2 2]]).
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::close_package_project
+
+Description: 
+(User-written application)
+Finally close the temporary package project.
+
+
+Syntax: 
+ip_packager::close_package_project  [-delete <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  [-delete]   When set to true, delete the temporary package project after 
+              closing.
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::create_bd_tcl_template
+
+Description: 
+(User-written application)
+Not implemented!
+
+
+Syntax: 
+ip_packager::create_bd_tcl_template  [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::create_package_project
+
+Description: 
+(User-written application)
+Create a new IP package project for the specified top-level HDL file.
+
+
+Syntax: 
+ip_packager::create_package_project  -top_file <arg> [-copy_to <arg>]
+                                     [-library <arg>] [-root_dir <arg>]
+                                     [-prj_name <arg>] [-part <arg>] [-quiet]
+                                     [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  -top_file    Top-level HDL file for packaging.
+  [-copy_to]   Path to folder, where to copy/import the added Top-level HDL 
+               file.
+               Default: None
+  [-library]   VHDL library to compile the Top-Level HDL file to.
+               Default: None
+  [-root_dir]  IP output root directory.
+               Default: ./..
+  [-prj_name]  Temporary package project name.
+               Default: package_prj
+  [-part]      FPGA part used for the package project.
+               Default: xc7z020iclg400-1L
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::create_upgrade_tcl_template
+
+Description: 
+(User-written application)
+Not implemented!
+
+
+Syntax: 
+ip_packager::create_upgrade_tcl_template  [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::create_user_param
+
+Description: 
+(User-written application)
+Create new parameter which is not already in the MODELPARAM space (generics).
+
+
+Syntax: 
+ip_packager::create_user_param  -param_name <arg> [-format <arg>]
+                                [-bit_string_length <arg>] [-value <arg>]
+                                [-value_tcl_expr <arg>]
+                                [-validation_range <arg>]
+                                [-validation_list <arg>]
+                                [-validation_pairs <arg>]
+                                [-enablement_tcl_expr <arg>] [-quiet]
+                                [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                    Description
+  -----------------------------------
+  -param_name             Parameter name (e.g. User_p).
+  [-format]               Parameter format (bitString, bool, float, long and 
+                          string).
+                          Default: string
+  [-bit_string_length]    Mandatory length for bitString parameters.
+                          Default: None
+  [-value]                Optional parameter default value. Only use -value 
+                          and -value_tcl_expr exclusively.
+                          Default: None
+  [-value_tcl_expr]       Optional parameter value expression (e.g. \$User_p 
+                          * 8). Only use -value and -value_tcl_expr 
+                          exclusively.
+                          Default: None
+  [-validation_range]     Optional validation range for float and long 
+                          parameters (e.g. [list <minimum> <maximum>] or 
+                          [list <minimum> -]).
+                          Default: None
+  [-validation_list]      Optional validation list (e.g. [list 1 3 5] or 
+                          ["100" "010" "001"]).
+                          Default: None
+  [-validation_pairs]     Optional validation pairs (e.g. [list key1 1 key2 2
+                          ...]).
+                          Default: None
+  [-enablement_tcl_expr]  Optional parameter enablement expression (e.g. "\$i
+                          > 2).
+                          Default: None
+  [-quiet]                Ignore command errors
+  [-verbose]              Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::gui_add_group
+
+Description: 
+(User-written application)
+Add new group to configuration GUI.
+
+
+Syntax: 
+ip_packager::gui_add_group  -group_name <arg> -display_name <arg>
+                            [-parent <arg>] [-tooltip <arg>] [-layout <arg>]
+                            [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name           Description
+  --------------------------
+  -group_name    GUI group identifier/name.
+  -display_name  Display name.
+  [-parent]      New GUI group's parent (default = current GUI page or 
+                 group). Define name of GUI page or group to change current 
+                 element's parent.
+                 Default: None
+  [-tooltip]     Tooltip (on hoover).
+                 Default: None
+  [-layout]      Group layout (e.g. horizontal or vertical).
+                 Default: vertical
+  [-quiet]       Ignore command errors
+  [-verbose]     Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::gui_add_page
+
+Description: 
+(User-written application)
+Add new page to configuration GUI.
+
+
+Syntax: 
+ip_packager::gui_add_page  -page_name <arg> -display_name <arg>
+                           [-tooltip <arg>] [-layout <arg>] [-parent <arg>]
+                           [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name           Description
+  --------------------------
+  -page_name     GUI page identifier/name.
+  -display_name  Display name.
+  [-tooltip]     Tooltip (on hoover).
+                 Default: None
+  [-layout]      Page layout (e.g. horizontal or vertical).
+                 Default: vertical
+  [-parent]      New GUI page's parent (default = current GUI page or group).
+                 Define name of GUI page or group to change current element's
+                 parent.
+                 Default: None
+  [-quiet]       Ignore command errors
+  [-verbose]     Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::gui_add_param
+
+Description: 
+(User-written application)
+Add existing MODELPARAM (generic) or user parameter to configuration GUI.
+
+
+Syntax: 
+ip_packager::gui_add_param  -param_name <arg> -display_name <arg>
+                            [-parent <arg>] [-tooltip <arg>] [-layout <arg>]
+                            [-widget <arg>] [-show_label <arg>]
+                            [-show_range <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name           Description
+  --------------------------
+  -param_name    GUI parameter identifier/name.
+  -display_name  Display name.
+  [-parent]      New GUI group's parent (default = current GUI page or 
+                 group). Define name of GUI page or group to change current 
+                 element's parent.
+                 Default: None
+  [-tooltip]     Tooltip (on hoover).
+                 Default: None
+  [-layout]      Group layout (e.g. horizontal or vertical).
+                 Default: vertical
+  [-widget]      Parameter widget (e.g. radioGroup, textEdit, checkBox or 
+                 comboBox).
+                 Default: None
+  [-show_label]  Boolean to hide -display_name string.
+  [-show_range]  Boolean to hide -validation_range.
+  [-quiet]       Ignore command errors
+  [-verbose]     Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::gui_add_text
+
+Description: 
+(User-written application)
+Add static text below to configuration GUI.
+
+
+Syntax: 
+ip_packager::gui_add_text  -text_name <arg> -text <arg> [-parent <arg>]
+                           [-tooltip <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  -text_name  GUI text identifier/name.
+  -text       Static text string.
+  [-parent]   New GUI group's parent (default = current GUI page or group). 
+              Define name of GUI page or group to change current element's 
+              parent.
+              Default: None
+  [-tooltip]  Tooltip (on hoover).
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::gui_set_parent
+
+Description: 
+(User-written application)
+Change current GUI parent. This will define the canvas to which the next parameter/group/page/text will be added.
+
+
+Syntax: 
+ip_packager::gui_set_parent  [-quiet] [-verbose] [<parent_name>]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+  [<parent_name>]  GUI parent identifier/name. Use "root" to define the main 
+                   window.
+                   Default: root
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::impl_package_project
+
+Description: 
+(User-written application)
+Run test implementation on package project.
+
+
+Syntax: 
+ip_packager::impl_package_project  [-part <arg>] [-jobs <arg>] [-timeout <arg>]
+                                   [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  [-part]     Define specific part used for implementation.
+              Default: None
+  [-jobs]     Define number of jobs used for implementation run.
+              Default: 4
+  [-timeout]  Define implementation run timeout in seconds.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::import_bus_definition
+
+Description: 
+(User-written application)
+Import existing interface/bus definition into packaged IP-core.
+
+
+Syntax: 
+ip_packager::import_bus_definition  [-quiet] [-verbose] <definition>
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name          Description
+  -------------------------
+  [-quiet]      Ignore command errors
+  [-verbose]    Suspend message limits during command execution
+  <definition>  File-path to the interface/bus definition XML.
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::save_package_project
+
+Description: 
+(User-written application)
+Save package project and generate IP-core. Optionally, archive to zip.
+
+
+Syntax: 
+ip_packager::save_package_project  [-archive_to <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name           Description
+  --------------------------
+  [-archive_to]  Define path to archive the final IPI to.
+                 Default: None
+  [-quiet]       Ignore command errors
+  [-verbose]     Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_auto_family_support
+
+Description: 
+(User-written application)
+Set automated family support level for this packaged IP-core.
+
+
+Syntax: 
+ip_packager::set_auto_family_support  [-quiet] [-verbose] <level_str>
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+  <level_str>  Auto familiy support level string (e.g. "level_1").
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_identification
+
+Description: 
+(User-written application)
+Set packaged IP-core identification values.
+
+
+Syntax: 
+ip_packager::set_identification  [-vendor <arg>] [-library <arg>] [-name <arg>]
+                                 [-version <arg>] [-core_revision <arg>]
+                                 [-display_name <arg>] [-description <arg>]
+                                 [-display_vendor <arg>] [-company_url <arg>]
+                                 [-taxonomy <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name               Description
+  ------------------------------
+  [-vendor]          Vendor sting of VLNV identifier (no white-spaces 
+                     allowed).
+                     Default: None
+  [-library]         Library sting of VLNV identifier (no white-spaces 
+                     allowed).
+                     Default: None
+  [-name]            Name sting of VLNV identifier (no white-spaces allowed).
+                     Default: None
+  [-version]         Version number of VLNV identifier (e.g. 1.0).
+                     Default: None
+  [-core_revision]   Revision number. If not overwritten by the user, the 
+                     revision identifier is set to seconds passed since 1 
+                     January 1970, 00:00 UTC (tcl: [clock seconds]).
+                     Default: None
+  [-display_name]    Displayed name sting.
+                     Default: None
+  [-description]     Description string.
+                     Default: None
+  [-display_vendor]  Displayed vendor sting.
+                     Default: None
+  [-company_url]     Company homepage URL.
+                     Default: None
+  [-taxonomy]        Taxonomy sting. Separate subgroups with "/" and 
+                     underscores are represented as white-spaces (e.g. 
+                     "/MY_CORES/Ip_Packager").
+                     Default: None
+  [-quiet]           Ignore command errors
+  [-verbose]         Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_interface_enablement
+
+Description: 
+(User-written application)
+Define interface enablement dependency.
+
+
+Syntax: 
+ip_packager::set_interface_enablement  -interface_name <arg> -dependency <arg>
+                                       [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -interface_name  List of interface names.
+  -dependency      Dependency condition (e.g. "\$i > 2").
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_param_config
+
+Description: 
+(User-written application)
+Configure existing MODELPARAM (generic) or added user parameter.
+
+
+Syntax: 
+ip_packager::set_param_config  -param_name <arg> [-value <arg>]
+                               [-value_tcl_expr <arg>]
+                               [-validation_range <arg>]
+                               [-validation_list <arg>]
+                               [-validation_pairs <arg>]
+                               [-enablement_tcl_expr <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                    Description
+  -----------------------------------
+  -param_name             Parameter name (e.g. User_p).
+  [-value]                Optional parameter default value. Only use -value 
+                          and -value_tcl_expr exclusively.
+                          Default: None
+  [-value_tcl_expr]       Optional parameter value expression (e.g. \$User_p 
+                          * 8). Only use -value and -value_tcl_expr 
+                          exclusively.
+                          Default: None
+  [-validation_range]     Optional validation range for float and long 
+                          parameters (e.g. [list <minimum> <maximum>] or 
+                          [list <minimum> -]).
+                          Default: None
+  [-validation_list]      Optional validation list (e.g. [list 1 3 5] or 
+                          ["100" "010" "001"]).
+                          Default: None
+  [-validation_pairs]     Optional validation pairs (e.g. [list key1 1 key2 2
+                          ...]).
+                          Default: None
+  [-enablement_tcl_expr]  Optional parameter enablement expression (e.g. "\$i
+                          > 2).
+                          Default: None
+  [-quiet]                Ignore command errors
+  [-verbose]              Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_param_enablement
+
+Description: 
+(User-written application)
+Set parameter enablement expression for existing MODELPARAM (generic) or added user parameter.
+
+
+Syntax: 
+ip_packager::set_param_enablement  -param_name <arg> -tcl_expr <arg> [-quiet]
+                                   [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  -param_name  Parameter name (e.g. User_p).
+  -tcl_expr    Parameter enablement expression (e.g. "\$i > 2).
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_param_validation
+
+Description: 
+(User-written application)
+Set value validation condition for existing MODELPARAM (generic) or added user parameter.
+
+
+Syntax: 
+ip_packager::set_param_validation  -param_name <arg> -type <arg> -value <arg>
+                                   [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  -param_name  Parameter name (e.g. User_p).
+  -type        Validation type (e.g. range, list or pairs).
+  -value       Validation value dependend on -type argument.
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_param_value
+
+Description: 
+(User-written application)
+Set parameter value expression for existing MODELPARAM (generic) or added user parameter.
+
+
+Syntax: 
+ip_packager::set_param_value  -param_name <arg> [-value <arg>]
+                              [-tcl_expr <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  -param_name  Parameter name (e.g. User_p).
+  [-value]     Parameter default value. Only use -value and -tcl_expr 
+               exclusively.
+               Default: None
+  [-tcl_expr]  Parameter value expression (e.g. "\$User_p * 2). Only use 
+               -value and -tcl_expr exclusively.
+               Default: None
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_port_enablement
+
+Description: 
+(User-written application)
+Define port enablement dependency.
+
+
+Syntax: 
+ip_packager::set_port_enablement  -port_name <arg> -dependency <arg>
+                                  [-driver_value <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name             Description
+  ----------------------------
+  -port_name       List of port names.
+  -dependency      Dependency condition (e.g. "\$i > 2").
+  [-driver_value]  Default driver value if input is not connected.
+                   Default: None
+  [-quiet]         Ignore command errors
+  [-verbose]       Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_supported_families
+
+Description: 
+(User-written application)
+Set supported families for this packaged IP-core.
+
+
+Syntax: 
+ip_packager::set_supported_families  [-quiet] [-verbose]
+                                     <families_lifecycle_pairs>
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                        Description
+  ---------------------------------------
+  [-quiet]                    Ignore command errors
+  [-verbose]                  Suspend message limits during command execution
+  <families_lifecycle_pairs>  List with pairs of FPGA-familiy identifiers and 
+                              lifecycle identifiers.
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_unsupported_simulators
+
+Description: 
+(User-written application)
+Define unsupported simulators for this packaged IP-core.
+
+
+Syntax: 
+ip_packager::set_unsupported_simulators  [-quiet] [-verbose] <simulators>
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name          Description
+  -------------------------
+  [-quiet]      Ignore command errors
+  [-verbose]    Suspend message limits during command execution
+  <simulators>  List of unsupported simulators identifiers (e.g. xsim, 
+                modelsim, questa, xcelium, vcs, riviera, activehdl).
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::simulate_package_project
+
+Description: 
+(User-written application)
+Launch Xilinx Simulator (xsim) on the package project.
+
+
+Syntax: 
+ip_packager::simulate_package_project  [-generics <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name         Description
+  ------------------------
+  [-generics]  Define sim_1 top-level generics for simulation. If not 
+               defined, the current default values from the configuration GUI
+               are used.
+               Default: None
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::synth_package_project
+
+Description: 
+(User-written application)
+Run test synthesis on package project.
+
+
+Syntax: 
+ip_packager::synth_package_project  [-part <arg>] [-jobs <arg>]
+                                    [-timeout <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name        Description
+  -----------------------
+  [-part]     Define specific part used for synthesis.
+              Default: None
+  [-jobs]     Define number of jobs used for synthesis run.
+              Default: 4
+  [-timeout]  Define synthesis run timeout in seconds.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+

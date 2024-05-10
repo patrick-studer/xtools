@@ -28,8 +28,6 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 
 ## Identification
 
-### PsiIpPackage
-
 * `init DISPLAY_NAME VERSION CORE_REVISION LIBRARY`
 * `set_description DESCRIPTION`
 * `set_vendor VENDOR`
@@ -74,13 +72,13 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 * `add_sub_core_reference VLNV`
   * `add_design_subcores -vlnv VLNV`
 * `set_logo_relative LOGO`
-  * `add_logo LOGO`
+  * `add_logo -file LOGO`
 * `set_datasheet_relative <datasheet>`
   * Deprecated. Use `add_product_guide`, `add_changelog`, or `add_readme`
 * `add_ttcl_vhd UTILITY_SCRIPT LIBRARY`
-  * `add_utility_scripts UTILITY_SCRIPT` (**Note:** LIBRARY is not supported anymore. It must be defined in the TTCL code)
+  * `add_utility_scripts -files UTILITY_SCRIPT` (**Note:** LIBRARY is not supported anymore. It must be defined in the TTCL code)
 * `add_gui_support_tcl TCL_SCRIPTS`
-  * `add_gui_support_tcl TCL_SCRIPTS`
+  * `add_gui_support_tcl -files TCL_SCRIPTS`
 * `add_drivers_relative DRIVER_DIR FILES`
 * `add_xparameters_entry PARAMETERS`
   * `add_software_driver -driver_dir DRIVER_DIR -parameters PARAMETERS` (**Note:** FILES must not be defined anymore. All sources in src folder are added automatically.)
@@ -122,8 +120,6 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 
 ## Ports and Interfaces
 
-### PsiIpPackage
-
 * `import_interface_definition DEFINITION DEF_NAMES`
   * `import_bus_definition DEFINITION` (**Note:** DEF_NAMES is not needed anymore.)
 * `add_bus_interface VLNV INTERFACE_NAME INTERFACE_MODE DESCRIPTION PORT_MAP`
@@ -160,8 +156,6 @@ No functions available.
 
 ## Customization GUI
 
-### PsiIpPackage
-
 * `gui_add_page DISPLAY_NAME`
   * `gui_add_page -page_name PAGE_NAME -display_name DISPLAY_NAME`
 * `gui_add_group DISPLAY_NAME`
@@ -175,6 +169,6 @@ No functions available.
 * `gui_parameter_text_below TEXT`
   * `gui_add_text -text_name TEXT_NAME -text TEXT`
 
-### ip_packager
+### New ip_packager features
 
   * `gui_set_parent`

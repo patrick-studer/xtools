@@ -80,20 +80,20 @@ Not available.
 * `add_design_constraints -files <arg> [-copy_to <arg>] [-used_in <arg>] [-processing_order <arg>] [-scoped_to_cells <arg>] [-quiet] [-verbose]`
 * `add_design_simulation -files <arg> [-copy_to <arg>] [-library <arg>] [-file_type <arg>] [-global_include <arg>] [-enabled <arg>]`
 * `add_design_subcores -vlnv <arg>`
-* `add_exdes_sources -files <arg> [-library <arg>] [-file_type <arg>]`
-* `add_exdes_constraints -files <arg>`
-* `add_exdes_simulation -files <arg> [-library <arg>] [-file_type <arg>]`
+* `add_exdes_sources -files <arg> [-copy_to <arg>] [-library <arg>] [-file_type <arg>]`
+* `add_exdes_constraints -files <arg> [-copy_to <arg>]`
+* `add_exdes_simulation -files <arg> [-copy_to <arg>] [-library <arg>] [-file_type <arg>]`
 * `add_exdes_subcores -vlnv <arg>`
-* `add_exdes_script -files <arg>`
-* `add_logo <logo>`
-* `add_product_guide <guide>`
-* `add_changelog <changelog>`
-* `add_readme <readme>`
-* `add_gui_support_tcl <tcl_scripts>`
-* `add_bd_tcl <bd_script>`
-* `add_upgrade_tcl <upgrade_script>`
-* `add_utility_scripts <utility_script>`
-* `add_software_driver -driver_dir <arg> [-parameters <arg>] [-driver_name <arg>] [-driver_version <arg>] [-driver_description <arg>] [-quiet] [-verbose]`
+* `add_exdes_script -files <arg> [-copy_to <arg>]`
+* `add_logo -file <arg> [-copy_to <arg>]`
+* `add_product_guide -file <arg> [-copy_to <arg>]`
+* `add_changelog -file <arg> [-copy_to <arg>]`
+* `add_readme -file <arg> [-copy_to <arg>]`
+* `add_gui_support_tcl -files <arg> [-copy_to <arg>]`
+* `add_bd_tcl -file <arg> [-copy_to <arg>]`
+* `add_upgrade_tcl -files <arg> [-copy_to <arg>] [-versions <arg>]`
+* `add_utility_scripts -files <arg> [-copy_to <arg>]`
+* `add_software_driver -driver_dir <arg> [-copy_to <arg>] [-parameters <arg>] [-driver_name <arg>] [-driver_version <arg>] [-driver_description <arg>] [-quiet] [-verbose]`
 
 ## Customization Paramenters
 
@@ -143,7 +143,7 @@ Not available.
 * `add_interrupt_interface -interface_name <arg> [-sensitivity <arg>] [-bus_params <arg>]`
 * `add_reset_interface -interface_name <arg> [-polarity <arg>] [-bus_params <arg>]`
 * `associate_interface_clock -interface_name <arg> -clock <arg>`
-* `associate_clock_reset -interface_name <arg> -reset <arg> [-quiet] [-verbose]`
+* `associate_clock_reset -clock <arg> -reset <arg> [-quiet] [-verbose]`
 * `set_interface_enablement -interface_name <arg> -dependency <arg>`
 * `set_port_enablement -port_name <arg> -dependency <arg> [-driver_value <arg>]`
 

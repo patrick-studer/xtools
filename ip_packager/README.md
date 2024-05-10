@@ -37,14 +37,9 @@ This would distribute the IP-Packager directly within Vivado and allow to access
 ## Compatibility
 The basis implementation was made with **Vivado 2020.1**. It is required to use a Vivado version equal or higher than 2020.1.
 
-## Installation
+## Installation and Usage
 Clone this repository (XTools) and access it directly from your design projects.
 
-```TCL
-set pkg_path                            <path (absolute or relative to package.tcl file) to directory in which folder "xtools" is located>
-```
-
-## Usage
 The process of packaging an IP-core is described in the so-called `package.tcl` (or any other name given by the user).
 It is recommended to create a IPI-wrapper (see [here](./test/test_ipi/hdl/IpPackager_2020_1_ipi.vhd)) file around the top-entity to overcome some limitations like removing external function calls (from HDL packages)
 or provide additional generics which support a nice IP-GUI design.
@@ -53,6 +48,7 @@ The IP-Packager provides a TCL package (`::xtools::ip_packager`), which may be l
 To use the Vivado-internal documentation/help mechanism and auto-completion of commands, it is necessary to load the IP-Packager as application and enable the help infrastructure.
 
 ```TCL
+set pkg_path                            <path (absolute or relative to current working directory (pwd)) to directory in which folder "xtools" is located>
 lappend auto_path                       [file join $pkg_path "xtools"]
 ::tclapp::support::appinit::load_app    ${pkg_path} "::xtools::ip_packager" "ip_packager"
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
@@ -72,17 +68,12 @@ The documentation of procedures is embedded in the source code and can be direct
 
 To get an overview of all available commands just type `help ip_packager` in Vivado TCL console after loading the application and enabling help (see above).
 
-Alternatively, you may run [help.tcl](scripts/help.tcl):
-
-```TCL
-cd $pkg_dir
-source -notrace ./xtools/ip_packager/scripts/help.tcl
-```
-
 Help to a specific command can be accessed by tipping `ip_packager::<any-command> -help` in the Vivado TCL console.
 
+Alternatively, you may consult the exported [Command Reference](doc/CommandReference.txt) to get a full documentation of all commands.
+
 ## Example/Testbench (test)
-Every tagged release of the IP-Packager is verified with a simple dummy IP-core (see [package.tcl](./test/test_ipi/scripts/package.tcl).
+Every tagged release of the IP-Packager is verified with a simple dummy IP-core (see [package.tcl](./test/test_ipi/package/package.tcl).
 This is also a good starting point for newbies of the IP-Packager, since it displays a wide range of features.
 
 To package the test IP-core run the following script in your Vivado TCL console:
@@ -92,11 +83,13 @@ cd $pkg_dir
 source ./xtools/ip_packager/test/test.tcl
 ```
 **NOTE:** The temporary created `package_prj` will be deleted after successful packaging.
-To evaluate the packaged test IPI, comment out the `ip_packager::close_package_project` command at the end of [package.tcl](./test/test_ipi/scripts/package.tcl).
+To evaluate the packaged test IPI, comment out the `ip_packager::close_package_project` command at the end of [package.tcl](./test/test_ipi/package/package.tcl).
 ## Templates
 The IP-Packager provides some useful templates for basic and advanced usage:
-- [package.tcl](./templates/package/package.tcl)
-  - Minimalistic IP-Packager package.tcl example. Can be used as starting point for new projects.
+- [package_internally.tcl](./templates/package/package_internally.tcl)
+  - Minimalistic IP-Packager package.tcl example to package an IPI in-place/internally. Can be used as starting point for new projects.
+- [package_externally.tcl](./templates/package/package_externally.tcl)
+  - Minimalistic IP-Packager package.tcl example to package an IPI to an external build location. Can be used as starting point for new projects.
 - [bd.tcl](./templates/bd/bd.tcl)
   - Allows automatic parameter propagation from block design (BD) parameters into the IP configuration and finally to HDL parameters (generics).
 - [TTCL](./templates/ttcl/template.ttcl)

@@ -6,16 +6,16 @@
 # IP Packager Configuraton
 ###################################################################################################
 
-set this_file_path      [file normalize [file dirname [info script]]];  # package.tcl directory.
-set pkg_path            [file join $this_file_path "../../../../.."];   # path to directory in which folder "xtools" is located.
-set root_dir            [file join $this_file_path ".."];               # path to root-directory of the IPI.
+set root_dir [file normalize [file join [file dirname [info script]] ".."]];    # IPI root directory.
 
 ###################################################################################################
 # Import IP Packager Package (including Xilinx Help infrastructure)
 ###################################################################################################
 
+# pkg_path must point to the app directory (folder which contains the "xtools" directory).
+set pkg_path                            [file normalize [file join $root_dir "../../../.."]];
 lappend auto_path                       [file join $pkg_path "xtools"]
-::tclapp::support::appinit::load_app    ${pkg_path} "::xtools::ip_packager" "ip_packager"
+::tclapp::support::appinit::load_app    $pkg_path "::xtools::ip_packager" "ip_packager"
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
 
 ###################################################################################################
@@ -84,6 +84,16 @@ ip_packager::set_param_config           -param_name             "<GENERIC-NAME_g
 ip_packager::auto_infer_interface       -interface_name         "<INTERFACE-NAME>" \
                                         -vlnv                   "<INTERFACE-VLNV>"
 
+ip_packager::add_axi_interface          -interface_name         "<INTERFACE-NAME>"
+
+ip_packager::add_axis_interface         -interface_name         "<INTERFACE-NAME>"
+
+ip_packager::add_interrupt_interface    -interface_name         "<INTERFACE-NAME>"
+
+ip_packager::add_clock_interface        -interface_name         "<INTERFACE-NAME>"
+
+ip_packager::add_reset_interface        -interface_name         "<INTERFACE-NAME>"
+
 # Manually-Mapped Interfaces ----------------------------------------------------------------------
 ip_packager::add_bus_interface          -interface_name         "<INTERFACE-NAME>" \
                                         -vlnv                   "<INTERFACE-VLNV>" \
@@ -94,12 +104,16 @@ ip_packager::add_bus_interface          -interface_name         "<INTERFACE-NAME
 ip_packager::associate_interface_clock  -interface_name         "<INTERFACE-NAME>" \
                                         -clock                  "<CLOCK-NAME>"
 
-ip_packager::associate_clock_reset      -interface_name         "<CLOCK-NAME>" \
+ip_packager::associate_clock_reset      -clock                  "<CLOCK-NAME>" \
                                         -reset                  "<RESET-NAME>"
 
 # Enablement Control ------------------------------------------------------------------------------
 ip_packager::set_interface_enablement   -interface_name         "<INTERFACE-NAME>" \
                                         -dependency             "<ENABLEMENT-DEPENDENCY>"
+
+ip_packager::set_port_enablement        -port_name              "<PORT-NAME>" \
+                                        -dependency             "PORT-DEPENDENCY" \
+                                        -driver_value           <PORT-DEFAULT-VALUE> \
 
 ###################################################################################################
 # Adressing and Memory
@@ -113,6 +127,7 @@ ip_packager::set_interface_enablement   -interface_name         "<INTERFACE-NAME
 
 # ROOT --------------------------------------------------------------------------------------------
 ip_packager::gui_set_parent     "root"
+
 ip_packager::gui_add_page       -page_name      "<PAGE-NAME>" \
                                 -display_name   "<PAGE-DISPLAY-NAME>"
 
@@ -138,7 +153,7 @@ ip_packager::impl_package_project
 
 ip_packager::save_package_project
 
-ip_packager::close_package_project      -delete     "true"
+ip_packager::close_package_project      -delete         "true"
 
 ###################################################################################################
 # EOF
