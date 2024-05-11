@@ -24,7 +24,9 @@ entity IpPackager_2020_1_ipi_tb is
         M_Axis_TDataWidth_g             : natural;
         M_Axis_TUserWidth_g             : natural;
         S_Axis_TDataWidth_g             : natural;
-        S_Axis_TUserWidth_g             : natural
+        S_Axis_TUserWidth_g             : natural;
+        TestSL_Int_g                    : integer range 0 to 1;
+        TestSLV_Int_g                   : integer range 0 to 3
     );
 end entity IpPackager_2020_1_ipi_tb;
 
@@ -45,7 +47,9 @@ begin
         M_Axis_TDataWidth_g => M_Axis_TDataWidth_g,
         M_Axis_TUserWidth_g => M_Axis_TUserWidth_g,
         S_Axis_TDataWidth_g => S_Axis_TDataWidth_g,
-        S_Axis_TUserWidth_g => S_Axis_TUserWidth_g
+        S_Axis_TUserWidth_g => S_Axis_TUserWidth_g,
+        TestSL_g            => to_unsigned(TestSL_Int_g, 1)(0),
+        TestSLV_g           => std_logic_vector(to_unsigned(TestSLV_Int_g, 2))
     )
     port map(
         -- Clock and Reset

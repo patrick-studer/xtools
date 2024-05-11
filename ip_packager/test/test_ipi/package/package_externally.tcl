@@ -63,7 +63,6 @@ ip_packager::add_design_sources         -files          [list \
                                                             "${src_dir}/hdl/IpPackager_2020_1.vhd" \
                                                         ] \
                                         -copy_to        "hdl" \
-                                        -file_type      "VHDL 2008" \
 
 ip_packager::add_design_sources         -files          [list \
                                                             "${src_dir}/hdl/IpPackager_2020_1_sub.v" \
@@ -73,7 +72,8 @@ ip_packager::add_design_sources         -files          [list \
 ip_packager::add_design_simulation      -files          [list \
                                                             "${src_dir}/tb/IpPackager_2020_1_ipi_tb.vhd" \
                                                         ] \
-                                        -copy_to        "hdl" \
+                                        -copy_to        "tb" \
+                                        -file_type      "VHDL 2008" \
 
 ip_packager::add_design_constraints     -files          [list \
                                                             "${src_dir}/xdc/ooc.xdc" \
@@ -235,6 +235,18 @@ ip_packager::set_param_config           -param_name             "S_Axis_TUserWid
                                         -value                  12 \
                                         -enablement_tcl_expr    "\$HasAxis_p == true" \
 
+ip_packager::set_param_config           -param_name             "TestSL_g" \
+                                        -format                 "bitString" \
+                                        -bit_string_length      1 \
+                                        -validation_list        [list {"0"} {"1"}] \
+                                        -value                  {"0"} \
+
+ip_packager::set_param_config           -param_name             "TestSLV_g" \
+                                        -format                 "bitString" \
+                                        -bit_string_length      2 \
+                                        -validation_list        [list {"00"} {"01"} {"10"}] \
+                                        -value                  {"00"} \
+
 ###################################################################################################
 # Ports and Interfaces
 ###################################################################################################
@@ -388,6 +400,24 @@ ip_packager::gui_add_page       -page_name      "Page_Config" \
                                 -layout         "vertical" \
 
     # PAGE Configuration --------------------------------------------------------------------------
+    ip_packager::gui_add_group      -group_name     "Group_Test" \
+                                    -display_name   "Test SL/SLV" \
+                                    -tooltip        "Test std_logic and std_logic_vector" \
+                                    -layout         "horizontal" \
+
+        # GROUP AXI4 ------------------------------------------------------------------------------
+        ip_packager::gui_add_param      -param_name     "TestSL_g" \
+                                        -display_name   "Test std_logic generic" \
+                                        -widget         "comboBox" \
+
+        ip_packager::gui_add_param      -param_name     "TestSLV_g" \
+                                        -display_name   "Test std_logic_vector generic" \
+                                        -widget         "comboBox" \
+
+    # PAGE Configuration --------------------------------------------------------------------------
+    ip_packager::gui_set_parent     "Page_Config"
+
+    # PAGE Configuration --------------------------------------------------------------------------
     ip_packager::gui_add_group      -group_name     "Group_Axi" \
                                     -display_name   "AXI4" \
                                     -tooltip        "AXI4 Master/Slave Configuration" \
@@ -521,10 +551,8 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # Review and Package
 ###################################################################################################
 
-ip_packager::simulate_package_project
-
-# ip_packager::simulate_package_project   -generics       [list \
-                                                            "Clk_FreqHz_g=100e6" \
+ip_packager::simulate_package_project   -generics       [list \
+                                                            "Clk_FreqHz_g=100000000" \
                                                             "M_Axi_DataWidth_g=16" \
                                                             "M_Axi_AddrWidth_g=16" \
                                                             "S_Axi_DataWidth_g=16" \
@@ -533,9 +561,25 @@ ip_packager::simulate_package_project
                                                             "M_Axis_TUserWidth_g=16" \
                                                             "S_Axis_TDataWidth_g=16" \
                                                             "S_Axis_TUserWidth_g=16" \
+                                                            "TestSL_Int_g=1" \
+                                                            "TestSLV_Int_g=3" \
                                                         ] \
 
 ip_packager::synth_package_project
+
+# ip_packager::synth_package_project      -generics       [list \
+                                                            "Clk_FreqHz_g=100000000" \
+                                                            "M_Axi_DataWidth_g=16" \
+                                                            "M_Axi_AddrWidth_g=16" \
+                                                            "S_Axi_DataWidth_g=16" \
+                                                            "S_Axi_AddrWidth_g=16" \
+                                                            "M_Axis_TDataWidth_g=16" \
+                                                            "M_Axis_TUserWidth_g=16" \
+                                                            "S_Axis_TDataWidth_g=16" \
+                                                            "S_Axis_TUserWidth_g=16" \
+                                                            "TestSL_g=1'b1" \
+                                                            "TestSLV_g=2'b11" \
+                                                        ] \
 
 # ip_packager::synth_package_project      -part           "xczu11eg-ffvb1517-2-e" \
 

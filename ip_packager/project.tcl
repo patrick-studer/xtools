@@ -208,8 +208,7 @@ proc ::xtools::ip_packager::_find_unique_ip_core {vlnv} {
 ###################################################################################################
 
 proc ::xtools::ip_packager::create_package_project {args} {
-    # Summary:
-    # Create a new IP package project for the specified top-level HDL file.
+    # Summary: Create a new IP package project for the specified top-level HDL file.
 
     # Argument Usage:
     # -top_file <arg>:                      Top-level HDL file for packaging.
@@ -295,7 +294,7 @@ proc ::xtools::ip_packager::simulate_package_project {args} {
     # Summary: Launch Xilinx Simulator (xsim) on the package project.
 
     # Argument Usage:
-    # [-generics <arg>]:    Define sim_1 top-level generics for simulation. If not defined, the current default values from the configuration GUI are used.
+    # -generics <arg>:    Define sim_1 top-level generics for simulation.
 
     # Return Value: TCL_OK
 
@@ -317,10 +316,18 @@ proc ::xtools::ip_packager::simulate_package_project {args} {
         set genericsList [list]
         set hdlParams [ipx::get_hdl_parameters]
         foreach hdlParam $hdlParams {
-            set hdlParamName   [get_property name $hdlParam]
-            set userParam      [ipx::get_user_parameters $hdlParamName -of_objects [ipx::current_core]]
-            set userParamName  [get_property name $userParam]
-            set userParamValue [get_property value $userParam]
+            set hdlParamType                [get_property data_type $hdlParam]
+            set hdlParamBitStringLength     [get_property value_bit_string_length $hdlParam]
+            set userParam                   [ipx::get_user_parameters [get_property name $hdlParam] -of_objects [ipx::current_core]]
+            set userParamName               [get_property name $userParam]
+            set userParamValue              [get_property value $userParam]
+            if {[string match "std_logic" $hdlParamType] || [string match "std_logic_vector*" $hdlParamType]} {
+                if {[string match "0x*" $userParamValue]} {
+                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]
+                } else {
+                    set userParamValue "${hdlParamBitStringLength}'b[string trim ${userParamValue} \"]"
+                }
+            }
             lappend genericsList "${userParamName}=${userParamValue}"
         }
         set_property generic -value $genericsList -objects [get_filesets "sim_1"]
@@ -339,6 +346,7 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # [-part <arg>]:        Define specific part used for synthesis.
     # [-jobs <arg> = 4]:    Define number of jobs used for synthesis run.
     # [-timeout <arg>]:     Define synthesis run timeout in seconds.
+    # [-generics <arg>]:    Define top-level generics for synthesis. If not defined, the current default values from the configuration GUI are used.
 
     # Return Value: TCL_OK
 
@@ -351,9 +359,10 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -part               {incr i; set part            [lindex $args $i]}
-            -jobs               {incr i; set jobs            [lindex $args $i]}
-            -timeout            {incr i; set timeout         [lindex $args $i]}
+            -part       {incr i; set part       [lindex $args $i]}
+            -jobs       {incr i; set jobs       [lindex $args $i]}
+            -timeout    {incr i; set timeout    [lindex $args $i]}
+            -generics   {incr i; set generics   [lindex $args $i]}
         }
     }
 
@@ -373,20 +382,35 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # Set project into "out_of_context" mode (no IOB placement)
     set_property {STEPS.SYNTH_DESIGN.ARGS.MORE OPTIONS} -value {-mode out_of_context} -objects $synthRun
 
-    # Drive top-level generics with current default values from IPI
-    set genericsList [list]
-    set hdlParams [ipx::get_hdl_parameters]
-    foreach hdlParam $hdlParams {
-        set hdlParamName   [get_property name $hdlParam]
-        set userParam      [ipx::get_user_parameters $hdlParamName -of_objects [ipx::current_core]]
-        set userParamName  [get_property name $userParam]
-        set userParamValue [get_property value $userParam]
-        lappend genericsList "${userParamName}=${userParamValue}"
+    # Drive simulation top generics
+    if {[info exists generics]} {
+        set_property generic -value $generics -objects [get_filesets "sources_1"]
+    } else {
+        # Drive top-level generics with current default values from IPI
+        puts "WARNING: \[synth_package_project\] No top-level generics defined for synthesis. Run will use the current default values from the configuration GUI."
+        set genericsList [list]
+        set hdlParams [ipx::get_hdl_parameters]
+        foreach hdlParam $hdlParams {
+            set hdlParamName                [get_property name $hdlParam]
+            set hdlParamType                [get_property data_type $hdlParam]
+            set hdlParamBitStringLength     [get_property value_bit_string_length $hdlParam]
+            set userParam                   [ipx::get_user_parameters $hdlParamName -of_objects [ipx::current_core]]
+            set userParamName               [get_property name $userParam]
+            set userParamValue              [get_property value $userParam]
+            if {[string match "std_logic" $hdlParamType] || [string match "std_logic_vector*" $hdlParamType]} {
+                if {[string match "0x*" $userParamValue]} {
+                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]
+                } else {
+                    set userParamValue "${hdlParamBitStringLength}'b[string trim ${userParamValue} \"]"
+                }
+            }
+            lappend genericsList "${userParamName}=${userParamValue}"
+        }
+        set_property generic -value $genericsList -objects [get_filesets "sources_1"]
     }
-    set_property generic -value $genericsList -objects [get_filesets "sources_1"]
 
     # Run synthesis
-    launch_runs $synthRun -jobs    $jobs
+    launch_runs $synthRun -jobs $jobs
     if {[info exists timeout]} {
         wait_on_run $synthRun -timeout $timeout
     } else {

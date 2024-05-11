@@ -24,7 +24,7 @@ Also check [Migration Guide](./PsiIpPackage_MigrationGuide.md) for 1:1 mapping o
 ### ip_packager
 
 * `create_package_project -top_file <arg> [-root_dir <arg>] [-prj_name <arg>] [-part <arg>]`
-* `simulate_package_project [-generics <arg>] [-timeout <arg>]`
+* `simulate_package_project -generics <arg> [-timeout <arg>]`
 * `synth_package_project [-part <arg>] [-jobs <arg>]`
 * `impl_package_project [-part <arg>] [-jobs <arg>] [-timeout <arg>]`
 * `save_package_project`
@@ -112,7 +112,7 @@ Not available.
 ### ip_packager
 
 * `create_user_param -param_name <arg> [-format <arg>] [-bit_string_length <arg>] [-value <arg>] [-value_tcl_expr <arg>] [-validation_range <arg>] [-validation_list <arg>] [-validation_pairs <arg>] [-enablement_tcl_expr <arg>] [-quiet] [-verbose]`
-* `set_param_config -param_name <arg> [-value <arg>] [-value_tcl_expr <arg>] [-validation_range <arg>] [-validation_list <arg>] [-validation_pairs <arg>] [-enablement_tcl_expr <arg>]`
+* `set_param_config -param_name <arg> [-format <arg>] [-bit_string_length <arg>] [-value <arg>] [-value_tcl_expr <arg>] [-validation_range <arg>] [-validation_list <arg>] [-validation_pairs <arg>] [-enablement_tcl_expr <arg>]`
 
 ## Ports and Interfaces
 

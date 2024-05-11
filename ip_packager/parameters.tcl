@@ -12,7 +12,8 @@ namespace eval ::xtools::ip_packager {
                         set_param_config \
                         set_param_validation \
                         set_param_enablement \
-                        set_param_value
+                        set_param_value \
+                        set_param_format
 }
 
 ###################################################################################################
@@ -25,7 +26,7 @@ proc ::xtools::ip_packager::create_user_param {args} {
     # Argument Usage:
     # -param_name <arg>:            Parameter name (e.g. User_p).
     # [-format <arg> = string]:     Parameter format (bitString, bool, float, long and string).
-    # [-bit_string_length <arg>]:   Mandatory length for bitString parameters.
+    # [-bit_string_length <arg>]:   Optional length for bitString parameters (required if format == bitString).
     # [-value <arg>]:               Optional parameter default value. Only use -value and -value_tcl_expr exclusively.
     # [-value_tcl_expr <arg>]:      Optional parameter value expression (e.g. \$User_p * 8). Only use -value and -value_tcl_expr exclusively.
     # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -]).
@@ -47,8 +48,8 @@ proc ::xtools::ip_packager::create_user_param {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -param_name             {incr i; set param_name        [lindex $args $i]}
-            -format                 {incr i; set format            [lindex $args $i]}
-            -bit_string_length      {incr i; set bit_string_length [lindex $args $i]}
+            -format                 {lappend configArgs [lindex $args $i]; incr i; lappend configArgs [lindex $args $i]}
+            -bit_string_length      {lappend configArgs [lindex $args $i]; incr i; lappend configArgs [lindex $args $i]}
             -value                  {lappend configArgs [lindex $args $i]; incr i; lappend configArgs [lindex $args $i]}
             -value_tcl_expr         {lappend configArgs [lindex $args $i]; incr i; lappend configArgs [lindex $args $i]}
             -validation_range       {lappend configArgs [lindex $args $i]; incr i; lappend configArgs [lindex $args $i]}
@@ -58,17 +59,12 @@ proc ::xtools::ip_packager::create_user_param {args} {
         }
     }
 
-    # Ensure value_bit_string_length is defined for bitString parameters
-    if {$format == "bitString" && ![info exists bit_string_length]} {error "ERROR: \[create_user_param\] Invalid configuration, -format = bitString requires -bit_string_length > 0."}
-
     # Add user parameter to IPI
     set addedParam [ipx::add_user_parameter $param_name [ipx::current_core]]
+    if {[info exists value_resolve_type]} {set_property value_resolve_type $value_resolve_type $addedParam}
+    if {[info exists format            ]} {set_property value_format       $format             $addedParam}
 
     # Call individual helper funcitons
-    if {[info exists value_resolve_type]} {set_property value_resolve_type      $value_resolve_type  $addedParam}
-    if {[info exists format            ]} {set_property value_format            $format              $addedParam}
-    if {[info exists bit_string_length ]} {set_property value_bit_string_length $bit_string_length   $addedParam}
-
     if {[llength configArgs] != 0} {
         set_param_config -param_name $param_name {*}$configArgs
     }
@@ -79,6 +75,8 @@ proc ::xtools::ip_packager::set_param_config {args} {
 
     # Argument Usage:
     # -param_name <arg>:            Parameter name (e.g. User_p).
+    # [-format <arg> = string]:     Optional parameter format (bitString, bool, float, long and string).
+    # [-bit_string_length <arg>]:   Optional length for bitString parameters (required if format == bitString).
     # [-value <arg>]:               Optional parameter default value. Only use -value and -value_tcl_expr exclusively.
     # [-value_tcl_expr <arg>]:      Optional parameter value expression (e.g. \$User_p * 8). Only use -value and -value_tcl_expr exclusively.
     # [-validation_range <arg>]:    Optional validation range for float and long parameters (e.g. [list <minimum> <maximum>] or [list <minimum> -]).
@@ -95,6 +93,8 @@ proc ::xtools::ip_packager::set_param_config {args} {
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -param_name             {incr i; set param_name          [lindex $args $i]}
+            -format                 {incr i; set format              [lindex $args $i]}
+            -bit_string_length      {incr i; set bit_string_length   [lindex $args $i]}
             -value                  {incr i; set value               [lindex $args $i]}
             -value_tcl_expr         {incr i; set value_tcl_expr      [lindex $args $i]}
             -validation_range       {incr i; set validation_range    [lindex $args $i]}
@@ -105,6 +105,13 @@ proc ::xtools::ip_packager::set_param_config {args} {
     }
 
     # Call individual helper funcitons
+    if {[info exists format]} {
+        if {[info exists bit_string_length]} {
+            set_param_format -param_name $param_name -format $format -bit_string_length $bit_string_length
+        } else {
+            set_param_format -param_name $param_name -format $format
+        }
+    }
     if {[info exists value              ]} {set_param_value      -param_name $param_name -value    $value}
     if {[info exists value_tcl_expr     ]} {set_param_value      -param_name $param_name -tcl_expr $value_tcl_expr}
     if {[info exists validation_range   ]} {set_param_validation -param_name $param_name -value    $validation_range -type "range" }
@@ -223,6 +230,39 @@ proc ::xtools::ip_packager::set_param_value {args} {
     foreach param [concat $hdlParam $userParam] {
         if {[info exists value   ]} {set_property value $value $param}
         if {[info exists tcl_expr]} {set_property enablement_value false $param; set_property value_tcl_expr "expr ${tcl_expr}" $param; ipx::update_dependency $param}
+    }
+}
+
+proc ::xtools::ip_packager::set_param_format {args} {
+    # Summary: Set parameter format for existing MODELPARAM (generic) or added user parameter.
+
+    # Argument Usage:
+    # -param_name <arg>:            Parameter name (e.g. User_p).
+    # -format <arg>:                Parameter format (bitString, bool, float, long and string).
+    # [-bit_string_length <arg>]:   Optional length for bitString parameters (required if format == bitString).
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -param_name         {incr i; set param_name         [lindex $args $i]}
+            -format             {incr i; set format             [lindex $args $i]}
+            -bit_string_length  {incr i; set bit_string_length  [lindex $args $i]}
+        }
+    }
+
+    # Ensure value_bit_string_length is defined for bitString parameters
+    if {$format == "bitString" && ![info exists bit_string_length]} {error "ERROR: \[set_param_format\] Invalid configuration, -format = bitString requires -bit_string_length > 0."}
+
+    set hdlParam  [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
+    set userParam [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
+    foreach param [concat $hdlParam $userParam] {
+        if {[info exists format           ]} {set_property value_format            $format            $param}
+        if {[info exists bit_string_length]} {set_property value_bit_string_length $bit_string_length $param}
     }
 }
 

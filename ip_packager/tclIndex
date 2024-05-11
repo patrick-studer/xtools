@@ -54,6 +54,7 @@ set auto_index(::xtools::ip_packager::set_param_config) [list source [file join 
 set auto_index(::xtools::ip_packager::set_param_validation) [list source [file join $dir parameters.tcl]]
 set auto_index(::xtools::ip_packager::set_param_enablement) [list source [file join $dir parameters.tcl]]
 set auto_index(::xtools::ip_packager::set_param_value) [list source [file join $dir parameters.tcl]]
+set auto_index(::xtools::ip_packager::set_param_format) [list source [file join $dir parameters.tcl]]
 set auto_index(::xtools::ip_packager::_check_vivado_version) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::_overwritte_msg_config) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::_synth_checks) [list source [file join $dir project.tcl]]

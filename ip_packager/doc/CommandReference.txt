@@ -148,6 +148,9 @@ ip_packager::set_param_config             (User-written application)
 ip_packager::set_param_enablement         (User-written application)
                                           Set parameter enablement expression for existing MODELPARAM (generic) or added user parameter.
                                           
+ip_packager::set_param_format             (User-written application)
+                                          Set parameter format for existing MODELPARAM (generic) or added user parameter.
+                                          
 ip_packager::set_param_validation         (User-written application)
                                           Set value validation condition for existing MODELPARAM (generic) or added user parameter.
                                           
@@ -1285,7 +1288,8 @@ Usage:
   [-format]               Parameter format (bitString, bool, float, long and 
                           string).
                           Default: string
-  [-bit_string_length]    Mandatory length for bitString parameters.
+  [-bit_string_length]    Optional length for bitString parameters (required 
+                          if format == bitString).
                           Default: None
   [-value]                Optional parameter default value. Only use -value 
                           and -value_tcl_expr exclusively.
@@ -1696,7 +1700,8 @@ Configure existing MODELPARAM (generic) or added user parameter.
 
 
 Syntax: 
-ip_packager::set_param_config  -param_name <arg> [-value <arg>]
+ip_packager::set_param_config  -param_name <arg> [-format <arg>]
+                               [-bit_string_length <arg>] [-value <arg>]
                                [-value_tcl_expr <arg>]
                                [-validation_range <arg>]
                                [-validation_list <arg>]
@@ -1711,6 +1716,12 @@ Usage:
   Name                    Description
   -----------------------------------
   -param_name             Parameter name (e.g. User_p).
+  [-format]               Optional parameter format (bitString, bool, float, 
+                          long and string).
+                          Default: string
+  [-bit_string_length]    Optional length for bitString parameters (required 
+                          if format == bitString).
+                          Default: None
   [-value]                Optional parameter default value. Only use -value 
                           and -value_tcl_expr exclusively.
                           Default: None
@@ -1761,6 +1772,38 @@ Usage:
   -tcl_expr    Parameter enablement expression (e.g. "\$i > 2).
   [-quiet]     Ignore command errors
   [-verbose]   Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
+ip_packager::set_param_format
+
+Description: 
+(User-written application)
+Set parameter format for existing MODELPARAM (generic) or added user parameter.
+
+
+Syntax: 
+ip_packager::set_param_format  -param_name <arg> -format <arg>
+                               [-bit_string_length <arg>] [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                  Description
+  ---------------------------------
+  -param_name           Parameter name (e.g. User_p).
+  -format               Parameter format (bitString, bool, float, long and 
+                        string).
+  [-bit_string_length]  Optional length for bitString parameters (required if
+                        format == bitString).
+                        Default: None
+  [-quiet]              Ignore command errors
+  [-verbose]            Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
@@ -1952,23 +1995,27 @@ Run test synthesis on package project.
 
 Syntax: 
 ip_packager::synth_package_project  [-part <arg>] [-jobs <arg>]
-                                    [-timeout <arg>] [-quiet] [-verbose]
+                                    [-timeout <arg>] [-generics <arg>] [-quiet]
+                                    [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name        Description
-  -----------------------
-  [-part]     Define specific part used for synthesis.
-              Default: None
-  [-jobs]     Define number of jobs used for synthesis run.
-              Default: 4
-  [-timeout]  Define synthesis run timeout in seconds.
-              Default: None
-  [-quiet]    Ignore command errors
-  [-verbose]  Suspend message limits during command execution
+  Name         Description
+  ------------------------
+  [-part]      Define specific part used for synthesis.
+               Default: None
+  [-jobs]      Define number of jobs used for synthesis run.
+               Default: 4
+  [-timeout]   Define synthesis run timeout in seconds.
+               Default: None
+  [-generics]  Define top-level generics for synthesis. If not defined, the 
+               current default values from the configuration GUI are used.
+               Default: None
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written

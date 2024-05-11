@@ -24,7 +24,9 @@ entity IpPackager_2020_1_ipi is
         M_Axis_TDataWidth_g             : natural;
         M_Axis_TUserWidth_g             : natural;
         S_Axis_TDataWidth_g             : natural;
-        S_Axis_TUserWidth_g             : natural
+        S_Axis_TUserWidth_g             : natural;
+        TestSL_g                        : std_logic;
+        TestSLV_g                       : std_logic_vector(1 downto 0)
     );
     port(
         -------------------------------------------------------------------------------------------
@@ -162,8 +164,12 @@ end entity IpPackager_2020_1_ipi;
 -- Architecture Implementation
 ---------------------------------------------------------------------------------------------------
 architecture struct of IpPackager_2020_1_ipi is
-
+    signal TestSL  : std_logic;
+    signal TestSLV : std_logic_vector(1 downto 0);
 begin
+
+    TestSL  <= TestSL_g;
+    TestSLV <= TestSLV_g;
 
     i_core : entity work.IpPackager_2020_1
     generic map(
