@@ -236,7 +236,7 @@ proc ::xtools::ip_packager::add_exdes_script {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -283,7 +283,7 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -332,7 +332,7 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -377,7 +377,7 @@ proc ::xtools::ip_packager::add_exdes_constraints {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -456,7 +456,7 @@ proc ::xtools::ip_packager::add_logo {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force $file $copyToDir
+        file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
     }
 
@@ -500,7 +500,7 @@ proc ::xtools::ip_packager::add_readme {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force $file $copyToDir
+        file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
     }
 
@@ -547,7 +547,7 @@ proc ::xtools::ip_packager::add_product_guide {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force $file $copyToDir
+        file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
     }
 
@@ -594,7 +594,7 @@ proc ::xtools::ip_packager::add_changelog {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force $file $copyToDir
+        file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
     }
 
@@ -657,7 +657,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        set driverDirPaths [glob -directory $driver_dir *]
+        set driverDirPaths [glob -directory [path_relative_to_pwd $driver_dir] *]
         file copy -force {*}$driverDirPaths $copyToDir
         set driver_dir $copyToDir
     }
@@ -722,7 +722,7 @@ proc ::xtools::ip_packager::add_utility_scripts {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -790,7 +790,7 @@ proc ::xtools::ip_packager::add_upgrade_tcl {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
@@ -857,7 +857,7 @@ proc ::xtools::ip_packager::add_bd_tcl {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force $file $copyToDir
+        file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
     }
 
@@ -900,7 +900,7 @@ proc ::xtools::ip_packager::add_gui_support_tcl {args} {
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force {*}$files $copyToDir
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
         set copiedFiles [list]
         foreach file $files {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
