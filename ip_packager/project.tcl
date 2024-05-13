@@ -323,7 +323,7 @@ proc ::xtools::ip_packager::simulate_package_project {args} {
             set userParamValue              [get_property value $userParam]
             if {[string match "std_logic" $hdlParamType] || [string match "std_logic_vector*" $hdlParamType]} {
                 if {[string match "0x*" $userParamValue]} {
-                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]
+                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]]
                 } else {
                     set userParamValue "${hdlParamBitStringLength}'b[string trim ${userParamValue} \"]"
                 }
@@ -399,7 +399,7 @@ proc ::xtools::ip_packager::synth_package_project {args} {
             set userParamValue              [get_property value $userParam]
             if {[string match "std_logic" $hdlParamType] || [string match "std_logic_vector*" $hdlParamType]} {
                 if {[string match "0x*" $userParamValue]} {
-                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]
+                    set userParamValue [string map [list "0x" "${hdlParamBitStringLength}'h"] [ipx::evaluate_to_bitstring_value -length $hdlParamBitStringLength $userParamValue [ipx::current_core]]]
                 } else {
                     set userParamValue "${hdlParamBitStringLength}'b[string trim ${userParamValue} \"]"
                 }
