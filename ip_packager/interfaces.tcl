@@ -34,11 +34,12 @@ namespace eval ::xtools::ip_packager {
     # TODO: add this very cool routine :D
 # }
 
-proc ::xtools::ip_packager::import_bus_definition {definition} {
-    # Summary: Import existing interface/bus definition into packaged IP-core.
+proc ::xtools::ip_packager::import_bus_definition {args} {
+    # Summary: Import/Copy existing interface/bus definition and abstraction XML into packaged IP-core.
 
     # Argument Usage:
-    # definition:       File-path to the interface/bus definition XML.
+    # -files <arg>:            List of interface definitions/abstractions XML to be added to the packager project.
+    # [-copy_to <arg>]:        Path to folder, where to copy/import the added interface definitions/abstractions XML.
 
     # Return Value: TCL_OK
 
@@ -47,8 +48,49 @@ proc ::xtools::ip_packager::import_bus_definition {definition} {
     # Load global variables
     variable RootDir
 
-    update_ip_catalog -add_interface $definition -repo_path [file join $RootDir "interfaces"]
-    update_ip_catalog -rebuild -repo_path $RootDir
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -files          {incr i; set files          [lindex $args $i]}
+            -copy_to        {incr i; set copy_to        [lindex $args $i]}
+        }
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
+    }
+
+    # Find new IP-Repos to be added to IP-Catalog (no dublicates)
+    set ipRepos [get_property ip_repo_paths [current_project]]
+    foreach file $files {
+        if {[string match "../*" [path_relative_to_root $file]]} {
+            set dir [file dirname [file normalize [path_relative_to_pwd $file]]]
+            if {$dir ni $ipRepos} {lappend ipRepos $dir}
+        }
+    }
+
+    # Filter out directories contained inside an other directory-path to keep top-most folders only
+    set ipRepos [lsort -dictionary $ipRepos]
+    set compareIndex 0
+    set ipReposFiltered [lindex $ipRepos 0]
+    for {set i 1} {$i < [llength $ipRepos]} {incr i} {
+        if {![string match "[lindex $ipRepos $compareIndex]/*" [lindex $ipRepos $i]]} {
+            lappend ipReposFiltered [lindex $ipRepos $i]
+            set compareIndex $i
+        }
+    }
+
+    # Update Vivado project IP-Repository with new paths
+    set_property ip_repo_paths $ipReposFiltered [current_project]
+    update_ip_catalog -rebuild
 }
 
 

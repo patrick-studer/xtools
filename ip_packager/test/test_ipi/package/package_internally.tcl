@@ -232,6 +232,10 @@ ip_packager::set_param_config           -param_name             "TestSLV_g" \
 ###################################################################################################
 
 # Create/Import User Interfaces -------------------------------------------------------------------
+# ip_packager::import_bus_definition      -files                  [list \
+                                                                    "<your_bus_definition>.xml" \
+                                                                    "<your_bus_definition>_rtl.xml" \
+                                                                ] \
 
 # Auto-Infer Interfaces ---------------------------------------------------------------------------
 ip_packager::auto_infer_interface       -interface_name         "S_Axi" \
@@ -529,8 +533,6 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # Review and Package
 ###################################################################################################
 
-# ip_packager::simulate_package_project
-
 ip_packager::simulate_package_project   -generics       [list \
                                                             "Clk_FreqHz_g=100000000" \
                                                             "M_Axi_DataWidth_g=16" \
@@ -566,7 +568,7 @@ ip_packager::synth_package_project
 
 # ip_packager::synth_package_project      -part           "xc7z030ifbg484-2L" \
 
-# ip_packager::impl_package_project
+ip_packager::impl_package_project
 
 # ip_packager::impl_package_project       -part           "xczu11eg-ffvb1517-2-e" \
 

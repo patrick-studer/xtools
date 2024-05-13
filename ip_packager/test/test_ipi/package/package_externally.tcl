@@ -252,6 +252,11 @@ ip_packager::set_param_config           -param_name             "TestSLV_g" \
 ###################################################################################################
 
 # Create/Import User Interfaces -------------------------------------------------------------------
+# ip_packager::import_bus_definition      -files                  [list \
+                                                                    "<your_bus_definition>.xml" \
+                                                                    "<your_bus_definition>_rtl.xml" \
+                                                                ] \
+                                        -copy_to                "interfaces" \
 
 # Auto-Infer Interfaces ---------------------------------------------------------------------------
 ip_packager::auto_infer_interface       -interface_name         "S_Axi" \
