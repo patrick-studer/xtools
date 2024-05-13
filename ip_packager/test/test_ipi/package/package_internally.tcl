@@ -87,11 +87,11 @@ ip_packager::add_design_constraints     -files          [list \
 
 # Example Design Files ----------------------------------------------------------------------------
 # ip_packager::add_exdes_script           -Files          [list \
-                                                            "${src_dir}/exdes/IpPackager_2020_1_exdes.tcl" \
+                                                            "exdes/IpPackager_2020_1_exdes.tcl" \
                                                         ] \
 
 # ip_packager::add_exdes_sources          -files          [list \
-                                                            "${src_dir}/exdes/IpPackager_2020_1_exdes.vhd" \
+                                                            "exdes/IpPackager_2020_1_exdes.vhd" \
                                                         ] \
 
 # Documentation Files -----------------------------------------------------------------------------
@@ -215,17 +215,19 @@ ip_packager::set_param_config           -param_name             "S_Axis_TUserWid
                                         -value                  12 \
                                         -enablement_tcl_expr    "\$HasAxis_p == true" \
 
+# Note the different value formatting possibilities for bitStrings (binary)! The "..." need to be present in the passed value.
 ip_packager::set_param_config           -param_name             "TestSL_g" \
                                         -format                 "bitString" \
                                         -bit_string_length      1 \
-                                        -validation_list        [list {"0"} {"1"}] \
-                                        -value                  {"0"} \
+                                        -validation_list        [list {"0"} "\"1\""] \
+                                        -value                  {"0"}\
 
+# Note the different value formatting possibilities for bitStrings (hex)! The 0x prefix needs to be present in the passed value.
 ip_packager::set_param_config           -param_name             "TestSLV_g" \
                                         -format                 "bitString" \
                                         -bit_string_length      2 \
-                                        -validation_list        [list {"00"} {"01"} {"10"}] \
-                                        -value                  {"00"} \
+                                        -validation_list        [list {0x0} "0x1" 0x2] \
+                                        -value                  0x0 \
 
 ###################################################################################################
 # Ports and Interfaces

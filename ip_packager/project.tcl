@@ -279,7 +279,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Add root_dir to IP location
     set_property ip_repo_paths $RootDir [current_project]
-    update_ip_catalog
+    update_ip_catalog -rebuild
 
     # Apply default family support
     set_property auto_family_support_level "level_2" [ipx::current_core]
