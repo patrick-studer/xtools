@@ -132,7 +132,7 @@ Not available.
 
 ### ip_packager
 
-* `import_bus_definition <definition>`
+* `import_bus_definition -files <arg> [-copy_to <arg>]`
 * `add_bus_interface -interface_name <arg> -vlnv <arg> -interface_mode <arg> -port_map <arg> [-bus_params <arg>] [-clock <arg>] [-reset <arg>]`
 * `auto_infer_interface -interface_name <arg> -vlnv <arg> [-port_pattern <arg>] [-bus_params <arg>]`
 * `add_axi_interface -interface_name <arg> [-port_pattern <arg>] [-bus_params <arg>]`

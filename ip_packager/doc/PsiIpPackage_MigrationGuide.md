@@ -121,7 +121,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 ## Ports and Interfaces
 
 * `import_interface_definition DEFINITION DEF_NAMES`
-  * `import_bus_definition DEFINITION` (**Note:** DEF_NAMES is not needed anymore.)
+  * `import_bus_definition -files [list DEFINITION/DEF_NAMES.xml DEFINITION/DEF_NAMES_rtl.xml] [-copy_to <arg>] "."` (**Note:** You may add different files than '*_rtl.xml' as well.)
 * `add_bus_interface VLNV INTERFACE_NAME INTERFACE_MODE DESCRIPTION PORT_MAP`
   * `add_bus_interface -interface_name INTERFACE_NAME -vlnv VLNV -interface_mode INTERFACE_MODE -port_map PORT_MAP` (**Note:** DESCRIPTION is not supported anymore. It is not visible anyways...)
 * `set_interface_mode INTERFACE_NAME INTERFACE_MODE`

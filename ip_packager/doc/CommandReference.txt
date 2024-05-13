@@ -128,7 +128,7 @@ ip_packager::impl_package_project         (User-written application)
                                           Run test implementation on package project.
                                           
 ip_packager::import_bus_definition        (User-written application)
-                                          Import existing interface/bus definition into packaged IP-core.
+                                          Import/Copy existing interface/bus definition and abstraction XML into packaged IP-core.
                                           
 ip_packager::save_package_project         (User-written application)
                                           Save package project and generate IP-core. Optionally, archive to zip.
@@ -1534,22 +1534,27 @@ ip_packager::import_bus_definition
 
 Description: 
 (User-written application)
-Import existing interface/bus definition into packaged IP-core.
+Import/Copy existing interface/bus definition and abstraction XML into packaged IP-core.
 
 
 Syntax: 
-ip_packager::import_bus_definition  [-quiet] [-verbose] <definition>
+ip_packager::import_bus_definition  -files <arg> [-copy_to <arg>] [-quiet]
+                                    [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name          Description
-  -------------------------
-  [-quiet]      Ignore command errors
-  [-verbose]    Suspend message limits during command execution
-  <definition>  File-path to the interface/bus definition XML.
+  Name        Description
+  -----------------------
+  -files      List of interface definitions/abstractions XML to be added to 
+              the packager project.
+  [-copy_to]  Path to folder, where to copy/import the added interface 
+              definitions/abstractions XML.
+              Default: None
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
@@ -1965,21 +1970,18 @@ Launch Xilinx Simulator (xsim) on the package project.
 
 
 Syntax: 
-ip_packager::simulate_package_project  [-generics <arg>] [-quiet] [-verbose]
+ip_packager::simulate_package_project  -generics <arg> [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name         Description
-  ------------------------
-  [-generics]  Define sim_1 top-level generics for simulation. If not 
-               defined, the current default values from the configuration GUI
-               are used.
-               Default: None
-  [-quiet]     Ignore command errors
-  [-verbose]   Suspend message limits during command execution
+  Name        Description
+  -----------------------
+  -generics   Define sim_1 top-level generics for simulation.
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
