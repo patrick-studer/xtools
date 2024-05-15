@@ -22,7 +22,19 @@ namespace eval ::xtools::ip_packager {
     variable GuiSupportTcl      [list]
     variable RootDir            "."
     variable VivadoVersion      [version -short]
-
+    
+    namespace eval ::xtools::ip_packager::config {
+    # Configuration Variables
+        variable MsgConfigOverwrite     true
+        variable SynthReports           true
+        variable SynthLatchCheck        true
+        variable ImplReports            true
+        variable ImplTimingCheck        true
+        variable ImplFailedNetsCheck    true
+        variable ImplTimingWns          -0.0
+        variable ImplTimingWhs          -0.0
+    }
+    
      # Allow Tcl to find tclIndex
     if {[lsearch -exact $::auto_path $Home] == -1} {
         lappend ::auto_path $Home

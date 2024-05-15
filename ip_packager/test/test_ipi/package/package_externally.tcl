@@ -20,6 +20,19 @@ lappend auto_path                       [file join $pkg_path "xtools"]
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
 
 ###################################################################################################
+# Configure IP Packager (optional)
+###################################################################################################
+
+# ip_packager::config_package_project     -msg_config_overwrite       false \
+                                        # -synth_reports              false \
+                                        # -synth_latch_check          false \
+                                        # -impl_reports               false \
+                                        # -impl_timing_check          false \
+                                        # -impl_failed_nets_check     false \
+                                        # -impl_timing_wns            -0.0 \
+                                        # -impl_timing_whs            -0.0 \
+
+###################################################################################################
 # Create Package Project
 ###################################################################################################
 

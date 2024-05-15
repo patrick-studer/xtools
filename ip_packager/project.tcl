@@ -8,7 +8,8 @@
 
 namespace eval ::xtools::ip_packager {
     # Export procs that should be allowed to import into other namespaces
-    namespace export    create_package_project \
+    namespace export    config_package_project \
+                        create_package_project \
                         simulate_package_project \
                         synth_package_project \
                         impl_package_project \
@@ -36,7 +37,7 @@ proc ::xtools::ip_packager::_check_vivado_version {} {
     }
 }
 
-proc ::xtools::ip_packager::_overwritte_msg_config {} {
+proc ::xtools::ip_packager::_overwrite_msg_config {} {
     # Summary: Internal procedure to configure Vivado message severities.
 
     # Argument Usage:
@@ -45,22 +46,29 @@ proc ::xtools::ip_packager::_overwritte_msg_config {} {
 
     # Categories: xilinxtclstore, ip_packager
 
-    reset_msg_config -id  *                     -default_severity -quiet
-    set_msg_config   -id  {[Vivado 12-180]}     -new_severity "ERROR"
-    set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
-    set_msg_config   -id  {[Vivado 12-3631]}    -new_severity "INFO"
-    set_msg_config   -id  {[Vivado 12-1348]}    -new_severity "INFO"
-    set_msg_config   -id  {[Ipptcl 7-1550]}     -new_severity "INFO"
-    set_msg_config   -id  {[IP_Flow 19-234]}    -suppress
-    set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
-    set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
-    set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
-    set_msg_config   -id  {[IP_Flow 19-3656]}   -suppress
-    set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
-    set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
-    set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress
-    set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
-    set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
+    # Load global variables
+    variable config::MsgConfigOverwrite
+
+    if {$config::MsgConfigOverwrite} {
+        reset_msg_config -id  *                     -default_severity -quiet
+        set_msg_config   -id  {[Vivado 12-180]}     -new_severity "ERROR"
+        set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
+        set_msg_config   -id  {[Vivado 12-3631]}    -new_severity "INFO"
+        set_msg_config   -id  {[Vivado 12-1348]}    -new_severity "INFO"
+        set_msg_config   -id  {[Ipptcl 7-1550]}     -new_severity "INFO"
+        set_msg_config   -id  {[IP_Flow 19-234]}    -suppress
+        set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
+        set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
+        set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-3656]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
+        set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
+        set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
+    } else {
+        puts "INFO: \[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
+    }
 }
 
 proc ::xtools::ip_packager::_synth_checks {} {
@@ -72,20 +80,31 @@ proc ::xtools::ip_packager::_synth_checks {} {
 
     # Categories: xilinxtclstore, ip_packager
 
+    # Load global variables
+    variable config::SynthReports
+    variable config::SynthLatchCheck
+
     # Open the synthesized design
     open_run [current_run -synthesis]
 
     # Check for latches
-    variable latches [all_latches]
-    if {$latches != ""} {
-        error "ERROR: \[_synth_checks\] The synthesized design contains [llength ${latches}] latches (${latches})."
+    if {$config::SynthLatchCheck} {
+        variable latches [all_latches]
+        if {$latches != ""} {
+            error "ERROR: \[_synth_checks\] The synthesized design contains [llength ${latches}] latches (${latches})."
+        } else {
+            puts "INFO: \[_synth_checks\] No latches found."
+        }
     } else {
-        puts "INFO: \[_synth_checks\] No latches found."
+        puts "WARNING: \[_synth_checks\] Synthesis Latch Checking is disabled."
     }
 
     # Export reports
-    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
-    report_utilization    -file "${rpt_dir}/[current_run -synthesis]_utilization.rpt" -hierarchical
+
+    if {$config::SynthReports} {
+        set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
+        report_utilization    -file "${rpt_dir}/[current_run -synthesis]_utilization.rpt" -hierarchical
+    }
 
     # Close the synthesized design
     close_design
@@ -99,6 +118,13 @@ proc ::xtools::ip_packager::_impl_checks {} {
     # Return Value: TCL_OK
 
     # Categories: xilinxtclstore, ip_packager
+
+    # Load global variables
+    variable config::ImplReports
+    variable config::ImplTimingCheck
+    variable config::ImplFailedNetsCheck
+    variable config::ImplTimingWns
+    variable config::ImplTimingWhs
 
     # Open the synthesized design
     open_run [current_run -implementation]
@@ -122,32 +148,42 @@ proc ::xtools::ip_packager::_impl_checks {} {
         puts "INFO: \[_impl_checks\] Finished [current_run -implementation] sucessfully (elapsed time = ${implTime})."
     }
 
-    # Check setup timing
-    if {$implWns < -0.0} {
-        error "ERROR: \[_impl_checks\] Design has setup-timing violation (WNS = ${implWns})."
+    if {$config::ImplTimingCheck} {
+        # Check setup timing
+        if {$implWns < $config::ImplTimingWns} {
+            error "ERROR: \[_impl_checks\] Design has setup-timing violation (WNS = ${implWns})."
+        } else {
+            puts "INFO: \[_impl_checks\] Setup-timing OK (WNS = ${implWns})."
+        }
+
+        # Check hold timing
+        if {$implWhs < $config::ImplTimingWhs} {
+            error "ERROR: \[_impl_checks\] Design has hold-timing violation (WHS = ${implWhs})."
+        } else {
+            puts "INFO: \[_impl_checks\] Hold-timing OK (WHS = ${implWhs})."
+        }
     } else {
-        puts "INFO: \[_impl_checks\] Setup-timing OK (WNS = ${implWns})."
+        puts "WARNING: \[_impl_checks\] Implementation Timing Checking is disabled."
     }
 
-    # Check hold timing
-    if {$implWhs < -0.0} {
-        error "ERROR: \[_impl_checks\] Design has hold-timing violation (WHS = ${implWhs})."
+    if {$config::ImplFailedNetsCheck} {
+        # Check unrouted nets
+        if {$implFailedNets > 0} {
+            error "ERROR: \[_impl_checks\] Design has unrouted nets (failed nets = ${implFailedNets})."
+        } else {
+            puts "INFO: \[_impl_checks\] All nets are routed."
+        }
     } else {
-        puts "INFO: \[_impl_checks\] Hold-timing OK (WHS = ${implWhs})."
-    }
-
-    # Check unrouted nets
-    if {$implFailedNets > 0} {
-        error "ERROR: \[_impl_checks\] Design has unrouted nets (failed nets = ${implFailedNets})."
-    } else {
-        puts "INFO: \[_impl_checks\] All nets are routed."
+        puts "WARNING: \[_impl_checks\] Implementation Failed Nets Checking is disabled."
     }
 
     # Export reports
-    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
-    report_timing_summary -file "${rpt_dir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
-    report_drc            -file "${rpt_dir}/[current_run -implementation]_drc.rpt"
-    report_methodology    -file "${rpt_dir}/[current_run -implementation]_methodology.rpt"
+    if {$config::ImplReports} {
+        set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
+        report_timing_summary -file "${rpt_dir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
+        report_drc            -file "${rpt_dir}/[current_run -implementation]_drc.rpt"
+        report_methodology    -file "${rpt_dir}/[current_run -implementation]_methodology.rpt"
+    }
 
     # Close the implemented design
     close_design
@@ -207,6 +243,59 @@ proc ::xtools::ip_packager::_find_unique_ip_core {vlnv} {
 # Package Project Procedures
 ###################################################################################################
 
+proc ::xtools::ip_packager::config_package_project {args} {
+    # Summary: Allows to modify/overwrite some IP-Packager configurations.
+
+    # Argument Usage:
+    # [-msg_config_overwrite <arg>]:    Set to false to disable overwriting of Vivado's message configuration.
+    # [-synth_reports <arg>]:           Set to false to disable reports export for synthesized design.
+    # [-synth_latch_check <arg>]:       Set to false to disable latch checking in synthesized design.
+    # [-impl_reports <arg>]:            Set to false to disable reports export for implemented design.
+    # [-impl_timing_check <arg>]:       Set to false to disable timing checking (WNS/WHS) in implemented design.
+    # [-impl_failed_nets_check <arg>]:  Set to false to disable failed nets checking in implemented design.
+    # [-impl_timing_wns <arg>]:         Set to negative value to relax implementation timing check of WNS (e.g. -0.2).
+    # [-impl_timing_whs <arg>]:         Set to negative value to relax implementation timing check of WHS (e.g. -0.2).
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+
+    # Load global variables
+    variable config::MsgConfigOverwrite
+    variable config::SynthReports
+    variable config::SynthLatchCheck
+    variable config::ImplReports
+    variable config::ImplTimingCheck
+    variable config::ImplFailedNetsCheck
+    variable config::ImplTimingWns
+    variable config::ImplTimingWhs
+
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -msg_config_overwrite       {incr i; set msg_config_overwrite   [lindex $args $i]}
+            -synth_reports              {incr i; set synth_reports          [lindex $args $i]}
+            -synth_latch_check          {incr i; set synth_latch_check      [lindex $args $i]}
+            -impl_reports               {incr i; set impl_reports           [lindex $args $i]}
+            -impl_timing_check          {incr i; set impl_timing_check      [lindex $args $i]}
+            -impl_failed_nets_check     {incr i; set impl_failed_nets_check [lindex $args $i]}
+            -impl_timing_wns            {incr i; set impl_timing_wns        [lindex $args $i]}
+            -impl_timing_whs            {incr i; set impl_timing_whs        [lindex $args $i]}
+        }
+    }
+
+    # Overwrite global config variables
+    if {[info exists msg_config_overwrite  ]} {set config::MsgConfigOverwrite   $msg_config_overwrite  }
+    if {[info exists synth_reports         ]} {set config::SynthReports         $synth_reports         }
+    if {[info exists synth_latch_check     ]} {set config::SynthLatchCheck      $synth_latch_check     }
+    if {[info exists impl_reports          ]} {set config::ImplReports          $impl_reports          }
+    if {[info exists impl_timing_check     ]} {set config::ImplTimingCheck      $impl_timing_check     }
+    if {[info exists impl_failed_nets_check]} {set config::ImplFailedNetsCheck  $impl_failed_nets_check}
+    if {[info exists impl_timing_wns       ]} {set config::ImplTimingWns        $impl_timing_wns       }
+    if {[info exists impl_timing_whs       ]} {set config::ImplTimingWhs        $impl_timing_whs       }
+}
+
 proc ::xtools::ip_packager::create_package_project {args} {
     # Summary: Create a new IP package project for the specified top-level HDL file.
 
@@ -252,7 +341,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     }
 
     # Define message severities
-    _overwritte_msg_config
+    _overwrite_msg_config
 
     # Update global RootDir variable
     if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to_pwd $root_dir]]}
@@ -343,10 +432,11 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # Summary: Run test synthesis on package project.
 
     # Argument Usage:
-    # [-part <arg>]:        Define specific part used for synthesis.
-    # [-jobs <arg> = 4]:    Define number of jobs used for synthesis run.
-    # [-timeout <arg>]:     Define synthesis run timeout in seconds.
-    # [-generics <arg>]:    Define top-level generics for synthesis. If not defined, the current default values from the configuration GUI are used.
+    # [-part <arg>]:            Define specific part used for synthesis.
+    # [-jobs <arg> = 4]:        Define number of jobs used for synthesis run.
+    # [-timeout <arg>]:         Define synthesis run timeout in seconds.
+    # [-generics <arg>]:        Define top-level generics for synthesis. If not defined, the current default values from the configuration GUI are used.
+    # [-disable_latch_check]:   Switch to turn-off latch checking on synthesized design.
 
     # Return Value: TCL_OK
 

@@ -23,6 +23,7 @@ Also check [Migration Guide](./PsiIpPackage_MigrationGuide.md) for 1:1 mapping o
 
 ### ip_packager
 
+* `config_package_project [-msg_config_overwrite <arg>] [-synth_reports <arg>] [-synth_latch_check <arg>] [-impl_reports <arg>][-impl_timing_check <arg>] [-impl_failed_nets_check <arg>] [-impl_timing_wns <arg>] [-impl_timing_whs <arg>]`
 * `create_package_project -top_file <arg> [-root_dir <arg>] [-prj_name <arg>] [-part <arg>]`
 * `simulate_package_project -generics <arg> [-timeout <arg>]`
 * `synth_package_project [-part <arg>] [-jobs <arg>]`

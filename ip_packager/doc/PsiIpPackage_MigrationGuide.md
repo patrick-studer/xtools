@@ -23,6 +23,7 @@ Check first [Relations Overview](./PsiIpPackage_RelationsOverview.md) to get an 
 
 ### New ip_packager features
 
+  * `config_package_project`
   * `simulate_package_project`
   * `impl_package_project`
 

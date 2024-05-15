@@ -97,6 +97,9 @@ ip_packager::auto_infer_interface         (User-written application)
 ip_packager::close_package_project        (User-written application)
                                           Finally close the temporary package project.
                                           
+ip_packager::config_package_project       (User-written application)
+                                          Allows to modify/overwrite some IP-Packager configurations.
+                                          
 ip_packager::create_bd_tcl_template       (User-written application)
                                           Not implemented!
                                           
@@ -1170,6 +1173,63 @@ xilinxtclstore, ip_packager, user-written
 
 ===================================================================================================
 
+ip_packager::config_package_project
+
+Description: 
+(User-written application)
+Allows to modify/overwrite some IP-Packager configurations.
+
+
+Syntax: 
+ip_packager::config_package_project  [-msg_config_overwrite <arg>]
+                                     [-synth_reports <arg>]
+                                     [-synth_latch_check <arg>]
+                                     [-impl_reports <arg>]
+                                     [-impl_timing_check <arg>]
+                                     [-impl_failed_nets_check <arg>]
+                                     [-impl_timing_wns <arg>]
+                                     [-impl_timing_whs <arg>] [-quiet]
+                                     [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name                       Description
+  --------------------------------------
+  [-msg_config_overwrite]    Set to false to disable overwriting of Vivado's 
+                             message configuration.
+                             Default: None
+  [-synth_reports]           Set to false to disable reports export for 
+                             synthesized design.
+                             Default: None
+  [-synth_latch_check]       Set to false to disable latch checking in 
+                             synthesized design.
+                             Default: None
+  [-impl_reports]            Set to false to disable reports export for 
+                             implemented design.
+                             Default: None
+  [-impl_timing_check]       Set to false to disable timing checking 
+                             (WNS/WHS) in implemented design.
+                             Default: None
+  [-impl_failed_nets_check]  Set to false to disable failed nets checking in 
+                             implemented design.
+                             Default: None
+  [-impl_timing_wns]         Set to negative value to relax implementation 
+                             timing check of WNS (e.g. -0.2).
+                             Default: None
+  [-impl_timing_whs]         Set to negative value to relax implementation 
+                             timing check of WHS (e.g. -0.2).
+                             Default: None
+  [-quiet]                   Ignore command errors
+  [-verbose]                 Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
 ip_packager::create_bd_tcl_template
 
 Description: 
@@ -1997,27 +2057,30 @@ Run test synthesis on package project.
 
 Syntax: 
 ip_packager::synth_package_project  [-part <arg>] [-jobs <arg>]
-                                    [-timeout <arg>] [-generics <arg>] [-quiet]
-                                    [-verbose]
+                                    [-timeout <arg>] [-generics <arg>]
+                                    [-disable_latch_check] [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name         Description
-  ------------------------
-  [-part]      Define specific part used for synthesis.
-               Default: None
-  [-jobs]      Define number of jobs used for synthesis run.
-               Default: 4
-  [-timeout]   Define synthesis run timeout in seconds.
-               Default: None
-  [-generics]  Define top-level generics for synthesis. If not defined, the 
-               current default values from the configuration GUI are used.
-               Default: None
-  [-quiet]     Ignore command errors
-  [-verbose]   Suspend message limits during command execution
+  Name                    Description
+  -----------------------------------
+  [-part]                 Define specific part used for synthesis.
+                          Default: None
+  [-jobs]                 Define number of jobs used for synthesis run.
+                          Default: 4
+  [-timeout]              Define synthesis run timeout in seconds.
+                          Default: None
+  [-generics]             Define top-level generics for synthesis. If not 
+                          defined, the current default values from the 
+                          configuration GUI are used.
+                          Default: None
+  [-disable_latch_check]  Switch to turn-off latch checking on synthesized 
+                          design.
+  [-quiet]                Ignore command errors
+  [-verbose]              Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
