@@ -2058,7 +2058,7 @@ Run test synthesis on package project.
 Syntax: 
 ip_packager::synth_package_project  [-part <arg>] [-jobs <arg>]
                                     [-timeout <arg>] [-generics <arg>]
-                                    [-disable_latch_check] [-quiet] [-verbose]
+                                    [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
@@ -2077,8 +2077,6 @@ Usage:
                           defined, the current default values from the 
                           configuration GUI are used.
                           Default: None
-  [-disable_latch_check]  Switch to turn-off latch checking on synthesized 
-                          design.
   [-quiet]                Ignore command errors
   [-verbose]              Suspend message limits during command execution
 

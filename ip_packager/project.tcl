@@ -436,7 +436,6 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # [-jobs <arg> = 4]:        Define number of jobs used for synthesis run.
     # [-timeout <arg>]:         Define synthesis run timeout in seconds.
     # [-generics <arg>]:        Define top-level generics for synthesis. If not defined, the current default values from the configuration GUI are used.
-    # [-disable_latch_check]:   Switch to turn-off latch checking on synthesized design.
 
     # Return Value: TCL_OK
 
