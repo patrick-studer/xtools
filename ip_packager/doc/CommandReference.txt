@@ -1182,6 +1182,7 @@ Allows to modify/overwrite some IP-Packager configurations.
 
 Syntax: 
 ip_packager::config_package_project  [-msg_config_overwrite <arg>]
+                                     [-remove_inferred_interfaces <arg>]
                                      [-synth_reports <arg>]
                                      [-synth_latch_check <arg>]
                                      [-impl_reports <arg>]
@@ -1196,34 +1197,41 @@ TCL_OK
 
 
 Usage: 
-  Name                       Description
-  --------------------------------------
-  [-msg_config_overwrite]    Set to false to disable overwriting of Vivado's 
-                             message configuration.
-                             Default: None
-  [-synth_reports]           Set to false to disable reports export for 
-                             synthesized design.
-                             Default: None
-  [-synth_latch_check]       Set to false to disable latch checking in 
-                             synthesized design.
-                             Default: None
-  [-impl_reports]            Set to false to disable reports export for 
-                             implemented design.
-                             Default: None
-  [-impl_timing_check]       Set to false to disable timing checking 
-                             (WNS/WHS) in implemented design.
-                             Default: None
-  [-impl_failed_nets_check]  Set to false to disable failed nets checking in 
-                             implemented design.
-                             Default: None
-  [-impl_timing_wns]         Set to negative value to relax implementation 
-                             timing check of WNS (e.g. -0.2).
-                             Default: None
-  [-impl_timing_whs]         Set to negative value to relax implementation 
-                             timing check of WHS (e.g. -0.2).
-                             Default: None
-  [-quiet]                   Ignore command errors
-  [-verbose]                 Suspend message limits during command execution
+  Name                           Description
+  ------------------------------------------
+  [-msg_config_overwrite]        Set to false to disable overwriting of 
+                                 Vivado's message configuration.
+                                 Default: None
+  [-remove_inferred_interfaces]  Set to false to disable removal of 
+                                 automatically interred interfaces by Vivado 
+                                 (at package project creation).
+                                 Default: None
+  [-synth_reports]               Set to false to disable reports export for 
+                                 synthesized design.
+                                 Default: None
+  [-synth_latch_check]           Set to false to disable latch checking in 
+                                 synthesized design.
+                                 Default: None
+  [-impl_reports]                Set to false to disable reports export for 
+                                 implemented design.
+                                 Default: None
+  [-impl_timing_check]           Set to false to disable timing checking 
+                                 (WNS/WHS) in implemented design.
+                                 Default: None
+  [-impl_failed_nets_check]      Set to false to disable failed nets checking
+                                 in implemented design.
+                                 Default: None
+  [-impl_timing_wns]             Set to negative value to relax 
+                                 implementation timing check of WNS (e.g. 
+                                 -0.2).
+                                 Default: None
+  [-impl_timing_whs]             Set to negative value to relax 
+                                 implementation timing check of WHS (e.g. 
+                                 -0.2).
+                                 Default: None
+  [-quiet]                       Ignore command errors
+  [-verbose]                     Suspend message limits during command 
+                                 execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written

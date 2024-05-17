@@ -25,14 +25,15 @@ namespace eval ::xtools::ip_packager {
     
     namespace eval ::xtools::ip_packager::config {
     # Configuration Variables
-        variable MsgConfigOverwrite     true
-        variable SynthReports           true
-        variable SynthLatchCheck        true
-        variable ImplReports            true
-        variable ImplTimingCheck        true
-        variable ImplFailedNetsCheck    true
-        variable ImplTimingWns          -0.0
-        variable ImplTimingWhs          -0.0
+        variable MsgConfigOverwrite         true
+        variable RemoveInferredInterfaces   true
+        variable SynthReports               true
+        variable SynthLatchCheck            true
+        variable ImplReports                true
+        variable ImplTimingCheck            true
+        variable ImplFailedNetsCheck        true
+        variable ImplTimingWns              -0.0
+        variable ImplTimingWhs              -0.0
     }
     
      # Allow Tcl to find tclIndex

@@ -247,14 +247,15 @@ proc ::xtools::ip_packager::config_package_project {args} {
     # Summary: Allows to modify/overwrite some IP-Packager configurations.
 
     # Argument Usage:
-    # [-msg_config_overwrite <arg>]:    Set to false to disable overwriting of Vivado's message configuration.
-    # [-synth_reports <arg>]:           Set to false to disable reports export for synthesized design.
-    # [-synth_latch_check <arg>]:       Set to false to disable latch checking in synthesized design.
-    # [-impl_reports <arg>]:            Set to false to disable reports export for implemented design.
-    # [-impl_timing_check <arg>]:       Set to false to disable timing checking (WNS/WHS) in implemented design.
-    # [-impl_failed_nets_check <arg>]:  Set to false to disable failed nets checking in implemented design.
-    # [-impl_timing_wns <arg>]:         Set to negative value to relax implementation timing check of WNS (e.g. -0.2).
-    # [-impl_timing_whs <arg>]:         Set to negative value to relax implementation timing check of WHS (e.g. -0.2).
+    # [-msg_config_overwrite <arg>]:        Set to false to disable overwriting of Vivado's message configuration.
+    # [-remove_inferred_interfaces <arg>]:  Set to false to disable removal of automatically interred interfaces by Vivado (at package project creation).
+    # [-synth_reports <arg>]:               Set to false to disable reports export for synthesized design.
+    # [-synth_latch_check <arg>]:           Set to false to disable latch checking in synthesized design.
+    # [-impl_reports <arg>]:                Set to false to disable reports export for implemented design.
+    # [-impl_timing_check <arg>]:           Set to false to disable timing checking (WNS/WHS) in implemented design.
+    # [-impl_failed_nets_check <arg>]:      Set to false to disable failed nets checking in implemented design.
+    # [-impl_timing_wns <arg>]:             Set to negative value to relax implementation timing check of WNS (e.g. -0.2).
+    # [-impl_timing_whs <arg>]:             Set to negative value to relax implementation timing check of WHS (e.g. -0.2).
 
     # Return Value: TCL_OK
 
@@ -262,6 +263,7 @@ proc ::xtools::ip_packager::config_package_project {args} {
 
     # Load global variables
     variable config::MsgConfigOverwrite
+    variable config::RemoveInferredInterfaces
     variable config::SynthReports
     variable config::SynthLatchCheck
     variable config::ImplReports
@@ -274,26 +276,28 @@ proc ::xtools::ip_packager::config_package_project {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -msg_config_overwrite       {incr i; set msg_config_overwrite   [lindex $args $i]}
-            -synth_reports              {incr i; set synth_reports          [lindex $args $i]}
-            -synth_latch_check          {incr i; set synth_latch_check      [lindex $args $i]}
-            -impl_reports               {incr i; set impl_reports           [lindex $args $i]}
-            -impl_timing_check          {incr i; set impl_timing_check      [lindex $args $i]}
-            -impl_failed_nets_check     {incr i; set impl_failed_nets_check [lindex $args $i]}
-            -impl_timing_wns            {incr i; set impl_timing_wns        [lindex $args $i]}
-            -impl_timing_whs            {incr i; set impl_timing_whs        [lindex $args $i]}
+            -msg_config_overwrite       {incr i; set msg_config_overwrite       [lindex $args $i]}
+            -remove_inferred_interfaces {incr i; set remove_inferred_interfaces [lindex $args $i]}
+            -synth_reports              {incr i; set synth_reports              [lindex $args $i]}
+            -synth_latch_check          {incr i; set synth_latch_check          [lindex $args $i]}
+            -impl_reports               {incr i; set impl_reports               [lindex $args $i]}
+            -impl_timing_check          {incr i; set impl_timing_check          [lindex $args $i]}
+            -impl_failed_nets_check     {incr i; set impl_failed_nets_check     [lindex $args $i]}
+            -impl_timing_wns            {incr i; set impl_timing_wns            [lindex $args $i]}
+            -impl_timing_whs            {incr i; set impl_timing_whs            [lindex $args $i]}
         }
     }
 
     # Overwrite global config variables
-    if {[info exists msg_config_overwrite  ]} {set config::MsgConfigOverwrite   $msg_config_overwrite  }
-    if {[info exists synth_reports         ]} {set config::SynthReports         $synth_reports         }
-    if {[info exists synth_latch_check     ]} {set config::SynthLatchCheck      $synth_latch_check     }
-    if {[info exists impl_reports          ]} {set config::ImplReports          $impl_reports          }
-    if {[info exists impl_timing_check     ]} {set config::ImplTimingCheck      $impl_timing_check     }
-    if {[info exists impl_failed_nets_check]} {set config::ImplFailedNetsCheck  $impl_failed_nets_check}
-    if {[info exists impl_timing_wns       ]} {set config::ImplTimingWns        $impl_timing_wns       }
-    if {[info exists impl_timing_whs       ]} {set config::ImplTimingWhs        $impl_timing_whs       }
+    if {[info exists msg_config_overwrite       ]} {set config::MsgConfigOverwrite          $msg_config_overwrite       }
+    if {[info exists remove_inferred_interfaces ]} {set config::RemoveInferredInterfaces    $remove_inferred_interfaces }
+    if {[info exists synth_reports              ]} {set config::SynthReports                $synth_reports              }
+    if {[info exists synth_latch_check          ]} {set config::SynthLatchCheck             $synth_latch_check          }
+    if {[info exists impl_reports               ]} {set config::ImplReports                 $impl_reports               }
+    if {[info exists impl_timing_check          ]} {set config::ImplTimingCheck             $impl_timing_check          }
+    if {[info exists impl_failed_nets_check     ]} {set config::ImplFailedNetsCheck         $impl_failed_nets_check     }
+    if {[info exists impl_timing_wns            ]} {set config::ImplTimingWns               $impl_timing_wns            }
+    if {[info exists impl_timing_whs            ]} {set config::ImplTimingWhs               $impl_timing_whs            }
 }
 
 proc ::xtools::ip_packager::create_package_project {args} {
@@ -314,6 +318,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Load global variables
     variable OldXguiFile
     variable RootDir
+    variable config::RemoveInferredInterfaces
 
     # Define default values for procedure arguments
     set prj_name "package_prj"
@@ -375,7 +380,13 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # IPI init (remove auto-generate stuff)
     ipgui::remove_page -component [ipx::current_core] [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
-    ipx::remove_bus_interface [get_property name [ipx::get_bus_interfaces -of_objects  [ipx::current_core]]] [ipx::current_core]
+    if {$config::RemoveInferredInterfaces} {
+        foreach autoInfInterface [get_property name [ipx::get_bus_interfaces -of_objects [ipx::current_core]]] {
+            ipx::remove_bus_interface $autoInfInterface [ipx::current_core]
+        }
+    } else {
+        puts "WARNING: \[create_package_project\] Removing inferred interfaces is disabled. The IP core will keep the automatically added interfaces. Please check in GUI if all interfaces are recognized correctly."
+    }
     set OldXguiFile [file join $root_dir "xgui" "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].tcl"]
 }
 
