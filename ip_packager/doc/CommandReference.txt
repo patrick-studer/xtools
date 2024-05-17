@@ -1667,7 +1667,9 @@ Usage:
   ------------------------
   [-quiet]     Ignore command errors
   [-verbose]   Suspend message limits during command execution
-  <level_str>  Auto familiy support level string (e.g. "level_1").
+  <level_str>  Auto familiy support level string ("level_1" = Pre-Production, 
+               "level_2" = Production, "level_beta" = Beta, 
+               "level_discontinued" = Discontinued).
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
@@ -2057,28 +2059,27 @@ Run test synthesis on package project.
 
 Syntax: 
 ip_packager::synth_package_project  [-part <arg>] [-jobs <arg>]
-                                    [-timeout <arg>] [-generics <arg>]
-                                    [-quiet] [-verbose]
+                                    [-timeout <arg>] [-generics <arg>] [-quiet]
+                                    [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name                    Description
-  -----------------------------------
-  [-part]                 Define specific part used for synthesis.
-                          Default: None
-  [-jobs]                 Define number of jobs used for synthesis run.
-                          Default: 4
-  [-timeout]              Define synthesis run timeout in seconds.
-                          Default: None
-  [-generics]             Define top-level generics for synthesis. If not 
-                          defined, the current default values from the 
-                          configuration GUI are used.
-                          Default: None
-  [-quiet]                Ignore command errors
-  [-verbose]              Suspend message limits during command execution
+  Name         Description
+  ------------------------
+  [-part]      Define specific part used for synthesis.
+               Default: None
+  [-jobs]      Define number of jobs used for synthesis run.
+               Default: 4
+  [-timeout]   Define synthesis run timeout in seconds.
+               Default: None
+  [-generics]  Define top-level generics for synthesis. If not defined, the 
+               current default values from the configuration GUI are used.
+               Default: None
+  [-quiet]     Ignore command errors
+  [-verbose]   Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written

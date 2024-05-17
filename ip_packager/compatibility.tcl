@@ -35,7 +35,7 @@ proc ::xtools::ip_packager::set_auto_family_support {level_str} {
     # Summary:  Set automated family support level for this packaged IP-core.
 
     # Argument Usage:
-    # level_str:        Auto familiy support level string (e.g. "level_1").
+    # level_str:        Auto familiy support level string ("level_1" = Pre-Production, "level_2" = Production, "level_beta" = Beta, "level_discontinued" = Discontinued).
 
     # Return Value: TCL_OK
 
