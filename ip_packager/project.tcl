@@ -381,8 +381,8 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # IPI init (remove auto-generate stuff)
     ipgui::remove_page -component [ipx::current_core] [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
     if {$config::RemoveInferredInterfaces} {
-        foreach autoInfInterface [get_property name [ipx::get_bus_interfaces -of_objects [ipx::current_core]]] {
-            ipx::remove_bus_interface $autoInfInterface [ipx::current_core]
+        foreach autoInfInterface [ipx::get_bus_interfaces -of_objects [ipx::current_core]] {
+            ipx::remove_bus_interface [get_property name $autoInfInterface] [ipx::current_core]
         }
     } else {
         puts "WARNING: \[create_package_project\] Removing inferred interfaces is disabled. The IP core will keep the automatically added interfaces. Please check in GUI if all interfaces are recognized correctly."
