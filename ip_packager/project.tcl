@@ -55,8 +55,11 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
         set_msg_config   -id  {[Vivado 12-3631]}    -new_severity "INFO"
         set_msg_config   -id  {[Vivado 12-1348]}    -new_severity "INFO"
+        set_msg_config   -id  {Vivado 12-7122}      -suppress
         set_msg_config   -id  {[Ipptcl 7-1550]}     -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-234]}    -suppress
+        set_msg_config   -id  {Synth 8-7080}        -suppress
+        set_msg_config   -id  {Route 35-198}        -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
