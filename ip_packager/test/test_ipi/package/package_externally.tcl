@@ -74,6 +74,7 @@ ip_packager::set_unsupported_simulators                 {xcelium vcs riviera act
 # IP Core Design Files ----------------------------------------------------------------------------
 ip_packager::add_design_sources         -files          [list \
                                                             "${src_dir}/hdl/IpPackager_2020_1.vhd" \
+                                                            "${src_dir}/hdl/IpPackager_2020_1_pkg.vhd" \
                                                         ] \
                                         -copy_to        "hdl" \
 
@@ -253,7 +254,7 @@ ip_packager::set_param_config           -param_name             "TestSL_g" \
                                         -format                 "bitString" \
                                         -bit_string_length      1 \
                                         -validation_list        [list {"0"} "\"1\""] \
-                                        -value                  {"0"}\
+                                        -value                  {"0"} \
 
 # Note the different value formatting possibilities for bitStrings (hex)! The 0x prefix needs to be present in the passed value.
 ip_packager::set_param_config           -param_name             "TestSLV_g" \

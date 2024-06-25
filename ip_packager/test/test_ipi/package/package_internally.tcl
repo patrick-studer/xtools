@@ -70,6 +70,7 @@ ip_packager::set_unsupported_simulators                 {xcelium vcs riviera act
 # IP Core Design Files ----------------------------------------------------------------------------
 ip_packager::add_design_sources         -files          [list \
                                                             "hdl/IpPackager_2020_1.vhd" \
+                                                            "hdl/IpPackager_2020_1_pkg.vhd" \
                                                         ] \
                                         -library        "test" \
 
@@ -360,12 +361,12 @@ ip_packager::gui_add_page       -page_name      "Page_UserParam" \
 
         ip_packager::gui_add_param      -param_name     "TestLong_p" \
                                         -display_name   "Random Long" \
-                                        -tooltip        "Long Tooltip"
+                                        -tooltip        "Long Tooltip" \
 
         ip_packager::gui_add_param      -param_name     "TestFloat_p" \
                                         -display_name   "Random Float" \
                                         -tooltip        "Float Tooltip" \
-                                        -widget         "comboBox"
+                                        -widget         "comboBox" \
 
     # PAGE User Parameters ------------------------------------------------------------------------
     ip_packager::gui_set_parent     "Page_UserParam"
@@ -492,6 +493,7 @@ ip_packager::gui_add_page       -page_name      "Page_Config" \
 
         # GROUP AXI4 ------------------------------------------------------------------------------
         ip_packager::gui_set_parent     "Group_Axis"
+
         ip_packager::gui_add_group      -group_name     "Group_M_Axis" \
                                         -display_name   "Master" \
                                         -tooltip        "AXI4-Stream Master Configuration" \
