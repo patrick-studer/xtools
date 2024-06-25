@@ -174,6 +174,14 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
 
     # Auto-infer bus interface
     set addedInterface [ipx::infer_bus_interface [get_property name $ifPorts] [get_property vlnv $ifBusAbs] [ipx::current_core]]
+
+    # Remove all auto-inferred parameters
+    set autoInfParameters [ipx::get_bus_parameters -of_objects $addedInterface]
+    foreach autoInfParameter $autoInfParameters {
+        ipx::remove_bus_parameter [get_property name $autoInfParameter] $addedInterface
+    }
+
+    # Overwrite default interface name
     if {[info exists interface_name]} {
         set_property name $interface_name $addedInterface
     }
