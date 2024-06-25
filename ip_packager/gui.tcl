@@ -138,6 +138,12 @@ proc ::xtools::ip_packager::gui_add_param {args} {
     if {[info exists parent]} {
         set CurrentGuiParent [gui_set_parent $parent]
     }
+
+    # Verify if param_name is a valid user parameter
+    if {[llength [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]] == 0} {
+        error "ERROR: \[gui_add_param\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
+
     set CurrentGuiParam [ipgui::add_param -name $param_name -component [ipx::current_core] -parent $CurrentGuiParent]
     if {[info exists display_name]} {set_property display_name $display_name $CurrentGuiParam}
     if {[info exists tooltip     ]} {set_property tooltip      $tooltip      $CurrentGuiParam}

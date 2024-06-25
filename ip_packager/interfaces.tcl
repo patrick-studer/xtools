@@ -25,6 +25,46 @@ namespace eval ::xtools::ip_packager {
 }
 
 ###################################################################################################
+# Helper Procedures
+###################################################################################################
+
+proc ::xtools::ip_packager::_get_ports {port_name {filter_expr ""}} {
+    # Summary: Guarded get_ports function. Checks if the port exists before returning.
+
+    # Argument Usage:
+    # port_name:        Port name/pattern.
+    # [filter_expr]:    Additional filter condition.
+
+    # Return Value:     TCL_ERROR if port was not found, else TCL_OK.
+
+    # Categories: xilinxtclstore, ip_packager
+    if {![string match $filter_expr ""]} {set filter_expr "&& (${filter_expr})"}
+    set foundPorts [ipx::get_ports -of_objects [ipx::current_core] -filter "name =~ ${port_name} ${filter_expr}"]
+    if {[llength $foundPorts] == 0} {
+            error "ERROR: \[_get_ports\] No ports matched pattern ${port_name}. Please verify spelling of this port."
+    }
+    return $foundPorts
+}
+
+proc ::xtools::ip_packager::_get_bus_interfaces {interface_name {filter_expr ""}} {
+    # Summary: Guarded get_bus_interface function. Checks if the interface exists before returning.
+
+    # Argument Usage:
+    # interface_name:   Interface name/pattern.
+    # [filter_expr]:    Additional filter condition.
+
+    # Return Value:     TCL_ERROR if interface was not found, else TCL_OK.
+
+    # Categories: xilinxtclstore, ip_packager
+    if {![string match $filter_expr ""]} {set filter_expr "&& (${filter_expr})"}
+    set foundInterfaces [ipx::get_bus_interfaces -of_objects [ipx::current_core] -filter "name =~ ${interface_name} ${filter_expr}"]
+    if {[llength $foundInterfaces] == 0} {
+            error "ERROR: \[_get_bus_interfaces\] No interface matched pattern ${interface_name}. Please verify spelling or add the interface first if not done yet."
+    }
+    return $foundInterfaces
+}
+
+###################################################################################################
 # Ports + Interfaces Procedures
 ###################################################################################################
 
@@ -127,7 +167,7 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
     if {![info exists port_pattern]} {
         set port_pattern "${interface_name}_*"
     }
-    set ifPorts [ipx::get_ports $port_pattern]
+    set ifPorts [_get_ports $port_pattern]
     if {[llength $ifPorts] == 0} {
         error "ERROR: \[auto_infer_interface\] Could not find an port that matches ${port_names}. Define a valid -port_names pattern."
     }
@@ -139,7 +179,7 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
     }
 
     # Add optional bus parameters
-    if {[info exists bus_param]} {
+    if {[info exists bus_params]} {
         foreach busParam $bus_params {
             set_property value [lindex $busParam 1] [ipx::add_bus_parameter [lindex $busParam 0] $addedInterface]
         }
@@ -393,6 +433,8 @@ proc ::xtools::ip_packager::add_bus_interface {args} {
         if {[lsearch -exact $abstractionList $abstractionName] == -1} {
             error "ERROR: \[add_bus_interface\] Found no abstraction port that is named ${abstractionName} (LIST: ${abstractionList}). Select a abstraction port from the list and define the name accordingly!"
         }
+        # Verify if port exists
+        _get_ports $physicalName
         set_property physical_name $physicalName [ipx::add_port_map $abstractionName $addedInterface]
     }
 
@@ -404,11 +446,10 @@ proc ::xtools::ip_packager::add_bus_interface {args} {
     }
 
     # Assosciate interface clock and reset
-    set busType [get_property bus_type_name $addedInterface]
-    if {[info exists clk] && $busType!="clock"} {
-        ipx::associate_bus_interfaces -busif $addedInterface -clock $clk [ipx::current_core]
-        if {[info exists rst] && $busType=="reset"} {
-            ipx::associate_bus_interfaces -clock $clk -reset $rst [ipx::current_core]
+    if {[info exists clk]} {
+        associate_interface_clock -interface_name [get_property name $addedInterface] -clock $clk
+        if {[info exists rst]} {
+            associate_interface_clock -clock $clk -reset $rst
         }
     }
 }
@@ -437,9 +478,9 @@ proc ::xtools::ip_packager::associate_interface_clock {args} {
 
     # Associate clock to interface
     foreach interface $interface_name {
-        foreach foundInterface [get_property name [ipx::get_bus_interfaces -of_objects [ipx::current_core] -filter "name =~ ${interface} && bus_type_name !~ reset && bus_type_name !~ clock"]] {
+        foreach foundInterface [get_property name [_get_bus_interfaces ${interface} "bus_type_name !~ reset && bus_type_name !~ clock"]] {
             foreach clk $clock {
-                if {[get_property bus_type_name [ipx::get_bus_interfaces $clk -of_objects [ipx::current_core]]] != "clock"} {
+                if {[get_property bus_type_name [_get_bus_interfaces $clk]] != "clock"} {
                     error "ERROR: \[associate_interface_clock\] Option -clock must include interfaces of type clock."
                 }
                 ipx::associate_bus_interfaces -busif $foundInterface -clock $clk [ipx::current_core]
@@ -470,11 +511,11 @@ proc ::xtools::ip_packager::associate_clock_reset {args} {
 
     # Associate reset to clock-interface
     foreach clk $clock {
-        if {[get_property bus_type_name [ipx::get_bus_interfaces $clk -of_objects [ipx::current_core]]] != "clock"} {
+        if {[get_property bus_type_name [_get_bus_interfaces $clk]] != "clock"} {
             error "ERROR: \[associate_clock_reset\] Option -clock must include interfaces of type clock."
         }
         foreach rst $reset {
-            if {[get_property bus_type_name [ipx::get_bus_interfaces $rst -of_objects [ipx::current_core]]] != "reset"} {
+            if {[get_property bus_type_name [_get_bus_interfaces $rst]] != "reset"} {
                 error "ERROR: \[associate_clock_reset\] Option -reset must include interfaces of type reset."
             }
             ipx::associate_bus_interfaces -clock $clk -reset $rst [ipx::current_core]
@@ -505,7 +546,7 @@ proc ::xtools::ip_packager::set_interface_enablement {args} {
     }
 
     # Set interface enablement condition
-    set_property enablement_dependency $dependency [ipx::get_bus_interfaces $interface_name -of_objects [ipx::current_core]]
+    set_property enablement_dependency $dependency [_get_bus_interfaces $interface_name]
 }
 
 proc ::xtools::ip_packager::set_port_enablement {args} {
@@ -531,9 +572,9 @@ proc ::xtools::ip_packager::set_port_enablement {args} {
     }
 
     # Set port enablement condition
-    set_property enablement_dependency $dependency [ipx::get_ports $port_name -of_objects [ipx::current_core]]
+    set_property enablement_dependency $dependency [_get_ports $port_name]
     if {[info exists driver_value]} {
-        set_property driver_value $driver_value [ipx::get_ports $port_name -of_objects [ipx::current_core]]
+        set_property driver_value $driver_value [_get_ports $port_name]
     }
 }
 

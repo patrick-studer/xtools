@@ -104,6 +104,11 @@ proc ::xtools::ip_packager::set_param_config {args} {
         }
     }
 
+    # Verify if param_name is a valid user parameter
+    if {[llength [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]] == 0} {
+        error "ERROR: \[set_param_config\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
+
     # Call individual helper funcitons
     if {[info exists format]} {
         if {[info exists bit_string_length]} {
@@ -146,6 +151,11 @@ proc ::xtools::ip_packager::set_param_validation {args} {
     set hdlParam    [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam   [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
     set valueFormat [get_property value_format $userParam]
+
+    # Verify if param_name is a valid user parameter
+    if {[llength $userParam] == 0} {
+        error "ERROR: \[set_param_validation\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
 
     # Set validation type and related values
     foreach param [concat $hdlParam $userParam] {
@@ -198,6 +208,12 @@ proc ::xtools::ip_packager::set_param_enablement {args} {
     # Add enablement condition to IPI parameter
     set hdlParam  [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
+
+    # Verify if param_name is a valid user parameter
+    if {[llength $userParam] == 0} {
+        error "ERROR: \[set_param_enablement\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
+
     foreach param [concat $hdlParam $userParam] {
         if {[info exists tcl_expr]} {set_property enablement_tcl_expr "expr ${tcl_expr}" $param; ipx::update_dependency $param}
     }
@@ -227,6 +243,12 @@ proc ::xtools::ip_packager::set_param_value {args} {
 
     set hdlParam  [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
+
+    # Verify if param_name is a valid user parameter
+    if {[llength $userParam] == 0} {
+        error "ERROR: \[set_param_value\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
+
     foreach param [concat $hdlParam $userParam] {
         if {[info exists value   ]} {set_property value $value $param}
         if {[info exists tcl_expr]} {set_property enablement_value false $param; set_property value_tcl_expr "expr ${tcl_expr}" $param; ipx::update_dependency $param}
@@ -260,6 +282,12 @@ proc ::xtools::ip_packager::set_param_format {args} {
 
     set hdlParam  [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
+
+    # Verify if param_name is a valid user parameter
+    if {[llength $userParam] == 0} {
+        error "ERROR: \[set_param_format\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+    }
+
     foreach param [concat $hdlParam $userParam] {
         if {[info exists format           ]} {set_property value_format            $format            $param}
         if {[info exists bit_string_length]} {set_property value_bit_string_length $bit_string_length $param}

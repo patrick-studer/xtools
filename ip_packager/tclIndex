@@ -35,6 +35,8 @@ set auto_index(::xtools::ip_packager::gui_add_param) [list source [file join $di
 set auto_index(::xtools::ip_packager::gui_add_text) [list source [file join $dir gui.tcl]]
 set auto_index(::xtools::ip_packager::gui_set_parent) [list source [file join $dir gui.tcl]]
 set auto_index(::xtools::ip_packager::set_identification) [list source [file join $dir identification.tcl]]
+set auto_index(::xtools::ip_packager::_get_ports) [list source [file join $dir interfaces.tcl]]
+set auto_index(::xtools::ip_packager::_get_bus_interfaces) [list source [file join $dir interfaces.tcl]]
 set auto_index(::xtools::ip_packager::import_bus_definition) [list source [file join $dir interfaces.tcl]]
 set auto_index(::xtools::ip_packager::auto_infer_interface) [list source [file join $dir interfaces.tcl]]
 set auto_index(::xtools::ip_packager::add_axi_interface) [list source [file join $dir interfaces.tcl]]
