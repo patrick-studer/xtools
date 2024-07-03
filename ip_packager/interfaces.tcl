@@ -197,7 +197,7 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
         if {[string match $interfaceMode "slave"]} {
             ipx::infer_memory_address_block $addedInterface
             # Workaround to force base_address to format long (introduced in newer Vivado versions around 2021.x)
-            set addressBlock [ipx::get_address_blocks reg0 -of_objects [ipx::get_memory_maps S_Axi -of_objects [ipx::current_core]]]
+            set addressBlock [ipx::get_address_blocks reg0 -of_objects [ipx::get_memory_maps $interface_name -of_objects [ipx::current_core]]]
             set_property base_address              0      $addressBlock
             set_property base_address_format       "long" $addressBlock
             set_property base_address_resolve_type "user" $addressBlock
