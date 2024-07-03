@@ -182,9 +182,7 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
     }
 
     # Overwrite default interface name
-    if {[info exists interface_name]} {
-        set_property name $interface_name $addedInterface
-    }
+    set_property name $interface_name $addedInterface
 
     # Add optional bus parameters
     if {[info exists bus_params]} {
@@ -192,6 +190,22 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
             set_property value [lindex $busParam 1] [ipx::add_bus_parameter [lindex $busParam 0] $addedInterface]
         }
     }
+
+    # Create default memory-map (AXI4 Slaves) or address-space (AXI4-Masters)
+    if {[string match [get_property vlnv $ifBusAbs] "xilinx.com:interface:aximm_rtl:1.0"]} {
+        set interfaceMode [get_property interface_mode $addedInterface]
+        if {[string match $interfaceMode "slave"]} {
+            ipx::infer_memory_address_block $addedInterface
+            # Workaround to force base_address to format long (introduced in newer Vivado versions around 2021.x)
+            set addressBlock [ipx::get_address_blocks reg0 -of_objects [ipx::get_memory_maps S_Axi -of_objects [ipx::current_core]]]
+            set_property base_address              0      $addressBlock
+            set_property base_address_format       "long" $addressBlock
+            set_property base_address_resolve_type "user" $addressBlock
+        } elseif {[string match $interfaceMode "master"]} {
+            ipx::infer_address_space $addedInterface
+        }
+    }
+
 }
 
 proc ::xtools::ip_packager::add_axi_interface {args} {

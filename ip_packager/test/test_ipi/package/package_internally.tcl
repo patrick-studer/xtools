@@ -23,13 +23,15 @@ lappend auto_path                       [file join $pkg_path "xtools"]
 ###################################################################################################
 
 # ip_packager::config_package_project     -msg_config_overwrite       false \
-                                        # -synth_reports              false \
-                                        # -synth_latch_check          false \
-                                        # -impl_reports               false \
-                                        # -impl_timing_check          false \
-                                        # -impl_failed_nets_check     false \
-                                        # -impl_timing_wns            -0.0 \
-                                        # -impl_timing_whs            -0.0 \
+                                        -remove_inferred_interfaces true \
+                                        -msg_config_overwrite       false \
+                                        -synth_reports              false \
+                                        -synth_latch_check          false \
+                                        -impl_reports               false \
+                                        -impl_timing_check          false \
+                                        -impl_failed_nets_check     false \
+                                        -impl_timing_wns            -0.0 \
+                                        -impl_timing_whs            -0.0 \
 
 ###################################################################################################
 # Create Package Project
@@ -267,12 +269,6 @@ ip_packager::add_axis_interface         -interface_name         "M_Axis" \
 ip_packager::add_interrupt_interface    -interface_name         "Interrupt" \
                                         -sensitivity            "LEVEL_HIGH" \
 
-ip_packager::add_clock_interface        -interface_name         "Clk" \
-
-ip_packager::add_clock_interface        -interface_name         "Axi_Clk" \
-
-ip_packager::add_clock_interface        -interface_name         "Axis_Clk" \
-
 ip_packager::add_reset_interface        -interface_name         "Rst" \
                                         -polarity               "ACTIVE_HIGH" \
 
@@ -281,6 +277,12 @@ ip_packager::add_reset_interface        -interface_name         "Axis_ResetN" \
 
 ip_packager::add_reset_interface        -interface_name         "Axi_ResetN" \
                                         -polarity               "ACTIVE_LOW" \
+
+ip_packager::add_clock_interface        -interface_name         "Clk" \
+
+ip_packager::add_clock_interface        -interface_name         "Axi_Clk" \
+
+ip_packager::add_clock_interface        -interface_name         "Axis_Clk" \
 
 # Manually-Mapped Interfaces ----------------------------------------------------------------------
 ip_packager::add_bus_interface          -interface_name         "UART" \
@@ -593,7 +595,7 @@ ip_packager::impl_package_project
 
 ip_packager::save_package_project
 
-ip_packager::close_package_project      -delete         "true"
+ip_packager::close_package_project      -delete         "false"
 
 ###################################################################################################
 # EOF

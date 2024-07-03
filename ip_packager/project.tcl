@@ -61,11 +61,13 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-3157]}   -new_severity "INFO" ; # Bus Interface 'Axis_ResetN': Bus parameter POLARITY is ACTIVE_LOW but port 'Axis_ResetN' is not *resetn - please double check the POLARITY setting.
         set_msg_config   -id  {[IP_Flow 19-3656]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
         set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
+        set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO" ; # Clock interface 'Clk' has no FREQ_HZ parameter.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
         set_msg_config   -id  {[Route 35-198]}      -suppress
     } else {
@@ -83,6 +85,7 @@ proc ::xtools::ip_packager::_synth_checks {} {
     # Categories: xilinxtclstore, ip_packager
 
     # Load global variables
+    variable ReportDir
     variable config::SynthReports
     variable config::SynthLatchCheck
 
@@ -104,8 +107,7 @@ proc ::xtools::ip_packager::_synth_checks {} {
     # Export reports
 
     if {$config::SynthReports} {
-        set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
-        report_utilization    -file "${rpt_dir}/[current_run -synthesis]_utilization.rpt" -hierarchical
+        report_utilization -file "${ReportDir}/[current_run -synthesis]_utilization.rpt" -hierarchical
     }
 
     # Close the synthesized design
@@ -122,6 +124,7 @@ proc ::xtools::ip_packager::_impl_checks {} {
     # Categories: xilinxtclstore, ip_packager
 
     # Load global variables
+    variable ReportDir
     variable config::ImplReports
     variable config::ImplTimingCheck
     variable config::ImplFailedNetsCheck
@@ -181,10 +184,9 @@ proc ::xtools::ip_packager::_impl_checks {} {
 
     # Export reports
     if {$config::ImplReports} {
-        set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
-        report_timing_summary -file "${rpt_dir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
-        report_drc            -file "${rpt_dir}/[current_run -implementation]_drc.rpt"
-        report_methodology    -file "${rpt_dir}/[current_run -implementation]_methodology.rpt"
+        report_timing_summary -file "${ReportDir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
+        report_drc            -file "${ReportDir}/[current_run -implementation]_drc.rpt"
+        report_methodology    -file "${ReportDir}/[current_run -implementation]_methodology.rpt"
     }
 
     # Close the implemented design
@@ -312,6 +314,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # [-root_dir <arg> = ./..]:             IP output root directory.
     # [-prj_name  <arg> = package_prj]:     Temporary package project name.
     # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project.
+    # [-report_dir <arg> = ./..]:           Directory location to store synth/impl reports.
 
     # Return Value: TCL_OK
 
@@ -320,22 +323,24 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Load global variables
     variable OldXguiFile
     variable RootDir
+    variable ReportDir
     variable config::RemoveInferredInterfaces
 
     # Define default values for procedure arguments
-    set prj_name "package_prj"
-    set part     "xc7z020iclg400-1L"
+    set prj_name    "package_prj"
+    set part        "xc7z020iclg400-1L"
 
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -top_file   {incr i; set top_file [lindex $args $i]}
-            -copy_to    {incr i; set copy_to  [lindex $args $i]}
-            -library    {incr i; set library  [lindex $args $i]}
-            -root_dir   {incr i; set root_dir [lindex $args $i]}
-            -prj_name   {incr i; set prj_name [lindex $args $i]}
-            -part       {incr i; set part     [lindex $args $i]}
+            -top_file   {incr i; set top_file   [lindex $args $i]}
+            -copy_to    {incr i; set copy_to    [lindex $args $i]}
+            -library    {incr i; set library    [lindex $args $i]}
+            -root_dir   {incr i; set root_dir   [lindex $args $i]}
+            -prj_name   {incr i; set prj_name   [lindex $args $i]}
+            -part       {incr i; set part       [lindex $args $i]}
+            -report_dir {incr i; set report_dir [lindex $args $i]}
         }
     }
 
@@ -351,7 +356,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     _overwrite_msg_config
 
     # Update global RootDir variable
-    if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to_pwd $root_dir]]}
+    if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to [pwd] $root_dir]]}
 
     # Create package project
     create_project -part $part -force -quiet $prj_name $prj_name
@@ -363,9 +368,9 @@ proc ::xtools::ip_packager::create_package_project {args} {
     if {[info exists library]} {set_property library $library $addedFiles}
 
     # Create reports directory
-    set rpt_dir "[get_property DIRECTORY [current_project]]/../reports"
-    file delete -force $rpt_dir
-    file mkdir $rpt_dir
+    if {[info exists report_dir]} {set ReportDir [file normalize [path_relative_to_pwd $report_dir]]}
+    file delete -force $ReportDir
+    file mkdir $ReportDir
 
     # Create new IPI component
     ipx::package_project -root_dir [file normalize $RootDir] -quiet
@@ -385,6 +390,12 @@ proc ::xtools::ip_packager::create_package_project {args} {
     if {$config::RemoveInferredInterfaces} {
         foreach autoInfInterface [ipx::get_bus_interfaces -of_objects [ipx::current_core]] {
             ipx::remove_bus_interface [get_property name $autoInfInterface] [ipx::current_core]
+        }
+        foreach autoInfMemoryMap [ipx::get_memory_maps -of_objects [ipx::current_core]] {
+            ipx::remove_memory_map [get_property name $autoInfMemoryMap] [ipx::current_core]
+        }
+        foreach autoInfAddressSpace [ipx::get_address_spaces -of_objects [ipx::current_core]] {
+            ipx::remove_address_space [get_property name $autoInfAddressSpace] [ipx::current_core]
         }
     } else {
         puts "WARNING: \[create_package_project\] Removing inferred interfaces is disabled. The IP core will keep the automatically added interfaces. Please check in GUI if all interfaces are recognized correctly."
@@ -612,7 +623,12 @@ proc ::xtools::ip_packager::save_package_project {args} {
                 set_property name $relative_file_path $file
             }
         }
-     }
+    }
+
+    # Sort Synthesis filegroup to have the top-level IPI wrapper at last position (Vivado requirement [IP_Flow 19-801] to infer library correctly)
+    set fileGroup [ipx::get_file_groups xilinx_anylanguagesynthesis -of_objects [ipx::current_core]]
+    set firstFile [lindex [get_property name [ipx::get_files -of_objects $fileGroup]] 0]
+    ipx::reorder_files -back $firstFile $fileGroup
 
     # Update XGUI file and delete default file
     ipx::create_xgui_files  [ipx::current_core]

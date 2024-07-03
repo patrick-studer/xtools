@@ -20,7 +20,8 @@ namespace eval ::xtools::ip_packager {
     variable CurrentGuiParent   "nullptr"
     variable OldXguiFile        ""
     variable GuiSupportTcl      [list]
-    variable RootDir            "."
+    variable RootDir            "./.."
+    variable ReportDir          "./reports"
     variable VivadoVersion      [version -short]
 
     namespace eval ::xtools::ip_packager::config {

@@ -1273,30 +1273,32 @@ Create a new IP package project for the specified top-level HDL file.
 Syntax: 
 ip_packager::create_package_project  -top_file <arg> [-copy_to <arg>]
                                      [-library <arg>] [-root_dir <arg>]
-                                     [-prj_name <arg>] [-part <arg>] [-quiet]
-                                     [-verbose]
+                                     [-prj_name <arg>] [-part <arg>]
+                                     [-report_dir <arg>] [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name         Description
-  ------------------------
-  -top_file    Top-level HDL file for packaging.
-  [-copy_to]   Path to folder, where to copy/import the added Top-level HDL 
-               file.
-               Default: None
-  [-library]   VHDL library to compile the Top-Level HDL file to.
-               Default: None
-  [-root_dir]  IP output root directory.
-               Default: ./..
-  [-prj_name]  Temporary package project name.
-               Default: package_prj
-  [-part]      FPGA part used for the package project.
-               Default: xc7z020iclg400-1L
-  [-quiet]     Ignore command errors
-  [-verbose]   Suspend message limits during command execution
+  Name           Description
+  --------------------------
+  -top_file      Top-level HDL file for packaging.
+  [-copy_to]     Path to folder, where to copy/import the added Top-level HDL
+                 file.
+                 Default: None
+  [-library]     VHDL library to compile the Top-Level HDL file to.
+                 Default: None
+  [-root_dir]    IP output root directory.
+                 Default: ./..
+  [-prj_name]    Temporary package project name.
+                 Default: package_prj
+  [-part]        FPGA part used for the package project.
+                 Default: xc7z020iclg400-1L
+  [-report_dir]  Directory location to store synth/impl reports.
+                 Default: ./..
+  [-quiet]       Ignore command errors
+  [-verbose]     Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written
