@@ -137,6 +137,13 @@ ip_packager::add_changelog              -file           "${src_dir}/doc/changelo
 ip_packager::add_software_driver        -driver_dir     "${src_dir}/drivers" \
                                         -copy_to        "drivers" \
                                         -driver_name    "IpPackager_2020_1" \
+                                        -parameters     [list \
+                                                            "TestBool_p" \
+                                                            "TestLong_p" \
+                                                            "TestFloat_p" \
+                                                            "TestBitString_p" \
+                                                            "TestString_p" \
+                                                        ]
 
 # Advanced Scripting Files ------------------------------------------------------------------------
 ip_packager::add_bd_tcl                 -file           "${src_dir}/bd/bd.tcl" \
