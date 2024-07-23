@@ -168,9 +168,6 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
         set port_pattern "${interface_name}_*"
     }
     set ifPorts [_get_ports $port_pattern]
-    if {[llength $ifPorts] == 0} {
-        error "ERROR: \[auto_infer_interface\] Could not find an port that matches ${port_names}. Define a valid -port_names pattern."
-    }
 
     # Auto-infer bus interface
     set addedInterface [ipx::infer_bus_interface [get_property name $ifPorts] [get_property vlnv $ifBusAbs] [ipx::current_core]]

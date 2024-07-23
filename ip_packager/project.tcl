@@ -56,20 +56,21 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
         set_msg_config   -id  {[Vivado 12-3631]}    -new_severity "INFO"
         set_msg_config   -id  {[Vivado 12-1348]}    -new_severity "INFO"
-        set_msg_config   -id  {[Vivado 12-7122]}    -new_severity "INFO"
+        set_msg_config   -id  {[Vivado 12-7122]}    -new_severity "INFO"  ; # Auto Incremental Compile:: No reference checkpoint was found in run synth_1. Auto-incremental flow will not be run, the standard flow will be run instead.
         set_msg_config   -id  {[IP_Flow 19-234]}    -suppress
         set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
-        set_msg_config   -id  {[IP_Flow 19-3157]}   -new_severity "INFO" ; # Bus Interface 'Axis_ResetN': Bus parameter POLARITY is ACTIVE_LOW but port 'Axis_ResetN' is not *resetn - please double check the POLARITY setting.
+        set_msg_config   -id  {[IP_Flow 19-3157]}   -new_severity "INFO"  ; # Bus Interface 'Axis_ResetN': Bus parameter POLARITY is ACTIVE_LOW but port 'Axis_ResetN' is not *resetn - please double check the POLARITY setting.
         set_msg_config   -id  {[IP_Flow 19-3656]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
         set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
-        set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO" ; # Clock interface 'Clk' has no FREQ_HZ parameter.
+        set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO"  ; # Clock interface 'Clk' has no FREQ_HZ parameter.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
-        set_msg_config   -id  {[Route 35-198]}      -suppress
+        set_msg_config   -id  {[Route 35-198]}      -suppress             ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+
     } else {
         puts "INFO: \[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
     }

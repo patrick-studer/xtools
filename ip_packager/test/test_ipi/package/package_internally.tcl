@@ -23,7 +23,7 @@ lappend auto_path                       [file join $pkg_path "xtools"]
 ###################################################################################################
 
 # ip_packager::config_package_project     -msg_config_overwrite       false \
-                                        -remove_inferred_interfaces true \
+                                        -remove_inferred_interfaces false \
                                         -msg_config_overwrite       false \
                                         -synth_reports              false \
                                         -synth_latch_check          false \
@@ -72,7 +72,6 @@ ip_packager::set_unsupported_simulators                 {xcelium vcs riviera act
 # IP Core Design Files ----------------------------------------------------------------------------
 ip_packager::add_design_sources         -files          [list \
                                                             "hdl/IpPackager_2020_1.vhd" \
-                                                            "hdl/IpPackager_2020_1_pkg.vhd" \
                                                         ] \
                                         -library        "test" \
 
@@ -236,14 +235,14 @@ ip_packager::set_param_config           -param_name             "TestSL_g" \
                                         -format                 "bitString" \
                                         -bit_string_length      1 \
                                         -validation_list        [list {"0"} "\"1\""] \
-                                        -value                  {"0"}\
+                                        -value                  {"0"} \
 
 # Note the different value formatting possibilities for bitStrings (hex)! The 0x prefix needs to be present in the passed value.
 ip_packager::set_param_config           -param_name             "TestSLV_g" \
                                         -format                 "bitString" \
-                                        -bit_string_length      2 \
-                                        -validation_list        [list {0x0} "0x1" 0x2] \
-                                        -value                  0x0 \
+                                        -bit_string_length      8 \
+                                        -validation_list        [list "0x00" "0x01" "0x02" "0xFF"] \
+                                        -value                  "0xFF" \
 
 ###################################################################################################
 # Ports and Interfaces
@@ -579,9 +578,8 @@ ip_packager::synth_package_project
                                                             "S_Axis_TDataWidth_g=16" \
                                                             "S_Axis_TUserWidth_g=16" \
                                                             "TestSL_g=1'b1" \
-                                                            "TestSLV_g=2'b11" \
+                                                            "TestSLV_g=8'b11" \
                                                         ] \
-
 
 # ip_packager::synth_package_project      -part           "xczu11eg-ffvb1517-2-e" \
 

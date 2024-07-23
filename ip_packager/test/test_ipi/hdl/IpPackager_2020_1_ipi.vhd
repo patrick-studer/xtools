@@ -10,7 +10,6 @@ library ieee;
     use ieee.numeric_std.all;
 
 library work;
-    use work.IpPackager_2020_1_pkg.all;
 
 ---------------------------------------------------------------------------------------------------
 -- Entity Declaration
@@ -27,7 +26,7 @@ entity IpPackager_2020_1_ipi is
         S_Axis_TDataWidth_g             : natural;
         S_Axis_TUserWidth_g             : natural;
         TestSL_g                        : std_logic;
-        TestSLV_g                       : std_logic_vector(TestSlv_Width_c-1 downto 0)
+        TestSLV_g                       : std_logic_vector(7 downto 0)
     );
     port(
         -------------------------------------------------------------------------------------------
@@ -166,7 +165,7 @@ end entity IpPackager_2020_1_ipi;
 ---------------------------------------------------------------------------------------------------
 architecture struct of IpPackager_2020_1_ipi is
     signal TestSL  : std_logic;
-    signal TestSLV : std_logic_vector(1 downto 0);
+    signal TestSLV : std_logic_vector(7 downto 0);
 begin
 
     TestSL  <= TestSL_g;
