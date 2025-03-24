@@ -630,6 +630,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     # Load global variables
     variable Home
     variable RootDir
+    variable SwDriverTclFile
 
     # Define default values for procedure arguments
     set ipName              [get_property name [ipx::current_core]]
@@ -684,7 +685,9 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     set paramList [string trim $paramList]
     set replaceTags [dict create "<DRIVER_NAME>" $driver_name "<PARAM_LIST>" $paramList]
     copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.tcl"] [file join $driver_dir $driver_name "data" "${driver_name}.tcl"] $replaceTags
-
+    # Store current SwDriverTclFile globally to later be able to add information
+    set SwDriverTclFile [file join $driver_dir $driver_name "data" "${driver_name}.tcl"]
+    
     # Add files to IPI file sets
     set fileGroup  [ipx::add_file_group -type "software_driver" "xilinx_softwaredriver" [ipx::current_core]]
     set driverSrcFilePaths     [glob -directory [file join $driver_dir $driver_name "src"]  -type f *]

@@ -113,6 +113,36 @@ proc ::xtools::ip_packager::copy_and_replace_tags {from_path to_path tags} {
     close $fp
 }
 
+proc ::xtools::ip_packager::replace_tags {path tags} {
+    # Summary: Replace one or more tags within a file.
+
+    # Argument Usage:
+    # path:	            Path to original file.
+    # tags:			    A dictonary containing tags as keys and their replacements as values.
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+
+    # read file
+    set fp [open $path "r"]
+    set content [read $fp]
+    close $fp
+
+    # replace tags
+    puts "INFO: \[replace_tags\] Replace following tags in file ${path}:"
+    foreach item [dict keys $tags] {
+        set val [dict get $tags $item]
+        set content [regsub -all $item $content $val]
+        puts "      - ${item} <= ${val}"
+    }
+    
+    # write file
+    set fp [open $path "w"]
+    puts -nonewline $fp $content
+    close $fp
+}
+
 ###################################################################################################
 # EOF
 ###################################################################################################

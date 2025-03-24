@@ -74,3 +74,4 @@ set auto_index(::xtools::ip_packager::path_relative_to) [list source [file join 
 set auto_index(::xtools::ip_packager::path_relative_to_pwd) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::path_relative_to_root) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::copy_and_replace_tags) [list source [file join $dir utils.tcl]]
+set auto_index(::xtools::ip_packager::replace_tags) [list source [file join $dir utils.tcl]]

@@ -15,14 +15,17 @@ package require ::tclapp::support::appinit 1.2
 namespace eval ::xtools::ip_packager {
 
     # Global Variables
-    variable Home               [file normalize [file dirname [info script]]]
-    variable CurrentNamespace   [namespace tail [namespace current]]
-    variable CurrentGuiParent   "nullptr"
-    variable OldXguiFile        ""
-    variable GuiSupportTcl      [list]
-    variable RootDir            "./.."
-    variable ReportDir          "./reports"
-    variable VivadoVersion      [version -short]
+    variable Home                   [file normalize [file dirname [info script]]]
+    variable CurrentNamespace       [namespace tail [namespace current]]
+    variable CurrentGuiParent       "nullptr"
+    variable OldXguiFile            ""
+    variable SwDriverTclFile        ""
+    variable SwDriverTclBaseValues  [list]
+    variable SwDriverTclHighValues  [list]
+    variable GuiSupportTcl          [list]
+    variable RootDir                "./.."
+    variable ReportDir              "./reports"
+    variable VivadoVersion          [version -short]
 
     namespace eval ::xtools::ip_packager::config {
     # Configuration Variables

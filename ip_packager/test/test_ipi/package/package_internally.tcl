@@ -265,6 +265,9 @@ ip_packager::set_param_config           -param_name             "TestSLV_g" \
 ip_packager::auto_infer_interface       -interface_name         "S_Axi" \
                                         -vlnv                   "aximm_rtl" \
 
+ip_packager::auto_infer_interface       -interface_name         "Control" \
+                                        -vlnv                   "aximm_rtl" \
+
 ip_packager::auto_infer_interface       -interface_name         "S_Axis" \
                                         -vlnv                   "axis_rtl" \
 

@@ -598,6 +598,9 @@ proc ::xtools::ip_packager::save_package_project {args} {
     # Load global variables
     variable OldXguiFile
     variable GuiSupportTcl
+    variable SwDriverTclFile
+    variable SwDriverTclBaseValues
+    variable SwDriverTclHighValues
     variable RootDir
 
     # Parse optional arguments
@@ -652,6 +655,22 @@ proc ::xtools::ip_packager::save_package_project {args} {
         close $f
     }
 
+    # Update SW Driver TCL File with AXI Slave BASE/HIGH addresses
+    if {$SwDriverTclFile != ""} {
+        set baseValuesList ""
+        foreach param $SwDriverTclBaseValues {
+            set baseValuesList "${baseValuesList} \"${param}\""
+        }
+        set baseValuesList [string trim $baseValuesList]
+        set highValuesList ""
+        foreach param $SwDriverTclHighValues {
+            set highValuesList "${highValuesList} \"${param}\""
+        }
+        set highValuesList [string trim $highValuesList]
+        set replaceTags [dict create "<BASEADDR_LIST>" $baseValuesList "<HIGHADDR_LIST>" $highValuesList]
+        replace_tags $SwDriverTclFile $replaceTags
+    }
+    
     # Save IPI core
     ipx::update_checksums   [ipx::current_core]
     ipx::save_core          [ipx::current_core]

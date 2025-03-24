@@ -135,6 +135,29 @@ entity IpPackager_2020_1_ipi is
         S_Axi_RLast     : out std_logic;
         S_Axi_RValid    : out std_logic;
         S_Axi_RReady    : in  std_logic;
+        
+        -------------------------------------------------------------------------------------------
+        -- AXI4-Lite Slave [Axi_Clk]
+        -------------------------------------------------------------------------------------------
+        Control_AWAddr  : in    std_logic_vector(11 downto 0);
+        Control_AWProt  : in    std_logic_vector(2 downto 0);
+        Control_AWValid : in    std_logic;
+        Control_AWReady : out   std_logic;
+        Control_WData   : in    std_logic_vector(31 downto 0);
+        Control_WStrb   : in    std_logic_vector(3 downto 0);
+        Control_WValid  : in    std_logic;
+        Control_WReady  : out   std_logic;
+        Control_BResp   : out   std_logic_vector(1 downto 0);
+        Control_BValid  : out   std_logic;
+        Control_BReady  : in    std_logic;
+        Control_ARAddr  : in    std_logic_vector(11 downto 0);
+        Control_ARProt  : in    std_logic_vector(2 downto 0);
+        Control_ARValid : in    std_logic;
+        Control_ARReady : out   std_logic;
+        Control_RData   : out   std_logic_vector(31 downto 0);
+        Control_RResp   : out   std_logic_vector(1 downto 0);
+        Control_RValid  : out   std_logic;
+        Control_RReady  : in    std_logic;
 
         -------------------------------------------------------------------------------------------
         -- AXI Stream Master Interface [Axis_Clk]
@@ -287,6 +310,16 @@ begin
         S_Axis_TValid   => S_Axis_TValid,
         S_Axis_TReady   => S_Axis_TReady
     );
+
+    Control_AWReady     <= '0';
+    Control_WReady      <= '0';
+    Control_BResp       <= (others => '0');
+    Control_BValid      <= '0';
+    Control_ARReady     <= '0';
+    Control_RData       <= (others => '0');
+    Control_RResp       <= (others => '0');
+    Control_RValid      <= '0';
+
 
 end architecture struct;
 

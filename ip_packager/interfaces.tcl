@@ -149,6 +149,10 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
 
     # Categories: xilinxtclstore, ip_packager
 
+    # Load global variables
+    variable SwDriverTclBaseValues
+    variable SwDriverTclHighValues
+    
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -194,15 +198,26 @@ proc ::xtools::ip_packager::auto_infer_interface {args} {
         if {[string match $interfaceMode "slave"]} {
             ipx::infer_memory_address_block $addedInterface
             # Workaround to force base_address to format long (introduced in newer Vivado versions around 2021.x)
-            set addressBlock [ipx::get_address_blocks reg0 -of_objects [ipx::get_memory_maps $interface_name -of_objects [ipx::current_core]]]
+            set addressBlock [ipx::get_address_blocks "reg0" -of_objects [ipx::get_memory_maps $interface_name -of_objects [ipx::current_core]]]
             set_property base_address              0      $addressBlock
             set_property base_address_format       "long" $addressBlock
             set_property base_address_resolve_type "user" $addressBlock
+            # Add independent OFFSET_BASE_PARAM parameters to allow having multiple AXI-Slaves present in the software driver
+            ipx::add_address_block_parameter "OFFSET_BASE_PARAM" $addressBlock
+            set paramName "C_[string toupper ${interface_name}]_BASEADDR"
+            set_property value $paramName [ipx::get_address_block_parameters "OFFSET_BASE_PARAM" -of_objects $addressBlock]
+            create_user_param -param_name $paramName -format bitString -bit_string_length 32 -value 0x00000000
+            lappend SwDriverTclBaseValues $paramName
+            # Add independent OFFSET_HIGH_PARAM parameters to allow having multiple AXI-Slaves present in the software driver
+            ipx::add_address_block_parameter "OFFSET_HIGH_PARAM" $addressBlock
+            set paramName "C_[string toupper ${interface_name}]_HIGHADDR"
+            set_property value $paramName [ipx::get_address_block_parameters "OFFSET_HIGH_PARAM" -of_objects $addressBlock]
+            create_user_param -param_name $paramName -format bitString -bit_string_length 32 -value 0xFFFFFFFF
+            lappend SwDriverTclHighValues $paramName
         } elseif {[string match $interfaceMode "master"]} {
             ipx::infer_address_space $addedInterface
         }
     }
-
 }
 
 proc ::xtools::ip_packager::add_axi_interface {args} {
