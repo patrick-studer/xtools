@@ -9,7 +9,7 @@ proc generate {drv_handle} {
         "NUM_INSTANCES" "DEVICE_ID" <BASEADDR_LIST> <HIGHADDR_LIST> \
         <PARAM_LIST>
 
-    ::hsi::utils::define_config_file     $drv_handle "<DRIVER_NAME>_g.c" \
+    # ::hsi::utils::define_config_file     $drv_handle "<DRIVER_NAME>_g.c" \
         <DRIVER_NAME> \
         "DEVICE_ID" <BASEADDR_LIST> \
         <PARAM_LIST>
