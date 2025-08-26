@@ -355,6 +355,9 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Define message severities
     _overwrite_msg_config
+    
+    # Limit maxThreads independently from OS
+    set_param general.maxThreads 2
 
     # Update global RootDir variable
     if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to [pwd] $root_dir]]}
@@ -458,7 +461,7 @@ proc ::xtools::ip_packager::synth_package_project {args} {
 
     # Argument Usage:
     # [-part <arg>]:            Define specific part used for synthesis.
-    # [-jobs <arg> = 4]:        Define number of jobs used for synthesis run.
+    # [-jobs <arg> = 1]:        Define number of jobs used for synthesis run.
     # [-timeout <arg>]:         Define synthesis run timeout in seconds.
     # [-generics <arg>]:        Define top-level generics for synthesis. If not defined, the current default values from the configuration GUI are used.
 
@@ -467,7 +470,7 @@ proc ::xtools::ip_packager::synth_package_project {args} {
     # Categories: xilinxtclstore, ip_packager
 
     # Define default values for procedure arguments
-    set jobs 4
+    set jobs 1
 
     # Parse optional arguments
     set num [llength $args]
@@ -540,7 +543,7 @@ proc ::xtools::ip_packager::impl_package_project {args} {
 
     # Argument Usage:
     # [-part <arg>]:        Define specific part used for implementation.
-    # [-jobs <arg> = 4]:    Define number of jobs used for implementation run.
+    # [-jobs <arg> = 1]:    Define number of jobs used for implementation run.
     # [-timeout <arg>]:     Define implementation run timeout in seconds.
 
     # Return Value: TCL_OK
@@ -548,7 +551,7 @@ proc ::xtools::ip_packager::impl_package_project {args} {
     # Categories: xilinxtclstore, ip_packager
 
     # Define default values for procedure arguments
-    set jobs 4
+    set jobs 1
 
     # Parse optional arguments
     set num [llength $args]
@@ -670,7 +673,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
         set replaceTags [dict create "<BASEADDR_LIST>" $baseValuesList "<HIGHADDR_LIST>" $highValuesList]
         replace_tags $SwDriverTclFile $replaceTags
     }
-    
+
     # Save IPI core
     ipx::update_checksums   [ipx::current_core]
     ipx::save_core          [ipx::current_core]

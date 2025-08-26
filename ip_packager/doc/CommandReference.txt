@@ -1591,7 +1591,7 @@ Usage:
   [-part]     Define specific part used for implementation.
               Default: None
   [-jobs]     Define number of jobs used for implementation run.
-              Default: 4
+              Default: 1
   [-timeout]  Define implementation run timeout in seconds.
               Default: None
   [-quiet]    Ignore command errors
@@ -2084,7 +2084,7 @@ Usage:
   [-part]      Define specific part used for synthesis.
                Default: None
   [-jobs]      Define number of jobs used for synthesis run.
-               Default: 4
+               Default: 1
   [-timeout]   Define synthesis run timeout in seconds.
                Default: None
   [-generics]  Define top-level generics for synthesis. If not defined, the 
