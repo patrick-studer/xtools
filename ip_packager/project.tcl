@@ -722,10 +722,12 @@ proc ::xtools::ip_packager::close_package_project {args} {
     }
 
     # Close project with or without deleting it
-    set projectDirectory [get_property DIRECTORY [current_project]]
+    set projectDirectory    [get_property DIRECTORY [current_project]]
+    set xilinxTempDirectory [file join [file dirname $projectDirectory] ".Xil"]
     close_project
     if {$delete} {
         file delete -force $projectDirectory
+        file delete -force $xilinxTempDirectory
         puts "INFO: \[close_package_project\] Deleted packager project (${projectDirectory})."
     }
 
