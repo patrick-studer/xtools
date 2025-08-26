@@ -358,9 +358,6 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Define message severities
     _overwrite_msg_config
-    
-    # Limit maxThreads independently from OS
-    set_param general.maxThreads 2
 
     # Update global RootDir variable
     if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to [pwd] $root_dir]]}
