@@ -494,12 +494,13 @@ proc ::xtools::ip_packager::synth_package_project {args} {
         set synthRun [get_runs "synth_1"]
     }
 
-
     # Reset synthesis run
     current_run $synthRun
     reset_run   $synthRun
 
-    # Set project into "out_of_context" mode (no IOB placement)
+    # Set run properties
+    set_property {AUTO_INCREMENTAL_CHECKPOINT} -value 0 -objects $synthRun
+    set_property {strategy} -value {Vivado Synthesis Defaults} -objects $synthRun
     set_property {STEPS.SYNTH_DESIGN.ARGS.MORE OPTIONS} -value {-mode out_of_context} -objects $synthRun
 
     # Drive simulation top generics
@@ -578,6 +579,11 @@ proc ::xtools::ip_packager::impl_package_project {args} {
     # Reset implementation run
     current_run $implRun
     reset_run   $implRun
+
+    # Set run properties
+    set_property {AUTO_INCREMENTAL_CHECKPOINT} -value 0 -objects $implRun
+    set_property {strategy} -value {Vivado Implementation Defaults} -objects $implRun
+    set_property {STEPS.PHYS_OPT_DESIGN.IS_ENABLED} -value false -objects $implRun
 
     # Run implementation
     launch_runs $implRun -jobs $jobs
