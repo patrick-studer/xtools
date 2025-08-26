@@ -188,9 +188,9 @@ proc ::xtools::ip_packager::_impl_checks {} {
 
     # Export reports
     if {$config::ImplReports} {
+        report_methodology    -file "${ReportDir}/[current_run -implementation]_methodology.rpt"
         report_timing_summary -file "${ReportDir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
         report_drc            -file "${ReportDir}/[current_run -implementation]_drc.rpt"
-        report_methodology    -file "${ReportDir}/[current_run -implementation]_methodology.rpt"
     }
 
     # Close the implemented design
