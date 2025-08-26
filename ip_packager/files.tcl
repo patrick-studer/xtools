@@ -463,7 +463,7 @@ proc ::xtools::ip_packager::add_logo {args} {
     # Verify file type support
     switch -glob -- $file {
         *.png                   {set type "LOGO"}
-        default                 {error "ERROR: \[add_logo\] File type not allowed. Supported file extensions are png."}
+        default                 {error "ERROR: \[add_logo\] File type not allowed. Supported file extension is png."}
     }
 
     # Add file to IPI file sets
@@ -477,7 +477,7 @@ proc ::xtools::ip_packager::add_readme {args} {
 
     # Argument Usage:
     # -file <arg>:      File-path to readme file.
-    # [-copy_to <arg>]: Path to folder, where to copy/import the added readme. Supported file extensions are pdf, txt, md, htm(l) and http(s).
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added readme. Supported file extensions are pdf, txt, md, and htm(l), as well as URLs (http(s)://).
 
     # Return Value: TCL_OK
 
@@ -510,7 +510,7 @@ proc ::xtools::ip_packager::add_readme {args} {
         *.pdf                   {set type "pdf"}
         *.txt       - *.md      {set type "text"}
         *.html      - *.htm     {set type "html"}
-        default                 {error "ERROR: \[add_readme\] File type not allowed. Supported file extensions are pdf, txt, md, htm(l) and http(s)."}
+        default                 {error "ERROR: \[add_readme\] File type not allowed. Supported file extensions are pdf, txt, md, and htm(l), as well as URLs (http(s)://)."}
     }
 
     # Add file to IPI file sets
@@ -524,7 +524,7 @@ proc ::xtools::ip_packager::add_product_guide {args} {
 
     # Argument Usage:
     # -file <arg>:      File-path to product guide file.
-    # [-copy_to <arg>]: Path to folder, where to copy/import the added product guide. Supported file extensions are pdf, txt, md, htm(l) and http(s).
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added product guide. Supported file extensions are pdfand htm(l), as well as URLs (http(s)://).
 
     # Return Value: TCL_OK
 
@@ -555,9 +555,8 @@ proc ::xtools::ip_packager::add_product_guide {args} {
     switch -glob -- $file {
         https://*   - http://*  {set type "unknown"}
         *.pdf                   {set type "pdf"}
-        *.txt       - *.md      {set type "text"}
         *.html      - *.htm     {set type "html"}
-        default                 {error "ERROR: \[add_product_guide\] File type not allowed. Supported file extensions are pdf, txt, md, htm(l) and http(s)."}
+        default                 {error "ERROR: \[add_product_guide\] File type not allowed. Supported file extensions are pdf and htm(l), as well as URLs (http(s)://)."}
     }
 
     # Add file to IPI file sets
@@ -571,7 +570,7 @@ proc ::xtools::ip_packager::add_changelog {args} {
 
     # Argument Usage:
     # -file <arg>:      File-path to changelog file.
-    # [-copy_to <arg>]: Path to folder, where to copy/import the added changelog. Supported file extensions are txt and md.
+    # [-copy_to <arg>]: Path to folder, where to copy/import the added changelog. Supported file extensions is txt.
 
     # Return Value: TCL_OK
 
@@ -600,8 +599,8 @@ proc ::xtools::ip_packager::add_changelog {args} {
 
     # Verify file type support
     switch -glob -- $file {
-        *.txt       - *.md      {set type "text"}
-        default                 {error "ERROR: \[add_changelog\] File type not allowed. Supported file extensions are txt and md."}
+        *.txt       {set type "text"}
+        default     {error "ERROR: \[add_changelog\] File type not allowed. Supported file extension is txt."}
     }
 
     # Add file to IPI file sets
@@ -687,7 +686,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.tcl"] [file join $driver_dir $driver_name "data" "${driver_name}.tcl"] $replaceTags
     # Store current SwDriverTclFile globally to later be able to add information
     set SwDriverTclFile [file join $driver_dir $driver_name "data" "${driver_name}.tcl"]
-    
+
     # Add files to IPI file sets
     set fileGroup  [ipx::add_file_group -type "software_driver" "xilinx_softwaredriver" [ipx::current_core]]
     set driverSrcFilePaths     [glob -directory [file join $driver_dir $driver_name "src"]  -type f *]

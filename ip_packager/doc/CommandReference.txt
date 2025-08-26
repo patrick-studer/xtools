@@ -344,7 +344,7 @@ Usage:
   -----------------------
   -file       File-path to changelog file.
   [-copy_to]  Path to folder, where to copy/import the added changelog. 
-              Supported file extensions are txt and md.
+              Supported file extensions is txt.
               Default: None
   [-quiet]    Ignore command errors
   [-verbose]  Suspend message limits during command execution
@@ -871,7 +871,8 @@ Usage:
   -----------------------
   -file       File-path to product guide file.
   [-copy_to]  Path to folder, where to copy/import the added product guide. 
-              Supported file extensions are pdf, txt, md, htm(l) and http(s).
+              Supported file extensions are pdfand htm(l), as well as URLs 
+              (http(s)://).
               Default: None
   [-quiet]    Ignore command errors
   [-verbose]  Suspend message limits during command execution
@@ -900,7 +901,8 @@ Usage:
   -----------------------
   -file       File-path to readme file.
   [-copy_to]  Path to folder, where to copy/import the added readme. 
-              Supported file extensions are pdf, txt, md, htm(l) and http(s).
+              Supported file extensions are pdf, txt, md, and htm(l), as well
+              as URLs (http(s)://).
               Default: None
   [-quiet]    Ignore command errors
   [-verbose]  Suspend message limits during command execution
