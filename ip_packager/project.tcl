@@ -623,13 +623,20 @@ proc ::xtools::ip_packager::save_package_project {args} {
         }
     }
 
+    # Update XGUI file and delete default file
+    ipx::create_xgui_files  [ipx::current_core]
+    set xguiFileName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].tcl"
+    set newXguiFile [file join $RootDir "xgui" $xguiFileName]
+    if {$newXguiFile != $OldXguiFile} {file delete -force $OldXguiFile}
+    set OldXguiFile $newXguiFile
+
     # Sort IPI files according to compile order
     update_compile_order -fileset sources_1
     ipx::merge_project_changes files [ipx::current_core]
 
     # Convert all IPI file paths to relative (except URLs => type=unknown)
     puts "INFO: \[save_package_project\] Following files are refered by the packaged IP-core:"
-        puts "      All paths relative to root directory (${RootDir})"
+    puts "      All paths relative to root directory (${RootDir})"
     foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
         puts "      - [get_property name $fileGroup]:"
         foreach file [ipx::get_files -of_objects $fileGroup] {
@@ -645,13 +652,6 @@ proc ::xtools::ip_packager::save_package_project {args} {
     set fileGroup [ipx::get_file_groups xilinx_anylanguagesynthesis -of_objects [ipx::current_core]]
     set firstFile [lindex [get_property name [ipx::get_files -of_objects $fileGroup]] 0]
     ipx::reorder_files -back $firstFile $fileGroup
-
-    # Update XGUI file and delete default file
-    ipx::create_xgui_files  [ipx::current_core]
-    set xguiFileName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].tcl"
-    set newXguiFile [file join $RootDir "xgui" $xguiFileName]
-    if {$newXguiFile != $OldXguiFile} {file delete -force $OldXguiFile}
-    set OldXguiFile $newXguiFile
 
     # Update XGUI File with custom GUI Support TCL
     if {[llength $GuiSupportTcl] > 0} {
@@ -694,7 +694,9 @@ proc ::xtools::ip_packager::save_package_project {args} {
     # Archive core if needed
     if {[info exists archive_to]} {
         set archiveName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].zip"
-        ipx::archive_core [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
+        set archivePath [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
+        puts "INFO: \[save_package_project\] Archive IP-core to ${archivePath}"
+        ipx::archive_core $archivePath
     }
 }
 
