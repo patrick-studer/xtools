@@ -51,6 +51,7 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
 
     if {$config::MsgConfigOverwrite} {
         reset_msg_config -id  *                     -default_severity -quiet
+        set_msg_config   -id  {[Common 17-1361]}    -suppress -quiet
         set_msg_config   -id  {[Ipptcl 7-1550]}     -new_severity "INFO"
         set_msg_config   -id  {[Vivado 12-180]}     -new_severity "ERROR"
         set_msg_config   -id  {[Vivado 12-508]}     -new_severity "ERROR"
@@ -61,11 +62,13 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[IP_Flow 19-377]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-459]}    -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-1700]}   -suppress
-        set_msg_config   -id  {[IP_Flow 19-3157]}   -new_severity "INFO"  ; # Bus Interface 'Axis_ResetN': Bus parameter POLARITY is ACTIVE_LOW but port 'Axis_ResetN' is not *resetn - please double check the POLARITY setting.
+        set_msg_config   -id  {[IP_Flow 19-3157]}   -new_severity "INFO"  ; # Bus Interface 'xxx': Bus parameter POLARITY is ACTIVE_LOW but port 'xxx' is not *resetn - please double check the POLARITY setting.
         set_msg_config   -id  {[IP_Flow 19-3656]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
         set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
-        set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress
+        set_msg_config   -id  {[IP_Flow 19-4728]}   -suppress             ; # Bus Interface 'xxx': Added interface parameter 'xxx' with value 'xxx'.
+        set_msg_config   -id  {[IP_Flow 19-5107]}   -suppress             ; # Inferred bus interface 'xxx' of definition 'vlnv' (from TCL Argument).
+        set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress             ; # Project source file 'xxx/component.xml' ignored by IP packager.
         set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO"  ; # Clock interface 'Clk' has no FREQ_HZ parameter.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
