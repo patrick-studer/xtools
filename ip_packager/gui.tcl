@@ -50,7 +50,7 @@ proc ::xtools::ip_packager::gui_add_page {args} {
 
     # Add new page to IP GUI
     if {[info exists parent]} {
-        set CurrentGuiParent [gui_set_parent $parent]
+        gui_set_parent $parent
     }
     set CurrentGuiPage [ipgui::add_page -name $page_name -component [ipx::current_core] -parent $CurrentGuiParent]
     if {[info exists display_name]} {set_property display_name $display_name $CurrentGuiPage}
@@ -90,7 +90,7 @@ proc ::xtools::ip_packager::gui_add_group {args} {
 
     # Add new group to IP GUI
     if {[info exists parent]} {
-        set CurrentGuiParent [gui_set_parent $parent]
+        gui_set_parent $parent
     }
     set CurrentGuiGroup [ipgui::add_group -name $group_name -component [ipx::current_core] -parent $CurrentGuiParent]
     if {[info exists display_name]} {set_property display_name $display_name $CurrentGuiGroup}
@@ -136,7 +136,7 @@ proc ::xtools::ip_packager::gui_add_param {args} {
 
     # Add existing IP parameter to IP GUI
     if {[info exists parent]} {
-        set CurrentGuiParent [gui_set_parent $parent]
+        gui_set_parent $parent
     }
 
     # Verify if param_name is a valid user parameter
@@ -182,7 +182,7 @@ proc ::xtools::ip_packager::gui_add_text {args} {
 
     # Add new text to IP GUI
     if {[info exists parent]} {
-        set CurrentGuiParent [gui_set_parent $parent]
+        gui_set_parent $parent
     }
     set CurrentGuiText [ipgui::add_static_text -name $text_name -component [ipx::current_core] -parent $CurrentGuiParent -text $text]
     if {[info exists tooltip]} {set_property tooltip $tooltip $CurrentGuiText}

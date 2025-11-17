@@ -372,41 +372,48 @@ ip_packager::set_interface_enablement   -interface_name         "UART" \
 # Customization GUI
 ###################################################################################################
 
-# ROOT --------------------------------------------------------------------------------------------
-ip_packager::gui_set_parent     "root"
+# Use -parent option to define GUI structure
 
-ip_packager::gui_add_page       -page_name      "Page_UserParam" \
+# ROOT --------------------------------------------------------------------------------------------
+
+ip_packager::gui_add_page       -page_name      "Page User Param" \
                                 -display_name   "User Parameters" \
                                 -tooltip        "User Parameters Page" \
                                 -layout         "vertical" \
+                                -parent         "root" \
 
     # PAGE User Parameters ------------------------------------------------------------------------
-    ip_packager::gui_add_group      -group_name     "Group_HExample" \
+    ip_packager::gui_add_group      -group_name     "Group HExample" \
                                     -display_name   "Example (horizontal)" \
                                     -tooltip        "Horizontal Group Example" \
                                     -layout         "horizontal" \
+                                    -parent         "Page User Param" \
 
         # GROUP Horizontal Example ----------------------------------------------------------------
         ip_packager::gui_add_param      -param_name     "TestBool_p" \
                                         -display_name   "Random Boolean" \
                                         -tooltip        "Settings Tooltip" \
+                                        -parent         "Group HExample" \
 
         ip_packager::gui_add_param      -param_name     "TestLong_p" \
                                         -display_name   "Random Long" \
                                         -tooltip        "Long Tooltip" \
+                                        -parent         "Group HExample" \
 
         ip_packager::gui_add_param      -param_name     "TestFloat_p" \
                                         -display_name   "Random Float" \
                                         -tooltip        "Float Tooltip" \
                                         -widget         "comboBox" \
+                                        -parent         "Group HExample" \
 
     # PAGE User Parameters ------------------------------------------------------------------------
-    ip_packager::gui_set_parent     "Page_UserParam"
+    # ip_packager::gui_set_parent     "Page User Param"
 
-    ip_packager::gui_add_group      -group_name     "Group_VExample" \
+    ip_packager::gui_add_group      -group_name     "Group VExample" \
                                     -display_name   "Example (vertical)" \
                                     -tooltip        "Vertical Group Example" \
                                     -layout         "vertical" \
+                                    -parent         "Page User Param" \
 
         # GROUP Vertical Example ------------------------------------------------------------------
         ip_packager::gui_add_param      -param_name     "TestBitString_p" \
@@ -414,14 +421,19 @@ ip_packager::gui_add_page       -page_name      "Page_UserParam" \
                                         -tooltip        "BitString Tooltip" \
                                         -widget         "radioGroup" \
                                         -layout         "horizontal" \
+                                        -parent         "Group VExample" \
 
         ip_packager::gui_add_param      -param_name     "TestString_p" \
                                         -display_name   "Random String" \
                                         -tooltip        "String Tooltip" \
+                                        -parent         "Group VExample" \
 
         ip_packager::gui_add_text       -text_name      "TestText_t" \
                                         -text           "This is a dummy Text!" \
                                         -tooltip        "Text Tooltip" \
+                                        -parent         "Group VExample" \
+
+# Use gui_set_parent procedure to define GUI structure
 
 # ROOT --------------------------------------------------------------------------------------------
 ip_packager::gui_set_parent     "root"
