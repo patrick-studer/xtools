@@ -36,7 +36,7 @@ proc ::xtools::ip_packager::path_relative_to {from_dir to_files {to_files_prefix
         set toFileParts  [file split [file normalize $toFile]]
         if {![string equal [lindex $fromDirParts 0] [lindex $toFileParts 0]]} {
           # not on *n*x then
-          error "ERROR: \[path_relative_to\] ${toFile} not on same volume as ${fromDir}!"
+          send_msg_id {XTOOLS 1-900} "ERROR" "\[path_relative_to\] ${toFile} not on same volume as ${fromDir}!"
         }
         while {[string equal [lindex $fromDirParts 0] [lindex $toFileParts 0]] && [llength $fromDirParts] > 0} {
           # discard matching components from the front
@@ -100,7 +100,7 @@ proc ::xtools::ip_packager::copy_and_replace_tags {from_path to_path tags} {
     close $fp
 
     # replace tags
-    puts "INFO: \[copy_and_replace_tags\] Replace following tags in file ${to_path}:"
+    send_msg_id {XTOOLS 1-901} "INFO" "\[copy_and_replace_tags\] Replace following tags in file ${to_path}:"
     foreach item [dict keys $tags] {
         set val [dict get $tags $item]
         set content [regsub -all $item $content $val]
@@ -130,7 +130,7 @@ proc ::xtools::ip_packager::replace_tags {path tags} {
     close $fp
 
     # replace tags
-    puts "INFO: \[replace_tags\] Replace following tags in file ${path}:"
+    send_msg_id {XTOOLS 1-902} "INFO" "\[replace_tags\] Replace following tags in file ${path}:"
     foreach item [dict keys $tags] {
         set val [dict get $tags $item]
         set content [regsub -all $item $content $val]

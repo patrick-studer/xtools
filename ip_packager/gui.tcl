@@ -141,7 +141,7 @@ proc ::xtools::ip_packager::gui_add_param {args} {
 
     # Verify if param_name is a valid user parameter
     if {[llength [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]] == 0} {
-        error "ERROR: \[gui_add_param\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-800} "ERROR" "\[gui_add_param\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     set CurrentGuiParam [ipgui::add_param -name $param_name -component [ipx::current_core] -parent $CurrentGuiParent]
@@ -211,7 +211,7 @@ proc ::xtools::ip_packager::gui_set_parent {{parent_name "root"}} {
         }
     }
     if {$CurrentGuiParent == ""} {
-        error "ERROR: \[gui_set_parent\] does not find a group/page named ${parent_name}."
+        send_msg_id {XTOOLS 1-801} "ERROR" "\[gui_set_parent\] does not find a group/page named ${parent_name}."
     }
 }
 

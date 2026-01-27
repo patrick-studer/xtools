@@ -106,7 +106,7 @@ proc ::xtools::ip_packager::set_param_config {args} {
 
     # Verify if param_name is a valid user parameter
     if {[llength [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]] == 0} {
-        error "ERROR: \[set_param_config\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-500} "ERROR" "\[set_param_config\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     # Call individual helper funcitons
@@ -154,16 +154,19 @@ proc ::xtools::ip_packager::set_param_validation {args} {
 
     # Verify if param_name is a valid user parameter
     if {[llength $userParam] == 0} {
-        error "ERROR: \[set_param_validation\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-501} "ERROR" "\[set_param_validation\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     # Set validation type and related values
     foreach param [concat $hdlParam $userParam] {
         switch -glob -- "${type}-${valueFormat}" {
             "*-bool" - "range-bitString" - "range-string" {
-                error "ERROR: \[set_param_validation\] Validation ${type} for ${valueFormat} parameters not supported."
+                send_msg_id {XTOOLS 1-502} "ERROR" "\[set_param_validation\] Validation ${type} for ${valueFormat} parameters not supported."
             }
             "range-long" - "range-float" {
+                if {[llength $value] != 2} {
+                    send_msg_id {XTOOLS 1-503} "ERROR" "\[set_param_validation\] Validation type range expects list with exactly two elements (min, max)."
+                }
                 set_property value_validation_type "range_${valueFormat}" $param
                 if {[string is double -strict [lindex $value 0]]} {
                     set_property value_validation_range_minimum [lindex $value 0] $param
@@ -211,7 +214,7 @@ proc ::xtools::ip_packager::set_param_enablement {args} {
 
     # Verify if param_name is a valid user parameter
     if {[llength $userParam] == 0} {
-        error "ERROR: \[set_param_enablement\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-504} "ERROR" "\[set_param_enablement\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     foreach param [concat $hdlParam $userParam] {
@@ -246,7 +249,7 @@ proc ::xtools::ip_packager::set_param_value {args} {
 
     # Verify if param_name is a valid user parameter
     if {[llength $userParam] == 0} {
-        error "ERROR: \[set_param_value\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-505} "ERROR" "\[set_param_value\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     foreach param [concat $hdlParam $userParam] {
@@ -278,14 +281,14 @@ proc ::xtools::ip_packager::set_param_format {args} {
     }
 
     # Ensure value_bit_string_length is defined for bitString parameters
-    if {$format == "bitString" && ![info exists bit_string_length]} {error "ERROR: \[set_param_format\] Invalid configuration, -format = bitString requires -bit_string_length > 0."}
+    if {$format == "bitString" && ![info exists bit_string_length]} {send_msg_id {XTOOLS 1-506} "ERROR" "\[set_param_format\] Invalid configuration, -format = bitString requires -bit_string_length > 0."}
 
     set hdlParam  [ipx::get_hdl_parameters  $param_name -of_objects [ipx::current_core]]
     set userParam [ipx::get_user_parameters $param_name -of_objects [ipx::current_core]]
 
     # Verify if param_name is a valid user parameter
     if {[llength $userParam] == 0} {
-        error "ERROR: \[set_param_format\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
+        send_msg_id {XTOOLS 1-507} "ERROR" "\[set_param_format\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
 
     foreach param [concat $hdlParam $userParam] {

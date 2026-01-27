@@ -41,7 +41,7 @@ proc ::xtools::ip_packager::_get_ports {port_name {filter_expr ""}} {
     if {![string match $filter_expr ""]} {set filter_expr "&& (${filter_expr})"}
     set foundPorts [ipx::get_ports -of_objects [ipx::current_core] -filter "name =~ ${port_name} ${filter_expr}"]
     if {[llength $foundPorts] == 0} {
-            error "ERROR: \[_get_ports\] No ports matched pattern ${port_name}. Please verify spelling of this port."
+            send_msg_id {XTOOLS 1-600} "ERROR" "\[_get_ports\] No ports matched pattern ${port_name}. Please verify spelling of this port."
     }
     return $foundPorts
 }
@@ -59,7 +59,7 @@ proc ::xtools::ip_packager::_get_bus_interfaces {interface_name {filter_expr ""}
     if {![string match $filter_expr ""]} {set filter_expr "&& (${filter_expr})"}
     set foundInterfaces [ipx::get_bus_interfaces -of_objects [ipx::current_core] -filter "name =~ ${interface_name} ${filter_expr}"]
     if {[llength $foundInterfaces] == 0} {
-            error "ERROR: \[_get_bus_interfaces\] No interface matched pattern ${interface_name}. Please verify spelling or add the interface first if not done yet."
+            send_msg_id {XTOOLS 1-601} "ERROR" "\[_get_bus_interfaces\] No interface matched pattern ${interface_name}. Please verify spelling or add the interface first if not done yet."
     }
     return $foundInterfaces
 }
@@ -465,7 +465,7 @@ proc ::xtools::ip_packager::add_bus_interface {args} {
         set abstractionName [lindex $portMapPair 1]
         set abstractionList [get_property name [ipx::get_bus_abstraction_ports -of_objects $ifBusAbs]]
         if {[lsearch -exact $abstractionList $abstractionName] == -1} {
-            error "ERROR: \[add_bus_interface\] Found no abstraction port that is named ${abstractionName} (LIST: ${abstractionList}). Select a abstraction port from the list and define the name accordingly!"
+            send_msg_id {XTOOLS 1-602} "ERROR" "\[add_bus_interface\] Found no abstraction port that is named ${abstractionName} (LIST: ${abstractionList}). Select a abstraction port from the list and define the name accordingly!"
         }
         # Verify if port exists
         _get_ports $physicalName
@@ -515,7 +515,7 @@ proc ::xtools::ip_packager::associate_interface_clock {args} {
         foreach foundInterface [get_property name [_get_bus_interfaces ${interface} "bus_type_name !~ reset && bus_type_name !~ clock"]] {
             foreach clk $clock {
                 if {[get_property bus_type_name [_get_bus_interfaces $clk]] != "clock"} {
-                    error "ERROR: \[associate_interface_clock\] Option -clock must include interfaces of type clock."
+                    send_msg_id {XTOOLS 1-603} "ERROR" "\[associate_interface_clock\] Option -clock must include interfaces of type clock."
                 }
                 ipx::associate_bus_interfaces -busif $foundInterface -clock $clk [ipx::current_core]
             }
@@ -546,11 +546,11 @@ proc ::xtools::ip_packager::associate_clock_reset {args} {
     # Associate reset to clock-interface
     foreach clk $clock {
         if {[get_property bus_type_name [_get_bus_interfaces $clk]] != "clock"} {
-            error "ERROR: \[associate_clock_reset\] Option -clock must include interfaces of type clock."
+            send_msg_id {XTOOLS 1-604} "ERROR" "\[associate_clock_reset\] Option -clock must include interfaces of type clock."
         }
         foreach rst $reset {
             if {[get_property bus_type_name [_get_bus_interfaces $rst]] != "reset"} {
-                error "ERROR: \[associate_clock_reset\] Option -reset must include interfaces of type reset."
+                send_msg_id {XTOOLS 1-605} "ERROR" "\[associate_clock_reset\] Option -reset must include interfaces of type reset."
             }
             ipx::associate_bus_interfaces -clock $clk -reset $rst [ipx::current_core]
         }

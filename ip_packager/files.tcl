@@ -451,7 +451,7 @@ proc ::xtools::ip_packager::add_logo {args} {
         }
     }
     # Verify that only a single file is provided
-    if {[llength $file] != 1} {error "ERROR: \[add_logo\] Option -file must define a single file path."}
+    if {[llength $file] != 1} {send_msg_id {XTOOLS 1-400} "ERROR" "\[add_logo\] Option -file must define a single file path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -463,7 +463,7 @@ proc ::xtools::ip_packager::add_logo {args} {
     # Verify file type support
     switch -glob -- $file {
         *.png                   {set type "LOGO"}
-        default                 {error "ERROR: \[add_logo\] File type not allowed. Supported file extension is png."}
+        default                 {send_msg_id {XTOOLS 1-401} "ERROR" "\[add_logo\] File type not allowed. Supported file extension is png."}
     }
 
     # Add file to IPI file sets
@@ -495,7 +495,7 @@ proc ::xtools::ip_packager::add_readme {args} {
         }
     }
     # Verify that only a single file is provided
-    if {[llength $file] != 1} {error "ERROR: \[add_readme\] Option -file must define a single file path."}
+    if {[llength $file] != 1} {send_msg_id {XTOOLS 1-402} "ERROR" "\[add_readme\] Option -file must define a single file path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -510,7 +510,7 @@ proc ::xtools::ip_packager::add_readme {args} {
         *.pdf                   {set type "pdf"}
         *.txt       - *.md      {set type "text"}
         *.html      - *.htm     {set type "html"}
-        default                 {error "ERROR: \[add_readme\] File type not allowed. Supported file extensions are pdf, txt, md, and htm(l), as well as URLs (http(s)://)."}
+        default                 {send_msg_id {XTOOLS 1-403} "ERROR" "\[add_readme\] File type not allowed. Supported file extensions are pdf, txt, md, and htm(l), as well as URLs (http(s)://)."}
     }
 
     # Add file to IPI file sets
@@ -542,7 +542,7 @@ proc ::xtools::ip_packager::add_product_guide {args} {
         }
     }
     # Verify that only a single file is provided
-    if {[llength $file] != 1} {error "ERROR: \[add_product_guide\] Option -file must define a single file path."}
+    if {[llength $file] != 1} {send_msg_id {XTOOLS 1-404} "ERROR" "\[add_product_guide\] Option -file must define a single file path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -556,7 +556,7 @@ proc ::xtools::ip_packager::add_product_guide {args} {
         https://*   - http://*  {set type "unknown"}
         *.pdf                   {set type "pdf"}
         *.html      - *.htm     {set type "html"}
-        default                 {error "ERROR: \[add_product_guide\] File type not allowed. Supported file extensions are pdf and htm(l), as well as URLs (http(s)://)."}
+        default                 {send_msg_id {XTOOLS 1-405} "ERROR" "\[add_product_guide\] File type not allowed. Supported file extensions are pdf and htm(l), as well as URLs (http(s)://)."}
     }
 
     # Add file to IPI file sets
@@ -588,7 +588,7 @@ proc ::xtools::ip_packager::add_changelog {args} {
         }
     }
     # Verify that only a single file is provided
-    if {[llength $file] != 1} {error "ERROR: \[add_changelog\] Option -file must define a single file path."}
+    if {[llength $file] != 1} {send_msg_id {XTOOLS 1-406} "ERROR" "\[add_changelog\] Option -file must define a single file path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -600,7 +600,7 @@ proc ::xtools::ip_packager::add_changelog {args} {
     # Verify file type support
     switch -glob -- $file {
         *.txt       {set type "text"}
-        default     {error "ERROR: \[add_changelog\] File type not allowed. Supported file extension is txt."}
+        default     {send_msg_id {XTOOLS 1-407} "ERROR" "\[add_changelog\] File type not allowed. Supported file extension is txt."}
     }
 
     # Add file to IPI file sets
@@ -652,7 +652,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     }
 
     # Verify that only a single directory is provided
-    if {[llength $driver_dir] != 1 || ![string match [file type [path_relative_to_pwd $driver_dir]] "directory"]} {error "ERROR: \[add_bd_tcl\] Option -driver_dir must define a single directory path."}
+    if {[llength $driver_dir] != 1 || ![string match [file type [path_relative_to_pwd $driver_dir]] "directory"]} {send_msg_id {XTOOLS 1-408} "ERROR" "\[add_bd_tcl\] Option -driver_dir must define a single directory path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -739,7 +739,7 @@ proc ::xtools::ip_packager::add_utility_scripts {args} {
             *.gtcl  {set type "GTCL"}
             *.tcl   {set type "tclSource"}
             *.ttcl  {set type "ttcl"}
-            default {error "ERROR: \[add_utility_scripts\] File type not allowed (${file}). Supported file extensions are xit, gtcl, tcl and ttcl."}
+            default {send_msg_id {XTOOLS 1-409} "ERROR" "\[add_utility_scripts\] File type not allowed (${file}). Supported file extensions are xit, gtcl, tcl and ttcl."}
         }
     }
 
@@ -761,7 +761,7 @@ proc ::xtools::ip_packager::create_upgrade_tcl_template {} {
     # Categories: xilinxtclstore, ip_packager
 
     #TODO: create_upgrade_tcl_template
-    error "ERROR: \[create_upgrade_tcl_template\] This function is not implemented yet."
+    send_msg_id {XTOOLS 1-410} "ERROR" "\[create_upgrade_tcl_template\] This function is not implemented yet."
 }
 
 proc ::xtools::ip_packager::add_upgrade_tcl {args} {
@@ -804,7 +804,7 @@ proc ::xtools::ip_packager::add_upgrade_tcl {args} {
     foreach file $files {
         switch -glob -- $file {
             *.tcl   {set type "tclSource"}
-            default {error "ERROR: \[add_upgrade_tcl\] File type not allowed (${file}). Supported file extention is tcl."}
+            default {send_msg_id {XTOOLS 1-411} "ERROR" "\[add_upgrade_tcl\] File type not allowed (${file}). Supported file extention is tcl."}
         }
     }
 
@@ -827,7 +827,7 @@ proc ::xtools::ip_packager::create_bd_tcl_template {} {
     # Categories: xilinxtclstore, ip_packager
 
     #TODO: create_bd_tcl_template
-    error "ERROR: \[create_bd_tcl_template\] This function is not implemented yet."
+    send_msg_id {XTOOLS 1-412} "ERROR" "\[create_bd_tcl_template\] This function is not implemented yet."
 }
 
 proc ::xtools::ip_packager::add_bd_tcl {args} {
@@ -854,7 +854,7 @@ proc ::xtools::ip_packager::add_bd_tcl {args} {
     }
 
     # Verify that only a single file is provided
-    if {[llength $file] != 1} {error "ERROR: \[add_bd_tcl\] Option -file must define a single file path."}
+    if {[llength $file] != 1} {send_msg_id {XTOOLS 1-413} "ERROR" "\[add_bd_tcl\] Option -file must define a single file path."}
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -866,7 +866,7 @@ proc ::xtools::ip_packager::add_bd_tcl {args} {
     # Verify file type support
     switch -glob -- $file {
         *.tcl   {set type "tclSource"}
-        default {error "ERROR: \[add_bd_tcl\] File type not allowed. Supported file extention is tcl."}
+        default {send_msg_id {XTOOLS 1-414} "ERROR" "\[add_bd_tcl\] File type not allowed. Supported file extention is tcl."}
     }
 
     # Add file to IPI file sets

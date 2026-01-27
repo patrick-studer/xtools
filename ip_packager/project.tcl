@@ -33,7 +33,7 @@ proc ::xtools::ip_packager::_check_vivado_version {} {
     variable VivadoVersion
 
     if {[package vsatisfies $VivadoVersion 2020.1-] == 0} {
-        error "ERROR: \[_check_vivado_version\] Vivado ${VivadoVersion} is not supported for IpPackage 2020_1. Please upgrade your package.tcl script or use Vivado >=2020.1!"
+        send_msg_id {XTOOLS 1-105} "ERROR" "\[_check_vivado_version\] Vivado ${VivadoVersion} is not supported for IpPackage 2020_1. Please upgrade your package.tcl script or use Vivado >=2020.1!"
     }
 }
 
@@ -75,7 +75,7 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[Route 35-198]}      -suppress             ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
 
     } else {
-        puts "INFO: \[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
+        send_msg_id {XTOOLS 1-101} "INFO" "\[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
     }
 }
 
@@ -100,12 +100,12 @@ proc ::xtools::ip_packager::_synth_checks {} {
     if {$config::SynthLatchCheck} {
         variable latches [all_latches]
         if {$latches != ""} {
-            error "ERROR: \[_synth_checks\] The synthesized design contains [llength ${latches}] latches (${latches})."
+            send_msg_id {XTOOLS 1-102} "ERROR" "\[_synth_checks\] The synthesized design contains [llength ${latches}] latches (${latches})."
         } else {
-            puts "INFO: \[_synth_checks\] No latches found."
+            send_msg_id {XTOOLS 1-103} "INFO" "\[_synth_checks\] No latches found."
         }
     } else {
-        puts "WARNING: \[_synth_checks\] Synthesis Latch Checking is disabled."
+        send_msg_id {XTOOLS 1-104} "WARNING" "\[_synth_checks\] Synthesis Latch Checking is disabled."
     }
 
     # Export reports
@@ -149,41 +149,41 @@ proc ::xtools::ip_packager::_impl_checks {} {
 
     if {$implProgress != "100%"} {
         if {[string match "Running*..." $implStatus]} {
-            error "ERROR: \[_impl_checks\] Timeout in [current_run -implementation] (current step = ${implStep}, elapsed time = ${implTime}). Check if applied timeout is still enough."
+            send_msg_id {XTOOLS 1-105} "ERROR" "\[_impl_checks\] Timeout in [current_run -implementation] (current step = ${implStep}, elapsed time = ${implTime}). Check if applied timeout is still enough."
         } else {
-            error "ERROR: \[_impl_checks\] Failed in [current_run -implementation] with status \"${implStatus}\" (current step = ${implStep}, elapsed time = ${implTime}). Please check the logfile for further information."
+            send_msg_id {XTOOLS 1-106} "ERROR" "\[_impl_checks\] Failed in [current_run -implementation] with status \"${implStatus}\" (current step = ${implStep}, elapsed time = ${implTime}). Please check the logfile for further information."
         }
     } else {
-        puts "INFO: \[_impl_checks\] Finished [current_run -implementation] sucessfully (elapsed time = ${implTime})."
+        send_msg_id {XTOOLS 1-107} "INFO" "\[_impl_checks\] Finished [current_run -implementation] sucessfully (elapsed time = ${implTime})."
     }
 
     if {$config::ImplTimingCheck} {
         # Check setup timing
         if {$implWns < $config::ImplTimingWns} {
-            error "ERROR: \[_impl_checks\] Design has setup-timing violation (WNS = ${implWns})."
+            send_msg_id {XTOOLS 1-108} "ERROR" "\[_impl_checks\] Design has setup-timing violation (WNS = ${implWns})."
         } else {
-            puts "INFO: \[_impl_checks\] Setup-timing OK (WNS = ${implWns})."
+            send_msg_id {XTOOLS 1-109} "INFO" "\[_impl_checks\] Setup-timing OK (WNS = ${implWns})."
         }
 
         # Check hold timing
         if {$implWhs < $config::ImplTimingWhs} {
-            error "ERROR: \[_impl_checks\] Design has hold-timing violation (WHS = ${implWhs})."
+            send_msg_id {XTOOLS 1-110} "ERROR" "\[_impl_checks\] Design has hold-timing violation (WHS = ${implWhs})."
         } else {
-            puts "INFO: \[_impl_checks\] Hold-timing OK (WHS = ${implWhs})."
+            send_msg_id {XTOOLS 1-111} "INFO" "\[_impl_checks\] Hold-timing OK (WHS = ${implWhs})."
         }
     } else {
-        puts "WARNING: \[_impl_checks\] Implementation Timing Checking is disabled."
+        send_msg_id {XTOOLS 1-112} "WARNING" "\[_impl_checks\] Implementation Timing Checking is disabled."
     }
 
     if {$config::ImplFailedNetsCheck} {
         # Check unrouted nets
         if {$implFailedNets > 0} {
-            error "ERROR: \[_impl_checks\] Design has unrouted nets (failed nets = ${implFailedNets})."
+            send_msg_id {XTOOLS 1-113} "ERROR" "\[_impl_checks\] Design has unrouted nets (failed nets = ${implFailedNets})."
         } else {
-            puts "INFO: \[_impl_checks\] All nets are routed."
+            send_msg_id {XTOOLS 1-114} "INFO" "\[_impl_checks\] All nets are routed."
         }
     } else {
-        puts "WARNING: \[_impl_checks\] Implementation Failed Nets Checking is disabled."
+        send_msg_id {XTOOLS 1-115} "WARNING" "\[_impl_checks\] Implementation Failed Nets Checking is disabled."
     }
 
     # Export reports
@@ -217,9 +217,9 @@ proc ::xtools::ip_packager::_find_unique_bus_abstraction {vlnv} {
         set ifBusAbs     [ipx::get_ipfiles -type "busabs" "*${vlnv}*"]
     }
     if {[llength $ifBusAbs] == 0} {
-        error "ERROR: \[add_bus_interface\] Could not find an interface abstraction definition that matches ${vlnv}. Define a valid interface abstraction or use \"import_interface_definition\" if you forgot to import an user-created definition."
+        send_msg_id {XTOOLS 1-116} "ERROR" "\[add_bus_interface\] Could not find an interface abstraction definition that matches ${vlnv}. Define a valid interface abstraction or use \"import_interface_definition\" if you forgot to import an user-created definition."
     } elseif {[llength $ifBusAbs] != 1} {
-        error "ERROR: \[add_bus_interface\] Found multiple interface abstraction definitions that matches ${vlnv} (LIST: [get_property vlnv ${ifBusAbs}]). Select an abstraction definition (vlnv) from the list and define the fully qualified name accordingly!"
+        send_msg_id {XTOOLS 1-117} "ERROR" "\[add_bus_interface\] Found multiple interface abstraction definitions that matches ${vlnv} (LIST: [get_property vlnv ${ifBusAbs}]). Select an abstraction definition (vlnv) from the list and define the fully qualified name accordingly!"
     }
     return $ifBusAbs
 }
@@ -241,9 +241,9 @@ proc ::xtools::ip_packager::_find_unique_ip_core {vlnv} {
         set ipCore [ipx::get_cores -from catalog "${vlnv}"]
     }
     if {[llength $ipCore] == 0} {
-        error "ERROR: \[_find_unique_ip_core\] Could not find an IP core that matches ${vlnv}. Define a valid name or vlnv-identifier."
+        send_msg_id {XTOOLS 1-118} "ERROR" "\[_find_unique_ip_core\] Could not find an IP core that matches ${vlnv}. Define a valid name or vlnv-identifier."
     } elseif {[llength $ipCore] != 1} {
-        error "ERROR: \[_find_unique_ip_core\] Found multiple IP cores that match ${vlnv} (LIST: [get_property vlnv ${ipCore}]). Select an IP core from the list and define the vlnv-identifier accordingly!"
+        send_msg_id {XTOOLS 1-119} "ERROR" "\[_find_unique_ip_core\] Found multiple IP cores that match ${vlnv} (LIST: [get_property vlnv ${ipCore}]). Select an IP core from the list and define the vlnv-identifier accordingly!"
     }
 }
 
@@ -352,7 +352,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Verify if no project is opened
     if {[current_project -quiet] != ""} {
-        error "ERROR: \[create_package_project\] There is a project opened in Vivado. Please close it before packaging a new IP Core."
+        send_msg_id {XTOOLS 1-120} "ERROR" "\[create_package_project\] There is a project opened in Vivado. Please close it before packaging a new IP Core."
     }
 
     # Define message severities
@@ -364,13 +364,13 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # Create package project
     if {[info exists part]} {
         if {[lsearch -exact [get_parts] $part] == -1} {
-            error "ERROR: \[create_package_project\] Defined part (${part}) does not exist. Check for typos or install the missing devices to this vivado installation."
+            send_msg_id {XTOOLS 1-121} "ERROR" "\[create_package_project\] Defined part (${part}) does not exist. Check for typos or install the missing devices to this vivado installation."
         }
         create_project -part $part -force $prj_name $prj_name
     } else {
         set part [lindex [get_parts] 0]
         create_project -part $part -force $prj_name $prj_name
-        puts "WARNING: \[create_package_project\] No specific part was defined for packaging project. Default part (${part}) will be used."
+        send_msg_id {XTOOLS 1-122} "WARNING" "\[create_package_project\] No specific part was defined for packaging project. Default part (${part}) will be used."
     }
     
     # Add top-level file
@@ -412,7 +412,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
             ipx::remove_address_space [get_property name $autoInfAddressSpace] [ipx::current_core]
         }
     } else {
-        puts "WARNING: \[create_package_project\] Removing inferred interfaces is disabled. The IP core will keep the automatically added interfaces. Please check in GUI if all interfaces are recognized correctly."
+        send_msg_id {XTOOLS 1-123} "WARNING" "\[create_package_project\] Removing inferred interfaces is disabled. The IP core will keep the automatically added interfaces. Please check in GUI if all interfaces are recognized correctly."
     }
     set OldXguiFile [file join $root_dir "xgui" "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].tcl"]
 }
@@ -515,7 +515,7 @@ proc ::xtools::ip_packager::synth_package_project {args} {
         set_property generic -value $generics -objects [get_filesets "sources_1"]
     } else {
         # Drive top-level generics with current default values from IPI
-        puts "WARNING: \[synth_package_project\] No top-level generics defined for synthesis. Run will use the current default values from the configuration GUI."
+        send_msg_id {XTOOLS 1-124} "WARNING" "\[synth_package_project\] No top-level generics defined for synthesis. Run will use the current default values from the configuration GUI."
         set genericsList [list]
         set hdlParams [ipx::get_hdl_parameters]
         foreach hdlParam $hdlParams {
@@ -642,18 +642,18 @@ proc ::xtools::ip_packager::save_package_project {args} {
     ipx::merge_project_changes files [ipx::current_core]
 
     # Convert all IPI file paths to relative (except URLs => type=unknown)
-    puts "INFO: \[save_package_project\] Following files are refered by the packaged IP-core:"
-    puts "      All paths relative to root directory (${RootDir})"
+    set msg_lines "\[save_package_project\] Following files are refered by the packaged IP-core:\nAll paths relative to root directory (${RootDir})"
     foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
-        puts "      - [get_property name $fileGroup]:"
+        append msg_lines "\n- [get_property name $fileGroup]:"
         foreach file [ipx::get_files -of_objects $fileGroup] {
             if {[get_property type $file] != "unknown"} {
                 set relative_file_path [path_relative_to_root [get_property name ${file}]]
-                puts "        - ${relative_file_path}"
+                append msg_lines "\n  - ${relative_file_path}"
                 set_property name $relative_file_path $file
             }
         }
     }
+    send_msg_id {XTOOLS 1-125} "INFO" $msg_lines
 
     # Sort Synthesis filegroup to have the top-level IPI wrapper at last position (Vivado requirement [IP_Flow 19-801] to infer library correctly)
     set fileGroup [ipx::get_file_groups xilinx_anylanguagesynthesis -of_objects [ipx::current_core]]
@@ -702,7 +702,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
     if {[info exists archive_to]} {
         set archiveName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].zip"
         set archivePath [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
-        puts "INFO: \[save_package_project\] Archive IP-core to ${archivePath}"
+        send_msg_id {XTOOLS 1-126} "INFO" "\[save_package_project\] Archive IP-core to ${archivePath}"
         ipx::archive_core $archivePath
     }
 }
@@ -735,7 +735,7 @@ proc ::xtools::ip_packager::close_package_project {args} {
     if {$delete} {
         file delete -force $projectDirectory
         file delete -force $xilinxTempDirectory
-        puts "INFO: \[close_package_project\] Deleted packager project (${projectDirectory})."
+        send_msg_id {XTOOLS 1-127} "INFO" "\[close_package_project\] Deleted packager project (${projectDirectory})."
     }
 
 }
