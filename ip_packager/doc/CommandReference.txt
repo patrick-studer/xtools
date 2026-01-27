@@ -1296,7 +1296,7 @@ Usage:
   [-prj_name]    Temporary package project name.
                  Default: package_prj
   [-part]        FPGA part used for the package project.
-                 Default: xc7z020iclg400-1L
+                 Default: None
   [-report_dir]  Directory location to store synth/impl reports.
                  Default: ./..
   [-quiet]       Ignore command errors

@@ -317,7 +317,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     # [-library <arg>]:                     VHDL library to compile the Top-Level HDL file to.
     # [-root_dir <arg> = ./..]:             IP output root directory.
     # [-prj_name  <arg> = package_prj]:     Temporary package project name.
-    # [-part <arg> = xc7z020iclg400-1L]:    FPGA part used for the package project.
+    # [-part <arg>]:                        FPGA part used for the package project.
     # [-report_dir <arg> = ./..]:           Directory location to store synth/impl reports.
 
     # Return Value: TCL_OK
@@ -332,7 +332,6 @@ proc ::xtools::ip_packager::create_package_project {args} {
 
     # Define default values for procedure arguments
     set prj_name    "package_prj"
-    set part        "xc7z020iclg400-1L"
 
     # Parse optional arguments
     set num [llength $args]
@@ -363,7 +362,18 @@ proc ::xtools::ip_packager::create_package_project {args} {
     if {[info exists root_dir]} {set RootDir [file normalize [path_relative_to [pwd] $root_dir]]}
 
     # Create package project
-    create_project -part $part -force -quiet $prj_name $prj_name
+    if {[info exists part]} {
+        if {[lsearch -exact [get_parts] $part] == -1} {
+            error "ERROR: \[create_package_project\] Defined part (${part}) does not exist. Check for typos or install the missing devices to this vivado installation."
+        }
+        create_project -part $part -force $prj_name $prj_name
+    } else {
+        set part [lindex [get_parts] 0]
+        create_project -part $part -force $prj_name $prj_name
+        puts "WARNING: \[create_package_project\] No specific part was defined for packaging project. Default part (${part}) will be used."
+    }
+    
+    # Add top-level file
     if {[info exists copy_to]} {
         set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $top_file]]
     } else {
@@ -377,7 +387,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
     file mkdir $ReportDir
 
     # Create new IPI component
-    ipx::package_project -root_dir [file normalize $RootDir] -quiet
+    ipx::package_project -root_dir [file normalize $RootDir]
 
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
