@@ -67,11 +67,13 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[IP_Flow 19-3833]}   -new_severity "ERROR"
         set_msg_config   -id  {[IP_Flow 19-4623]}   -suppress
         set_msg_config   -id  {[IP_Flow 19-4728]}   -suppress             ; # Bus Interface 'xxx': Added interface parameter 'xxx' with value 'xxx'.
+        set_msg_config   -id  {[IP_Flow 19-4995]}   -new_severity "INFO"  ; # The host OS only allows 260 characters in a normal path. The IP cache path is more than 80 characters. If you experience issues with IP caching, please consider changing the IP cache to a location with a shorter path.
         set_msg_config   -id  {[IP_Flow 19-5107]}   -suppress             ; # Inferred bus interface 'xxx' of definition 'vlnv' (from TCL Argument).
         set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress             ; # Project source file 'xxx/component.xml' ignored by IP packager.
         set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO"  ; # Clock interface 'Clk' has no FREQ_HZ parameter.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
+        set_msg_config   -id  {[Synth 8-614]}       -new_severity "ERROR" ; # Signal 'xxx' is read in the process but is not in the sensitivity list
         set_msg_config   -id  {[Route 35-198]}      -suppress             ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
 
     } else {
