@@ -251,11 +251,11 @@ proc ::xtools::ip_packager::set_param_value {args} {
     if {[llength $userParam] == 0} {
         send_msg_id {XTOOLS 1-505} "ERROR" "\[set_param_value\] No user parameter matched pattern ${param_name}. Please verify spelling or add the user parameter first (see ip_packager::create_user_param) if not done yet."
     }
-
     foreach param [concat $hdlParam $userParam] {
-        if {[info exists value   ]} {set_property value $value $param}
-        if {[info exists tcl_expr]} {set_property enablement_value false $param; set_property value_tcl_expr "expr ${tcl_expr}" $param; ipx::update_dependency $param}
+        if {[info exists value]} {set_property value $value $param}
     }
+    # value_tcl_expr only for USER parameter. HDL parameter must stay enabled!
+    if {[info exists tcl_expr]} {set_property enablement_value false $param; set_property value_tcl_expr "expr ${tcl_expr}" $userParam; ipx::update_dependency $userParam}
 }
 
 proc ::xtools::ip_packager::set_param_format {args} {
