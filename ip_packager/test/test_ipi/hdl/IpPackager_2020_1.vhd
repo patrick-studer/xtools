@@ -171,6 +171,9 @@ architecture rtl of IpPackager_2020_1 is
         Uart_Rx     : in std_logic
     );
     end component;
+    
+    signal temp1 : std_logic;
+    signal temp2 : std_logic;
 
 begin
 
@@ -255,16 +258,8 @@ begin
 p_seq_sync_rst_axis : process(Axis_Clk)
 begin
     if rising_edge(Axis_Clk) then
-        if Axis_ResetN = '0' then
-            -- AXI Stream Master Interface [Axis_Clk]
-            M_Axis_TData    <= (others => '0');
-            M_Axis_TStrb    <= (others => '0');
-            M_Axis_TKeep    <= (others => '0');
-            M_Axis_TUser    <= (others => '0');
-            M_Axis_TLast    <= '0';
-            M_Axis_TValid   <= '0';
-            -- AXI Stream Slave Interface [Axis_Clk]
-            S_Axis_TReady   <= '0';
+        if Rst = '1' then
+            
         else
             -- AXI Stream Master Interface [Axis_Clk]
             M_Axis_TData    <= S_Axis_TData;
@@ -279,8 +274,11 @@ begin
     end if;
 end process p_seq_sync_rst_axis;
 
+
         -- Misc [Clk]
-        Interrupt       <= not Uart_Rx;
+        temp1           <= '1' when temp2 = '1' else '0';
+        temp2           <= '0' when temp1 = '1' else '1';
+        Interrupt       <= temp1 xor temp2;
 
         i_sub : component IpPackager_2020_1_sub
         port map(
