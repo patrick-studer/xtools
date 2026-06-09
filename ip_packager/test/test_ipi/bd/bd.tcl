@@ -1,5 +1,5 @@
 ###################################################################################################
-# Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+# Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
 ###################################################################################################
 
 set currentNamespace [namespace current]

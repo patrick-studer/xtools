@@ -74,8 +74,10 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO"  ; # Clock interface 'Clk' has no FREQ_HZ parameter.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
         set_msg_config   -id  {[Synth 8-614]}       -new_severity "ERROR" ; # Signal 'xxx' is read in the process but is not in the sensitivity list
+        set_msg_config   -id  {[Synth 8-7080]}      -suppress             ; # Parallel synthesis criteria is not met
         set_msg_config   -id  {[Route 35-198]}      -suppress             ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
-
+        set_msg_config   -id  {[DRC 23-814]}        -suppress             ; # Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
+ 
     } else {
         send_msg_id {XTOOLS 1-101} "INFO" "\[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
     }

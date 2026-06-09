@@ -1,5 +1,5 @@
 ###################################################################################################
-# Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+# Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
 ###################################################################################################
 
 ###################################################################################################
@@ -9,14 +9,15 @@
 set this_file_path                      [file normalize [file dirname [info script]]];
 set cmd_ref_path                        [file join $this_file_path "../doc/CommandReference.txt"]
 set pkg_path                            [file join $this_file_path "../../.."];
-lappend auto_path                       [file join $pkg_path "xtools"]
+set xtools_path                         [file join $pkg_path "xtools"]
+if {[lsearch -exact $auto_path $xtools_path] == -1} {lappend auto_path $xtools_path}
 ::tclapp::support::appinit::load_app    $pkg_path "::xtools::ip_packager" "ip_packager"
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
 
 set f [open $cmd_ref_path "w"]
 
 puts $f "==================================================================================================="
-puts $f "= Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)"
+puts $f "= Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)"
 puts $f "==================================================================================================="
 puts $f ""
 puts $f "==================================================================================================="

@@ -955,8 +955,9 @@ Syntax:
 ip_packager::add_software_driver  -driver_dir <arg> [-copy_to <arg>]
                                   [-parameters <arg>] [-driver_name <arg>]
                                   [-driver_version <arg>]
-                                  [-driver_description <arg>] [-quiet]
-                                  [-verbose]
+                                  [-driver_description <arg>]
+                                  [-gen_config_file <arg>]
+                                  [-gen_uio_support <arg>] [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
@@ -984,6 +985,9 @@ Usage:
   [-driver_description]  Optionally, overwrite default driver description 
                          (default = "<IP-Name> specific driver").
                          Default: None
+  [-gen_config_file]     Optionally, enable driver config file creation 
+                         (<driver_name>_g.c).
+  [-gen_uio_support]     Optionally, enable linux generic-uio compatibility.
   [-quiet]               Ignore command errors
   [-verbose]             Suspend message limits during command execution
 

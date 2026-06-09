@@ -677,16 +677,17 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     file mkdir [file join $driver_dir $driver_name "examples"]
 
     # Makefile Snipped
-    set replaceTags [dict create "<IP_NAME>" $ipName]
+    set replaceTags [dict create \
+        "<IP_NAME>" $ipName]
     copy_and_replace_tags \
         [file join $Home "snippets" "driver" "Makefile"] \
         [file join $driver_dir $driver_name "src" "Makefile"] \
         $replaceTags
 
     # .MDD File Snipped
-    set replaceTags [dict create 
-        "<IP_NAME>" $ipName 
-        "<DRIVER_NAME>" $driver_name 
+    set replaceTags [dict create \
+        "<IP_NAME>" $ipName \
+        "<DRIVER_NAME>" $driver_name \
         "<DRIVER_VERSION>" $driver_version]
     copy_and_replace_tags \
         [file join $Home "snippets" "driver" "snippet.mdd"] \

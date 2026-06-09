@@ -1,5 +1,5 @@
 ###################################################################################################
-# Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+# Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
 ###################################################################################################
 
 ###################################################################################################
@@ -14,8 +14,9 @@ set root_dir    [file normalize [file join $src_dir ".." "test_ipi_externally"]]
 ###################################################################################################
 
 # pkg_path must point to the app directory (folder which contains the "xtools" directory).
-set pkg_path                            [file normalize [file join $src_dir "../../../.."]];
-lappend auto_path                       [file join $pkg_path "xtools"]
+set pkg_path                            [file normalize [file join $src_dir "../../../.."]]
+set xtools_path                         [file normalize [file join $pkg_path "xtools"]]
+if {[lsearch -exact $auto_path $xtools_path] == -1} {lappend auto_path $xtools_path}
 ::tclapp::support::appinit::load_app    $pkg_path "::xtools::ip_packager" "ip_packager"
 ::rdi::set_help_config                  -expose_namespace "ip_packager"
 
