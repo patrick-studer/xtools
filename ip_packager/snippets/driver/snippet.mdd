@@ -2,6 +2,7 @@ OPTION psf_version = 2.1;
 
 BEGIN DRIVER <DRIVER_NAME>
 	OPTION supported_peripherals = (<IP_NAME>);
+	OPTION supported_os_types    = (standalone freertos DTS);
     OPTION driver_state          = ACTIVE;
 	OPTION copyfiles             = all;
 	OPTION VERSION               = <DRIVER_VERSION>;

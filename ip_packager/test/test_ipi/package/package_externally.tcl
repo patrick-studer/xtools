@@ -331,6 +331,7 @@ ip_packager::associate_interface_clock  -interface_name         "*_Axi" \
                                         -clock                  "Axi_Clk" \
 
 ip_packager::associate_interface_clock  -interface_name         [list \
+                                                                    "Control" \
                                                                     "Interrupt" \
                                                                     "UART" \
                                                                 ] \

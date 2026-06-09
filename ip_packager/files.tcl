@@ -615,12 +615,14 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     # Summary: Add software driver template and custom src-files to the packaged IP-core.
 
     # Argument Usage:
-    # -driver_dir <arg>:            Output directory path for software-driver. Existing src-files (e.g. *.h or *.c) needs to be locaded inside the "src" subfolder and are added automatically.
-    # [-copy_to <arg>]:             Path to folder, where to copy/import the added softwar driver sources.
-    # [-parameters <arg>]:          Add a list of IP parameters which values are exported to the xparameters.h file.
-    # [-driver_name <arg>]:         Optionally, overwrite default driver name (default = <IP-Name>).
-    # [-driver_version <arg>]:      Optionally, overwrite default driver version (default = 1.0).
-    # [-driver_description <arg>]:  Optionally, overwrite default driver description (default = "<IP-Name> specific driver").
+    # -driver_dir <arg>:                Output directory path for software-driver. Existing src-files (e.g. *.h or *.c) needs to be locaded inside the "src" subfolder and are added automatically.
+    # [-copy_to <arg>]:                 Path to folder, where to copy/import the added softwar driver sources.
+    # [-parameters <arg>]:              Add a list of IP parameters which values are exported to the xparameters.h file.
+    # [-driver_name <arg>]:             Optionally, overwrite default driver name (default = <IP-Name>).
+    # [-driver_version <arg>]:          Optionally, overwrite default driver version (default = 1.0).
+    # [-driver_description <arg>]:      Optionally, overwrite default driver description (default = "<IP-Name> specific driver").
+    # [-gen_config_file <arg> = false]: Optionally, enable driver config file creation (<driver_name>_g.c).
+    # [-gen_uio_support <arg> = false]: Optionally, enable linux generic-uio compatibility.
 
     # Return Value: TCL_OK
 
@@ -637,6 +639,8 @@ proc ::xtools::ip_packager::add_software_driver {args} {
     set driver_name         $ipName
     set driver_version      1.0
     set driver_description  "\"${ipName} specific driver.\""
+    set genConfigFile       0
+    set genUioSupport       0
 
     # Parse optional arguments
     set num [llength $args]
@@ -648,11 +652,15 @@ proc ::xtools::ip_packager::add_software_driver {args} {
             -driver_name            {incr i; set driver_name        [lindex $args $i]}
             -driver_version         {incr i; set driver_version     [lindex $args $i]}
             -driver_description     {incr i; set driver_description [lindex $args $i]}
+            -gen_config_file        {incr i; set genConfigFile      [lindex $args $i]}
+            -gen_uio_support        {incr i; set genUioSupport      [lindex $args $i]}
         }
     }
 
     # Verify that only a single directory is provided
-    if {[llength $driver_dir] != 1 || ![string match [file type [path_relative_to_pwd $driver_dir]] "directory"]} {send_msg_id {XTOOLS 1-408} "ERROR" "\[add_bd_tcl\] Option -driver_dir must define a single directory path."}
+    if {[llength $driver_dir] != 1 || ![string match [file type [path_relative_to_pwd $driver_dir]] "directory"]} {
+        send_msg_id {XTOOLS 1-408} "ERROR" "\[add_bd_tcl\] Option -driver_dir must define a single directory path."
+    }
 
     # Copy files if needed
     if {[info exists copy_to]} {
@@ -670,11 +678,20 @@ proc ::xtools::ip_packager::add_software_driver {args} {
 
     # Makefile Snipped
     set replaceTags [dict create "<IP_NAME>" $ipName]
-    copy_and_replace_tags [file join $Home "snippets" "driver" "Makefile"] [file join $driver_dir $driver_name "src" "Makefile"] $replaceTags
+    copy_and_replace_tags \
+        [file join $Home "snippets" "driver" "Makefile"] \
+        [file join $driver_dir $driver_name "src" "Makefile"] \
+        $replaceTags
 
     # .MDD File Snipped
-    set replaceTags [dict create "<IP_NAME>" $ipName "<DRIVER_NAME>" $driver_name "<DRIVER_VERSION>" $driver_version "<DRIVER_DESCRIPTION>" $driver_description]
-    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.mdd"] [file join $driver_dir $driver_name "data" "${driver_name}.mdd"] $replaceTags
+    set replaceTags [dict create 
+        "<IP_NAME>" $ipName 
+        "<DRIVER_NAME>" $driver_name 
+        "<DRIVER_VERSION>" $driver_version]
+    copy_and_replace_tags \
+        [file join $Home "snippets" "driver" "snippet.mdd"] \
+        [file join $driver_dir $driver_name "data" "${driver_name}.mdd"] \
+        $replaceTags
 
     # .TCL File Snipped
     set paramList ""
@@ -682,11 +699,19 @@ proc ::xtools::ip_packager::add_software_driver {args} {
         set paramList "${paramList} \"${param}\""
     }
     set paramList [string trim $paramList]
-    set replaceTags [dict create "<DRIVER_NAME>" $driver_name "<PARAM_LIST>" $paramList]
-    copy_and_replace_tags [file join $Home "snippets" "driver" "snippet.tcl"] [file join $driver_dir $driver_name "data" "${driver_name}.tcl"] $replaceTags
+    set replaceTags [dict create \
+        "<DRIVER_NAME>" $driver_name \
+        "<PARAM_LIST>" $paramList \
+        "<GEN_CONFIG_FILE>" $genConfigFile \
+        "<GEN_CONFIG_FILE>" $genConfigFile \
+        "<GEN_UIO_SUPPORT>" $genUioSupport]
+    copy_and_replace_tags \
+        [file join $Home "snippets" "driver" "snippet.tcl"] \
+        [file join $driver_dir $driver_name "data" "${driver_name}.tcl"] \
+        $replaceTags
     # Store current SwDriverTclFile globally to later be able to add information
     set SwDriverTclFile [file join $driver_dir $driver_name "data" "${driver_name}.tcl"]
-
+        
     # Add files to IPI file sets
     set fileGroup  [ipx::add_file_group -type "software_driver" "xilinx_softwaredriver" [ipx::current_core]]
     set driverSrcFilePaths     [glob -directory [file join $driver_dir $driver_name "src"]  -type f *]

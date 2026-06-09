@@ -41,7 +41,7 @@ ip_packager::create_package_project     -prj_name       "packager_prj" \
                                         -root_dir       $root_dir \
                                         -top_file       "hdl/IpPackager_2020_1_ipi.vhd" \
                                         -library        "test" \
-                                        -part           "xc7z020iclg400-1L" \
+                                        -part           "xc7z020iclg400-1L"
 
 ###################################################################################################
 # Identification
@@ -310,6 +310,7 @@ ip_packager::associate_interface_clock  -interface_name         "*_Axi" \
                                         -clock                  "Axi_Clk" \
 
 ip_packager::associate_interface_clock  -interface_name         [list \
+                                                                    "Control" \
                                                                     "Interrupt" \
                                                                     "UART" \
                                                                 ] \

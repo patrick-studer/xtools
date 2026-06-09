@@ -1,0 +1,5 @@
+cd C:/GitLab/PATRICK-STUDER/xtools/ip_packager/test/packager_prj/dt
+hsi open_hw_design ./test.xsa
+hsi set_repo_path [list C:/Xilinx/DT/device-tree-xlnx .]
+hsi create_sw_design device-tree -os device_tree -proc psu_cortexa53_0
+hsi generate_target -dir ./dt_output
