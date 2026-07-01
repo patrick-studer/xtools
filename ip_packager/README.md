@@ -82,8 +82,6 @@ To package the test IP-core run the following script in your Vivado TCL console:
 cd $pkg_dir
 source ./xtools/ip_packager/test/test.tcl
 ```
-**NOTE:** The temporary created `package_prj` will be deleted after successful packaging.
-To evaluate the packaged test IPI, comment out the `ip_packager::close_package_project` command at the end of [package.tcl](./test/test_ipi/package/package.tcl).
 ## Templates
 The IP-Packager provides some useful templates for basic and advanced usage:
 - [package_internally.tcl](./templates/package/package_internally.tcl)
