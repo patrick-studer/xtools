@@ -41,7 +41,6 @@ ip_packager::create_package_project     -prj_name       "packager_prj" \
                                         -root_dir       $root_dir \
                                         -top_file       "hdl/IpPackager_2020_1_ipi.vhd" \
                                         -library        "test" \
-                                        -part           "xc7z020iclg400-1L" \
 
 ###################################################################################################
 # Identification
