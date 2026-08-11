@@ -638,7 +638,7 @@ ip_packager::impl_package_project
 
 ip_packager::save_package_project
 
-ip_packager::close_package_project      -delete         "false"
+# ip_packager::close_package_project      -delete         "false"
 
 ###################################################################################################
 # EOF

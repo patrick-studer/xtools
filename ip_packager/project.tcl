@@ -72,12 +72,15 @@ proc ::xtools::ip_packager::_overwrite_msg_config {} {
         set_msg_config   -id  {[IP_Flow 19-5226]}   -suppress             ; # Project source file 'xxx/component.xml' ignored by IP packager.
         set_msg_config   -id  {[IP_Flow 19-5905]}   -new_severity "INFO"
         set_msg_config   -id  {[IP_Flow 19-11770]}  -new_severity "INFO"  ; # Clock interface 'Clk' has no FREQ_HZ parameter.
+        set_msg_config   -id  {[IP_Flow 19-11888]}  -suppress             ; # Component Definition 'xxx': IP description "xxx" is not meaningful: same as name or display name.
         set_msg_config   -id  {[filemgmt 20-730]}   -new_severity "INFO"
         set_msg_config   -id  {[Synth 8-614]}       -new_severity "ERROR" ; # Signal 'xxx' is read in the process but is not in the sensitivity list
-        set_msg_config   -id  {[Synth 8-7080]}      -suppress             ; # Parallel synthesis criteria is not met
-        set_msg_config   -id  {[Route 35-198]}      -suppress             ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+        set_msg_config   -id  {[Synth 8-7080]}      -new_severity "INFO"  ; # Parallel synthesis criteria is not met
+        set_msg_config   -id  {[Place 46-29]}       -new_severity "INFO"  ; # place_design is not in timing mode. Skip physical synthesis in placer
+        set_msg_config   -id  {[Route 35-197]}      -new_severity "INFO"  ; # Clock port "xxx" does not have an associated HD.CLK_SRC. Without this constraint, timing analysis may not be accurate and upstream checks cannot be done to ensure correct clock placement.
+        set_msg_config   -id  {[Route 35-198]}      -new_severity "INFO"  ; # Port <port_name> does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal <port_name>. Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+        set_msg_config   -id  {[Timing 38-242]}     -new_severity "INFO"  ; # The property HD.CLK_SRC of clock port "xxx" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
         set_msg_config   -id  {[DRC 23-814]}        -suppress             ; # Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
- 
     } else {
         send_msg_id {XTOOLS 1-101} "INFO" "\[_overwrite_msg_config\] Message Config Overwrite is disabled. Continue with the default Vivado settings."
     }
@@ -390,9 +393,19 @@ proc ::xtools::ip_packager::create_package_project {args} {
     file delete -force $ReportDir
     file mkdir $ReportDir
 
+    # Temporary ignore auto-inferred interface warnings
+    set_msg_config   -id  {[IP_Flow 19-3480]}   -suppress
+    set_msg_config   -id  {[IP_Flow 19-4751]}   -suppress
+    set_msg_config   -id  {[IP_Flow 19-5661]}   -suppress
+    
     # Create new IPI component
     ipx::package_project -root_dir [file normalize $RootDir]
-
+    
+    # Restore temporary ignored auto-inferred interface warnings
+    reset_msg_config -id  {[IP_Flow 19-3480]}   -default_severity -quiet
+    reset_msg_config -id  {[IP_Flow 19-4751]}   -default_severity -quiet
+    reset_msg_config -id  {[IP_Flow 19-5661]}   -default_severity -quiet
+    
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
 
