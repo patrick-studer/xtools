@@ -29,6 +29,7 @@ proc ::xtools::ip_packager::set_identification {args} {
     # [-display_vendor <arg>]:          Displayed vendor sting.
     # [-company_url <arg>]:             Company homepage URL.
     # [-taxonomy <arg>]:                Taxonomy sting. Separate subgroups with "/" and underscores are represented as white-spaces (e.g. "/MY_CORES/Ip_Packager").
+    # [-license_key <arg>]:             Add license key and set payment required to true.
 
     # Return Value: TCL_OK
 
@@ -51,21 +52,23 @@ proc ::xtools::ip_packager::set_identification {args} {
             -display_vendor {incr i; set display_vendor [lindex $args $i]}
             -company_url    {incr i; set company_url    [lindex $args $i]}
             -taxonomy       {incr i; set taxonomy       [lindex $args $i]}
+            -license_key    {incr i; set license_key    [lindex $args $i]}
         }
     }
 
     # Set provided properties
-    if {[info exists vendor        ]} {set_property vendor              $vendor         [ipx::current_core]}
-    if {[info exists library       ]} {set_property library             $library        [ipx::current_core]}
-    if {[info exists name          ]} {set_property name                $name           [ipx::current_core]}
-    if {[info exists version       ]} {set_property version             $version        [ipx::current_core]}
-    if {[info exists core_revision ]} {set_property core_revision       $core_revision  [ipx::current_core]}
-    if {[info exists display_name  ]} {set_property display_name        $display_name   [ipx::current_core]}
-    if {[info exists description   ]} {set_property description         $description    [ipx::current_core]}
-    if {[info exists display_vendor]} {set_property vendor_display_name $display_vendor [ipx::current_core]}
-    if {[info exists company_url   ]} {set_property company_url         $company_url    [ipx::current_core]}
-    if {[info exists taxonomy      ]} {set_property taxonomy            $taxonomy       [ipx::current_core]}
-
+    if {[info exists vendor          ]} {set_property vendor              $vendor           [ipx::current_core]}
+    if {[info exists library         ]} {set_property library             $library          [ipx::current_core]}
+    if {[info exists name            ]} {set_property name                $name             [ipx::current_core]}
+    if {[info exists version         ]} {set_property version             $version          [ipx::current_core]}
+    if {[info exists core_revision   ]} {set_property core_revision       $core_revision    [ipx::current_core]}
+    if {[info exists display_name    ]} {set_property display_name        $display_name     [ipx::current_core]}
+    if {[info exists description     ]} {set_property description         $description      [ipx::current_core]}
+    if {[info exists display_vendor  ]} {set_property vendor_display_name $display_vendor   [ipx::current_core]}
+    if {[info exists company_url     ]} {set_property company_url         $company_url      [ipx::current_core]}
+    if {[info exists taxonomy        ]} {set_property taxonomy            $taxonomy         [ipx::current_core]}
+    if {[info exists license_key     ]} {set_property payment_required    true              [ipx::current_core]
+                                         ipx::add_license_key             $license_key      [ipx::current_core]}
 }
 
 ###################################################################################################

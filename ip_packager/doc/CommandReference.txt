@@ -1,5 +1,5 @@
 ===================================================================================================
-= Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+= Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
 ===================================================================================================
 
 ===================================================================================================
@@ -1704,7 +1704,8 @@ ip_packager::set_identification  [-vendor <arg>] [-library <arg>] [-name <arg>]
                                  [-version <arg>] [-core_revision <arg>]
                                  [-display_name <arg>] [-description <arg>]
                                  [-display_vendor <arg>] [-company_url <arg>]
-                                 [-taxonomy <arg>] [-quiet] [-verbose]
+                                 [-taxonomy <arg>] [-license_key <arg>]
+                                 [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
@@ -1738,6 +1739,8 @@ Usage:
   [-taxonomy]        Taxonomy sting. Separate subgroups with "/" and 
                      underscores are represented as white-spaces (e.g. 
                      "/MY_CORES/Ip_Packager").
+                     Default: None
+  [-license_key]     Add license key and set payment required to true.
                      Default: None
   [-quiet]           Ignore command errors
   [-verbose]         Suspend message limits during command execution
