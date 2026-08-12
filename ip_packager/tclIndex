@@ -51,6 +51,7 @@ set auto_index(::xtools::ip_packager::associate_interface_clock) [list source [f
 set auto_index(::xtools::ip_packager::associate_clock_reset) [list source [file join $dir interfaces.tcl]]
 set auto_index(::xtools::ip_packager::set_interface_enablement) [list source [file join $dir interfaces.tcl]]
 set auto_index(::xtools::ip_packager::set_port_enablement) [list source [file join $dir interfaces.tcl]]
+set auto_index(reload_xtools_ip_packager) [list source [file join $dir ip_packager.tcl]]
 set auto_index(::xtools::ip_packager::create_user_param) [list source [file join $dir parameters.tcl]]
 set auto_index(::xtools::ip_packager::set_param_config) [list source [file join $dir parameters.tcl]]
 set auto_index(::xtools::ip_packager::set_param_validation) [list source [file join $dir parameters.tcl]]
@@ -75,3 +76,5 @@ set auto_index(::xtools::ip_packager::path_relative_to_pwd) [list source [file j
 set auto_index(::xtools::ip_packager::path_relative_to_root) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::copy_and_replace_tags) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::replace_tags) [list source [file join $dir utils.tcl]]
+set auto_index(::xtools::ip_packager::_reorder_ipx_file_group) [list source [file join $dir utils.tcl]]
+set auto_index(::xtools::ip_packager::_print_ipx_files) [list source [file join $dir utils.tcl]]

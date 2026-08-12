@@ -653,29 +653,23 @@ proc ::xtools::ip_packager::save_package_project {args} {
     set newXguiFile [file join $RootDir "xgui" $xguiFileName]
     if {$newXguiFile != $OldXguiFile} {file delete -force $OldXguiFile}
     set OldXguiFile $newXguiFile
-
-    # Sort IPI files according to compile order
-    update_compile_order -fileset sources_1
-    ipx::merge_project_changes files [ipx::current_core]
-
+    
     # Convert all IPI file paths to relative (except URLs => type=unknown)
-    set msg_lines "\[save_package_project\] Following files are refered by the packaged IP-core:\nAll paths relative to root directory (${RootDir})"
     foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
-        append msg_lines "\n- [get_property name $fileGroup]:"
         foreach file [ipx::get_files -of_objects $fileGroup] {
             if {[get_property type $file] != "unknown"} {
                 set relative_file_path [path_relative_to_root [get_property name ${file}]]
-                append msg_lines "\n  - ${relative_file_path}"
                 set_property name $relative_file_path $file
             }
         }
     }
-    send_msg_id {XTOOLS 1-125} "INFO" $msg_lines
 
-    # Sort Synthesis filegroup to have the top-level IPI wrapper at last position (Vivado requirement [IP_Flow 19-801] to infer library correctly)
-    set fileGroup [ipx::get_file_groups xilinx_anylanguagesynthesis -of_objects [ipx::current_core]]
-    set firstFile [lindex [get_property name [ipx::get_files -of_objects $fileGroup]] 0]
-    ipx::reorder_files -back $firstFile $fileGroup
+    # Sort IPX filegroups according to compile-order to have the top-level IPI wrapper at last position (Vivado requirement [IP_Flow 19-801] to infer library correctly)
+    _reorder_ipx_file_group
+    
+    # Print packaged IPX files
+    set msg_lines "\[save_package_project\] Following files are referred by the packaged IP-core:\nAll paths relative to root directory (${RootDir})"
+    send_msg_id {XTOOLS 1-125} "INFO" [_print_ipx_files $msg_lines]
 
     # Update XGUI File with custom GUI Support TCL
     if {[llength $GuiSupportTcl] > 0} {

@@ -67,19 +67,33 @@ proc ::xtools::ip_packager::add_design_sources {args} {
         }
     }
 
-    # Add files to project
+    # Copy files if needed
     if {[info exists copy_to]} {
-        set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $files]]
-    } else {
-        set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $files]]
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
+    
+    # Add files to package project
+    set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $files]]
     if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
     if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
     if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
     if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
 
-    # Merge package project files to IPI filesets
-    ipx::merge_project_changes files [ipx::current_core]
+    # Add files to IPI file sets
+    foreach {fgType fgName} {"synthesis" "xilinx_anylanguagesynthesis" "simulation" "xilinx_anylanguagebehavioralsimulation"} {
+        set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
+        foreach file $files {
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
+            if {[info exists file_type     ]} {set_property type       $file_type      $addedFile}
+            if {[info exists global_include]} {set_property is_include $global_include $addedFile}
+        }
+    }
 }
 
 proc ::xtools::ip_packager::add_design_simulation {args} {
@@ -113,19 +127,33 @@ proc ::xtools::ip_packager::add_design_simulation {args} {
         }
     }
 
-    # Add files to project
+    # Copy files if needed
     if {[info exists copy_to]} {
-        set addedFiles [add_files -fileset "sim_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $files]]
-    } else {
-        set addedFiles [add_files -fileset "sim_1" -norecurse -force [path_relative_to_pwd $files]]
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
     }
+    
+    # Add files to package project
+    set addedFiles [add_files -fileset "sim_1" -norecurse -force [path_relative_to_pwd $files]]
     if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
     if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
     if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
     if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
 
-    # Merge package project files to IPI filesets
-    ipx::merge_project_changes files [ipx::current_core]
+    # Add files to IPI file sets
+    foreach {fgType fgName} {"testbench" "xilinx_testbench"} {
+        set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
+        foreach file $files {
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
+            if {[info exists file_type     ]} {set_property type       $file_type      $addedFile}
+            if {[info exists global_include]} {set_property is_include $global_include $addedFile}
+        }
+    }
 }
 
 proc ::xtools::ip_packager::add_design_constraints {args} {
@@ -145,6 +173,9 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
     # Load global variables
     variable RootDir
 
+    # Define default values for procedure arguments
+    set used_in "synthesis implementation"
+    
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -160,20 +191,39 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
     # Ensure OOC files are used in package project synthesis/implementation
     if {$used_in == "out_of_context"} { set used_in "synthesis implementation out_of_context"}
 
-    # Add files to package project
+    # Copy files if needed
     if {[info exists copy_to]} {
-        set addedFiles [add_files -fileset "constrs_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $files]]
-    } else {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force {*}[path_relative_to_pwd $files] $copyToDir
+        set copiedFiles [list]
+        foreach file $files {
+            lappend copiedFiles [file join $copyToDir [file tail $file]]
+        }
+        set files $copiedFiles
+    }
+    
+    # Add files to package project
+    if {[string tolower [file extension $file]] in {.sdc .xdc}} {
         set addedFiles [add_files -fileset "constrs_1" -norecurse -force [path_relative_to_pwd $files]]
+        if {[info exists used_in         ]} {set_property used_in           $used_in            $addedFiles}
+        if {[info exists processing_order]} {set_property processing_order  $processing_order   $addedFiles}
+        if {[info exists scoped_to_cells ]} {set_property scoped_to_cells   $scoped_to_cells    $addedFiles}
     }
 
-
-    if {[info exists used_in         ]} {set_property used_in           $used_in            $addedFiles}
-    if {[info exists processing_order]} {set_property processing_order  $processing_order   $addedFiles}
-    if {[info exists scoped_to_cells ]} {set_property scoped_to_cells   $scoped_to_cells    $addedFiles}
-
-    # Merge package project files to IPI filesets
-    ipx::merge_project_changes files [ipx::current_core]
+    # Add files to IPI file sets
+    foreach {fgType fgName} {"implementation" "xilinx_implementation" "synthesis" "xilinx_anylanguagesynthesis"} {
+        # Add "synthesis" and "out_of_context" to synthesis file group. Add "implementation" to implementation file group.
+        if {([lsearch -exact $used_in $fgType] == -1) || ($fgType eq "implementation" && [lsearch -exact $used_in "out_of_context"] != -1)} {
+            continue
+        }
+        set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
+        foreach file $files {
+            set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
+            if {[info exists used_in         ]} {set_property used_in           $used_in            $addedFile}
+            if {[info exists processing_order]} {set_property processing_order  $processing_order   $addedFile}
+            if {[info exists scoped_to_cells ]} {set_property scoped_to_cells   $scoped_to_cells    $addedFile}
+        }
+    }
 }
 
 proc ::xtools::ip_packager::add_design_subcores {args} {
@@ -296,7 +346,7 @@ proc ::xtools::ip_packager::add_exdes_sources {args} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
-            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
+            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFile]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
     }
@@ -345,7 +395,7 @@ proc ::xtools::ip_packager::add_exdes_simulation {args} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
         foreach file $files {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
-            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
+            if {[info exists library  ]} {set_property library_name $library   [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFile]}
             if {[info exists file_type]} {set_property type         $file_type $addedFile}
         }
     }

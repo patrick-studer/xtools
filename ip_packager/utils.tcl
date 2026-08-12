@@ -143,6 +143,54 @@ proc ::xtools::ip_packager::replace_tags {path tags} {
     close $fp
 }
 
+proc ::xtools::ip_packager::_reorder_ipx_file_group {} {
+    # Summary: Reorder ipx-files according to compile-order.
+
+    # Argument Usage:
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+    
+
+    # Sorting constraints/sources used for Synthesis
+    set fileGroup [ipx::get_file_groups "xilinx_anylanguagesynthesis" -of_objects [ipx::current_core]]
+    set compileOrderConstraints [path_relative_to_root [get_files -compile_order "constraints" -used_in "synthesis"]]
+    set compileOrderSources     [path_relative_to_root [get_files -compile_order "sources"     -used_in "synthesis"]]
+    ipx::reorder_files -back $compileOrderConstraints $fileGroup -quiet
+    ipx::reorder_files -back $compileOrderSources     $fileGroup -quiet
+
+    # Sorting sources used for Simulation
+    set fileGroup [ipx::get_file_groups "xilinx_anylanguagebehavioralsimulation" -of_objects [ipx::current_core]]
+    set compileOrderSources     [path_relative_to_root [get_files -compile_order "sources"     -used_in "simulation"]]
+    ipx::reorder_files -back $compileOrderSources     $fileGroup -quiet
+
+    # Sorting constraints/sources used for Implementation
+    set fileGroup [ipx::get_file_groups "xilinx_implementation" -of_objects [ipx::current_core]]
+    set compileOrderConstraints [path_relative_to_root [get_files -compile_order "constraints" -used_in "implementation"]]
+    ipx::reorder_files -back $compileOrderConstraints $fileGroup -quiet
+}
+
+proc ::xtools::ip_packager::_print_ipx_files {msg_lines} {
+    # Summary: Create printable IPX FileGroup/Files string.
+
+    # Argument Usage:
+    # msg_lines:    Initial Message lines (header).
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+    
+    # Convert all IPI file paths to relative (except URLs => type=unknown)
+    foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
+        append msg_lines "\n- [get_property name ${fileGroup}]:"
+        foreach file [ipx::get_files -of_objects $fileGroup] {
+            append msg_lines "\n  - [get_property name ${file}]"
+        }
+    }
+    return $msg_lines
+}
+
 ###################################################################################################
 # EOF
 ###################################################################################################

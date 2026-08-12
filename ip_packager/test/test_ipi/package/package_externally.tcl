@@ -61,6 +61,7 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -display_vendor "XTools" \
                                         -company_url    "https://www.github.com/patrick-studer" \
                                         -taxonomy       "/XTools/IP_Packager_Testbench"
+                                        # -license_key    "test@1234.99"
 
 ###################################################################################################
 # Compatibility
@@ -92,11 +93,17 @@ ip_packager::add_design_simulation      -files          [list \
                                         -file_type      "VHDL 2008" \
 
 ip_packager::add_design_constraints     -files          [list \
+                                                            "${src_dir}/ttcl/ooc_xdc.ttcl" \
+                                                        ] \
+                                        -copy_to        "ttcl" \
+                                        -used_in        "out_of_context" \
+
+ip_packager::add_design_constraints     -files          [list \
                                                             "${src_dir}/xdc/ooc.xdc" \
                                                         ] \
                                         -copy_to        "xdc" \
                                         -used_in        "out_of_context" \
-
+                                        
 ip_packager::add_design_constraints     -files          [list \
                                                             "${src_dir}/xdc/synth.xdc" \
                                                         ] \
@@ -596,7 +603,7 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # Review and Package
 ###################################################################################################
 
-ip_packager::simulate_package_project   -generics       [list \
+# ip_packager::simulate_package_project   -generics       [list \
                                                             "Clk_FreqHz_g=100000000" \
                                                             "M_Axi_DataWidth_g=16" \
                                                             "M_Axi_AddrWidth_g=16" \
@@ -610,7 +617,7 @@ ip_packager::simulate_package_project   -generics       [list \
                                                             "TestSLV_Int_g=3" \
                                                         ] \
 
-ip_packager::synth_package_project
+# ip_packager::synth_package_project
 
 # ip_packager::synth_package_project      -generics       [list \
                                                             "Clk_FreqHz_g=100000000" \
@@ -630,7 +637,7 @@ ip_packager::synth_package_project
 
 # ip_packager::synth_package_project      -part           "xc7z030ifbg484-2L" \
 
-ip_packager::impl_package_project
+# ip_packager::impl_package_project
 
 # ip_packager::impl_package_project       -part           "xczu11eg-ffvb1517-2-e" \
 
