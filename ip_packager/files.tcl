@@ -53,6 +53,7 @@ proc ::xtools::ip_packager::add_design_sources {args} {
 
     # Load global variables
     variable RootDir
+    variable AddedTtclFiles
 
     # Parse optional arguments
     set num [llength $args]
@@ -67,31 +68,57 @@ proc ::xtools::ip_packager::add_design_sources {args} {
         }
     }
 
+    # Verify file type support
+    set srcFiles  [list]
+    set ttclFiles [list]
+    foreach file $files {
+        switch -nocase -glob -- $file {
+            *.ttcl - *.xit  { lappend ttclFiles $file}
+            default         { lappend srcFiles  $file}
+        }
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force {*}[path_relative_to_pwd $files] $copyToDir
-        set copiedFiles [list]
-        foreach file $files {
-            lappend copiedFiles [file join $copyToDir [file tail $file]]
-        }
-        set files $copiedFiles
+        set copiedSrcFiles  [list]
+        foreach file $srcFiles { lappend copiedSrcFiles [file join $copyToDir [file tail $file]] }
+        set srcFiles $copiedSrcFiles
+        set copiedTtclFiles [list]
+        foreach file $ttclFiles { lappend copiedTtclFiles [file join $copyToDir [file tail $file]] }
+        set ttclFiles $copiedTtclFiles
     }
-    
+
     # Add files to package project
-    set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $files]]
-    if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
-    if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
-    if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
-    if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
+    if {[llength $srcFiles]} {
+        set addedFiles [add_files -fileset "sources_1" -norecurse -force [path_relative_to_pwd $srcFiles]]
+        if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
+        if {[info exists file_type     ]} {set_property file_type      $file_type      $addedFiles}
+        if {[info exists global_include]} {set_property global_include $global_include $addedFiles}
+        if {[info exists enabled       ]} {set_property enabled        $enabled        $addedFiles}
+    }
+
+    # Add TTCL/XIT files to global variable to convert and add them in the save_package_project step
+    if {[llength $ttclFiles]} {
+        set AddedTtclFile [dict create]
+        dict set AddedTtclFile files   $ttclFiles
+        dict set AddedTtclFile fileset "sources_1"
+        if {[info exists library       ]} {dict set AddedTtclFile library        $library       }
+        if {[info exists file_type     ]} {dict set AddedTtclFile file_type      $file_type     }
+        if {[info exists global_include]} {dict set AddedTtclFile global_include $global_include}
+        if {[info exists enabled       ]} {dict set AddedTtclFile enabled        $enabled       }
+        lappend AddedTtclFiles $AddedTtclFile
+    }
 
     # Add files to IPI file sets
     foreach {fgType fgName} {"synthesis" "xilinx_anylanguagesynthesis" "simulation" "xilinx_anylanguagebehavioralsimulation"} {
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
-        foreach file $files {
+        foreach file [concat $srcFiles $ttclFiles] {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
-            if {[info exists file_type     ]} {set_property type       $file_type      $addedFile}
-            if {[info exists global_include]} {set_property is_include $global_include $addedFile}
+            # if {[info exists library       ]} {set_property library_name $library        [ipx::get_files -filter {type =~ "vhdlSource*"} -of $addedFile]}
+            if {[info exists file_type     ]} {set_property type         $file_type      $addedFile}
+            if {[info exists global_include]} {set_property is_include   $global_include $addedFile}
         }
     }
 }
@@ -137,7 +164,7 @@ proc ::xtools::ip_packager::add_design_simulation {args} {
         }
         set files $copiedFiles
     }
-    
+
     # Add files to package project
     set addedFiles [add_files -fileset "sim_1" -norecurse -force [path_relative_to_pwd $files]]
     if {[info exists library       ]} {set_property library        $library        [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
@@ -172,10 +199,11 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
 
     # Load global variables
     variable RootDir
+    variable AddedTtclFiles
 
     # Define default values for procedure arguments
-    set used_in "synthesis implementation"
-    
+    set used_in         "synthesis implementation"
+
     # Parse optional arguments
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
@@ -191,23 +219,48 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
     # Ensure OOC files are used in package project synthesis/implementation
     if {$used_in == "out_of_context"} { set used_in "synthesis implementation out_of_context"}
 
+    # Verify file type support
+    set xdcFiles  [list]
+    set ttclFiles [list]
+    foreach file $files {
+        switch -nocase -glob -- $file {
+            *.xdc           { lappend xdcFiles  $file}
+            *.ttcl - *.xit  { lappend ttclFiles $file}
+            *.sdc           {send_msg_id {XTOOLS 1-401} "ERROR" "\[add_design_constraints\] File type not supported for IP packaging (${file}). Use XDC file extension with supported subset of SDC commands, or port it to be fully XDC compliant. If you need more features than XDC provides, think about using TTCL or XIT."}
+            *.tcl           {send_msg_id {XTOOLS 1-401} "ERROR" "\[add_design_constraints\] File type not supported for IP packaging (${file}). Use XDC file extension with supported subset of TCL commands (set, list, expr). If you need more features than XDC provides, think about using TTCL or XIT."}
+            default         {send_msg_id {XTOOLS 1-402} "ERROR" "\[add_design_constraints\] File type not supported for IP packaging (${file}). Supported file extension are xdc, ttcl, and xit."}
+        }
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force {*}[path_relative_to_pwd $files] $copyToDir
-        set copiedFiles [list]
-        foreach file $files {
-            lappend copiedFiles [file join $copyToDir [file tail $file]]
-        }
-        set files $copiedFiles
+        set copiedXdcFiles  [list]
+        foreach file $xdcFiles { lappend copiedXdcFiles [file join $copyToDir [file tail $file]] }
+        set xdcFiles $copiedXdcFiles
+        set copiedTtclFiles [list]
+        foreach file $ttclFiles { lappend copiedTtclFiles [file join $copyToDir [file tail $file]] }
+        set ttclFiles $copiedTtclFiles
     }
-    
-    # Add files to package project
-    if {[string tolower [file extension $file]] in {.sdc .xdc}} {
-        set addedFiles [add_files -fileset "constrs_1" -norecurse -force [path_relative_to_pwd $files]]
+
+    # Add XDC files to package project
+    if {[llength $xdcFiles]} {
+        set addedFiles [add_files -fileset "constrs_1" -norecurse -force [path_relative_to_pwd $xdcFiles]]
         if {[info exists used_in         ]} {set_property used_in           $used_in            $addedFiles}
         if {[info exists processing_order]} {set_property processing_order  $processing_order   $addedFiles}
         if {[info exists scoped_to_cells ]} {set_property scoped_to_cells   $scoped_to_cells    $addedFiles}
+    }
+
+    # Add TTCL/XIT files to global variable to convert and add them in the save_package_project step
+    if {[llength $ttclFiles]} {
+        set AddedTtclFile [dict create]
+        dict set AddedTtclFile files   $ttclFiles
+        dict set AddedTtclFile fileset "constrs_1"
+        if {[info exists used_in         ]} {dict set AddedTtclFile used_in          $used_in         }
+        if {[info exists processing_order]} {dict set AddedTtclFile processing_order $processing_order}
+        if {[info exists scoped_to_cells ]} {dict set AddedTtclFile scoped_to_cells  $scoped_to_cells }
+        lappend AddedTtclFiles $AddedTtclFile
     }
 
     # Add files to IPI file sets
@@ -217,7 +270,7 @@ proc ::xtools::ip_packager::add_design_constraints {args} {
             continue
         }
         set fileGroup [ipx::add_file_group -type $fgType $fgName [ipx::current_core]]
-        foreach file $files {
+        foreach file [concat $xdcFiles $ttclFiles] {
             set addedFile [ipx::add_file [path_relative_to_root $file] $fileGroup]
             if {[info exists used_in         ]} {set_property used_in           $used_in            $addedFile}
             if {[info exists processing_order]} {set_property processing_order  $processing_order   $addedFile}
@@ -503,17 +556,17 @@ proc ::xtools::ip_packager::add_logo {args} {
     # Verify that only a single file is provided
     if {[llength $file] != 1} {send_msg_id {XTOOLS 1-400} "ERROR" "\[add_logo\] Option -file must define a single file path."}
 
+    # Verify file type support
+    switch -nocase -glob -- $file {
+        *.png                   {set type "LOGO"}
+        default                 {send_msg_id {XTOOLS 1-401} "ERROR" "\[add_logo\] File type not allowed. Supported file extension is png."}
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
-    }
-
-    # Verify file type support
-    switch -glob -- $file {
-        *.png                   {set type "LOGO"}
-        default                 {send_msg_id {XTOOLS 1-401} "ERROR" "\[add_logo\] File type not allowed. Supported file extension is png."}
     }
 
     # Add file to IPI file sets
@@ -547,20 +600,20 @@ proc ::xtools::ip_packager::add_readme {args} {
     # Verify that only a single file is provided
     if {[llength $file] != 1} {send_msg_id {XTOOLS 1-402} "ERROR" "\[add_readme\] Option -file must define a single file path."}
 
-    # Copy files if needed
-    if {[info exists copy_to]} {
-        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
-        file copy -force [path_relative_to_pwd $file] $copyToDir
-        set file [file join $copyToDir [file tail $file]]
-    }
-
     # Verify file type support
-    switch -glob -- $file {
+    switch -nocase -glob -- $file {
         https://*   - http://*  {set type "unknown"}
         *.pdf                   {set type "pdf"}
         *.txt       - *.md      {set type "text"}
         *.html      - *.htm     {set type "html"}
         default                 {send_msg_id {XTOOLS 1-403} "ERROR" "\[add_readme\] File type not allowed. Supported file extensions are pdf, txt, md, and htm(l), as well as URLs (http(s)://)."}
+    }
+
+    # Copy files if needed
+    if {[info exists copy_to]} {
+        file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
+        file copy -force [path_relative_to_pwd $file] $copyToDir
+        set file [file join $copyToDir [file tail $file]]
     }
 
     # Add file to IPI file sets
@@ -594,19 +647,19 @@ proc ::xtools::ip_packager::add_product_guide {args} {
     # Verify that only a single file is provided
     if {[llength $file] != 1} {send_msg_id {XTOOLS 1-404} "ERROR" "\[add_product_guide\] Option -file must define a single file path."}
 
+    # Verify file type support
+    switch -nocase -glob -- $file {
+        https://*   - http://*  {set type "unknown"}
+        *.pdf                   {set type "pdf"}
+        *.html      - *.htm     {set type "html"}
+        default                 {send_msg_id {XTOOLS 1-405} "ERROR" "\[add_product_guide\] File type not allowed. Supported file extensions are pdf and htm(l), as well as URLs (http(s)://)."}
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
-    }
-
-    # Verify file type support
-    switch -glob -- $file {
-        https://*   - http://*  {set type "unknown"}
-        *.pdf                   {set type "pdf"}
-        *.html      - *.htm     {set type "html"}
-        default                 {send_msg_id {XTOOLS 1-405} "ERROR" "\[add_product_guide\] File type not allowed. Supported file extensions are pdf and htm(l), as well as URLs (http(s)://)."}
     }
 
     # Add file to IPI file sets
@@ -640,17 +693,17 @@ proc ::xtools::ip_packager::add_changelog {args} {
     # Verify that only a single file is provided
     if {[llength $file] != 1} {send_msg_id {XTOOLS 1-406} "ERROR" "\[add_changelog\] Option -file must define a single file path."}
 
+    # Verify file type support
+    switch -nocase -glob -- $file {
+        *.txt       {set type "text"}
+        default     {send_msg_id {XTOOLS 1-407} "ERROR" "\[add_changelog\] File type not allowed. Supported file extension is txt."}
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
-    }
-
-    # Verify file type support
-    switch -glob -- $file {
-        *.txt       {set type "text"}
-        default     {send_msg_id {XTOOLS 1-407} "ERROR" "\[add_changelog\] File type not allowed. Supported file extension is txt."}
     }
 
     # Add file to IPI file sets
@@ -762,7 +815,7 @@ proc ::xtools::ip_packager::add_software_driver {args} {
         $replaceTags
     # Store current SwDriverTclFile globally to later be able to add information
     set SwDriverTclFile [file join $driver_dir $driver_name "data" "${driver_name}.tcl"]
-        
+
     # Add files to IPI file sets
     set fileGroup  [ipx::add_file_group -type "software_driver" "xilinx_softwaredriver" [ipx::current_core]]
     set driverSrcFilePaths     [glob -directory [file join $driver_dir $driver_name "src"]  -type f *]
@@ -797,6 +850,17 @@ proc ::xtools::ip_packager::add_utility_scripts {args} {
         }
     }
 
+    # Verify file type support
+    foreach file $files {
+        switch -nocase -glob -- $file {
+            *.xit   {set type "xit"}
+            *.gtcl  {set type "GTCL"}
+            *.tcl   {set type "tclSource"}
+            *.ttcl  {set type "ttcl"}
+            default {send_msg_id {XTOOLS 1-409} "ERROR" "\[add_utility_scripts\] File type not allowed (${file}). Supported file extensions are xit, gtcl, tcl and ttcl."}
+        }
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
@@ -806,17 +870,6 @@ proc ::xtools::ip_packager::add_utility_scripts {args} {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
         }
         set files $copiedFiles
-    }
-
-    # Verify file type support
-    foreach file $files {
-        switch -glob -- $file {
-            *.xit   {set type "xit"}
-            *.gtcl  {set type "GTCL"}
-            *.tcl   {set type "tclSource"}
-            *.ttcl  {set type "ttcl"}
-            default {send_msg_id {XTOOLS 1-409} "ERROR" "\[add_utility_scripts\] File type not allowed (${file}). Supported file extensions are xit, gtcl, tcl and ttcl."}
-        }
     }
 
     # Add file to IPI file sets
@@ -865,6 +918,14 @@ proc ::xtools::ip_packager::add_upgrade_tcl {args} {
         }
     }
 
+    # Verify file type support
+    foreach file $files {
+        switch -nocase -glob -- $file {
+            *.tcl   {set type "tclSource"}
+            default {send_msg_id {XTOOLS 1-411} "ERROR" "\[add_upgrade_tcl\] File type not allowed (${file}). Supported file extension is tcl."}
+        }
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
@@ -874,14 +935,6 @@ proc ::xtools::ip_packager::add_upgrade_tcl {args} {
             lappend copiedFiles [file join $copyToDir [file tail $file]]
         }
         set files $copiedFiles
-    }
-
-    # Verify file type support
-    foreach file $files {
-        switch -glob -- $file {
-            *.tcl   {set type "tclSource"}
-            default {send_msg_id {XTOOLS 1-411} "ERROR" "\[add_upgrade_tcl\] File type not allowed (${file}). Supported file extention is tcl."}
-        }
     }
 
     # Add file to IPI file sets
@@ -932,17 +985,17 @@ proc ::xtools::ip_packager::add_bd_tcl {args} {
     # Verify that only a single file is provided
     if {[llength $file] != 1} {send_msg_id {XTOOLS 1-413} "ERROR" "\[add_bd_tcl\] Option -file must define a single file path."}
 
+    # Verify file type support
+    switch -nocase -glob -- $file {
+        *.tcl   {set type "tclSource"}
+        default {send_msg_id {XTOOLS 1-414} "ERROR" "\[add_bd_tcl\] File type not allowed. Supported file extension is tcl."}
+    }
+
     # Copy files if needed
     if {[info exists copy_to]} {
         file mkdir [set copyToDir [file normalize [path_relative_to_pwd $copy_to]]]
         file copy -force [path_relative_to_pwd $file] $copyToDir
         set file [file join $copyToDir [file tail $file]]
-    }
-
-    # Verify file type support
-    switch -glob -- $file {
-        *.tcl   {set type "tclSource"}
-        default {send_msg_id {XTOOLS 1-414} "ERROR" "\[add_bd_tcl\] File type not allowed. Supported file extention is tcl."}
     }
 
     # Add file to IPI file sets

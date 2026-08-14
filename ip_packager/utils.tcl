@@ -8,7 +8,6 @@
 
 namespace eval ::xtools::ip_packager {
     # namespace export ""
-
 }
 
 ###################################################################################################
@@ -175,7 +174,7 @@ proc ::xtools::ip_packager::_print_ipx_files {msg_lines} {
     # Summary: Create printable IPX FileGroup/Files string.
 
     # Argument Usage:
-    # msg_lines:    Initial Message lines (header).
+    # msg_lines:        Initial Message lines (header).
 
     # Return Value: TCL_OK
 
@@ -189,6 +188,29 @@ proc ::xtools::ip_packager::_print_ipx_files {msg_lines} {
         }
     }
     return $msg_lines
+}
+
+proc ::xtools::ip_packager::find_files_recursive {directory {extension "*"}} {
+    # Summary: Finde files with recursive globbing.
+
+    # Argument Usage:
+    # directory:      Origin directory from where the search starts.
+    # [extension=*]:  File extension for filtering.
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+    set result {}
+
+    foreach path [glob -nocomplain -directory $directory *] {
+        if {[file isdirectory $path]} {
+            lappend result {*}[find_files_recursive $path $extension]
+        } elseif {[file isfile $path] && [string match $extension [file tail $path]]} {
+            lappend result $path
+        }
+    }
+
+    return $result
 }
 
 ###################################################################################################

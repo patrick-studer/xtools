@@ -1,4 +1,4 @@
-Copyright (c) 2024, XTools by Patrick Studer (https://github.com/patrick-studer)
+Copyright (c) 2026, XTools by Patrick Studer (https://github.com/patrick-studer)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

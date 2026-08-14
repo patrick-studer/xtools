@@ -379,7 +379,7 @@ proc ::xtools::ip_packager::create_package_project {args} {
         create_project -part $part -force $prj_name $prj_name
         send_msg_id {XTOOLS 1-122} "WARNING" "\[create_package_project\] No specific part was defined for packaging project. Default part (${part}) will be used."
     }
-    
+
     # Add top-level file
     if {[info exists copy_to]} {
         set addedFiles [add_files -fileset "sources_1" -norecurse -force -copy_to [file normalize [path_relative_to_pwd $copy_to]] [path_relative_to_pwd $top_file]]
@@ -397,15 +397,15 @@ proc ::xtools::ip_packager::create_package_project {args} {
     set_msg_config   -id  {[IP_Flow 19-3480]}   -suppress
     set_msg_config   -id  {[IP_Flow 19-4751]}   -suppress
     set_msg_config   -id  {[IP_Flow 19-5661]}   -suppress
-    
+
     # Create new IPI component
     ipx::package_project -root_dir [file normalize $RootDir]
-    
+
     # Restore temporary ignored auto-inferred interface warnings
     reset_msg_config -id  {[IP_Flow 19-3480]}   -default_severity -quiet
     reset_msg_config -id  {[IP_Flow 19-4751]}   -default_severity -quiet
     reset_msg_config -id  {[IP_Flow 19-5661]}   -default_severity -quiet
-    
+
     # Disable OOC Synthesis Cache
     config_ip_cache -disable_cache
 
@@ -450,6 +450,11 @@ proc ::xtools::ip_packager::simulate_package_project {args} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
             -generics   {incr i; set generics [lindex $args $i]}
         }
+    }
+
+    # Test if IP core was saved before entering any validation steps
+    if {[get_property DIRTY [ipx::current_core]]} {
+        send_msg_id {XTOOLS 1-105} "ERROR" "\[simulate_package_project\] IP core not generated yet. Please use ip_packager::save_package_project first!"
     }
 
     # Drive simulation top generics
@@ -508,6 +513,11 @@ proc ::xtools::ip_packager::synth_package_project {args} {
             -timeout    {incr i; set timeout    [lindex $args $i]}
             -generics   {incr i; set generics   [lindex $args $i]}
         }
+    }
+
+    # Test if IP core was saved before entering any validation steps
+    if {[get_property DIRTY [ipx::current_core]]} {
+        send_msg_id {XTOOLS 1-105} "ERROR" "\[synth_package_project\] IP core not generated yet. Please use ip_packager::save_package_project first!"
     }
 
     # Create part-specific synthesis and implementation runs
@@ -591,6 +601,11 @@ proc ::xtools::ip_packager::impl_package_project {args} {
         }
     }
 
+    # Test if IP core was saved before entering any validation steps
+    if {[get_property DIRTY [ipx::current_core]]} {
+        send_msg_id {XTOOLS 1-105} "ERROR" "\[impl_package_project\] IP core not generated yet. Please use ip_packager::save_package_project first!"
+    }
+
     # Load/Create part-specific synthesis and implementation runs
     if {[info exists part]} {
         set synthRun [get_runs "synth_${part}"]
@@ -637,6 +652,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
     variable SwDriverTclFile
     variable SwDriverTclBaseValues
     variable SwDriverTclHighValues
+    variable AddedTtclFiles
     variable RootDir
 
     # Parse optional arguments
@@ -649,11 +665,12 @@ proc ::xtools::ip_packager::save_package_project {args} {
 
     # Update XGUI file and delete default file
     ipx::create_xgui_files  [ipx::current_core]
-    set xguiFileName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].tcl"
+    set CurrentCoreName [get_property name [ipx::current_core]]
+    set xguiFileName "${CurrentCoreName}_v[string map {. _} [get_property version [ipx::current_core]]].tcl"
     set newXguiFile [file join $RootDir "xgui" $xguiFileName]
     if {$newXguiFile != $OldXguiFile} {file delete -force $OldXguiFile}
     set OldXguiFile $newXguiFile
-    
+
     # Convert all IPI file paths to relative (except URLs => type=unknown)
     foreach fileGroup [ipx::get_file_groups * -of_objects [ipx::current_core]] {
         foreach file [ipx::get_files -of_objects $fileGroup] {
@@ -666,7 +683,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
 
     # Sort IPX filegroups according to compile-order to have the top-level IPI wrapper at last position (Vivado requirement [IP_Flow 19-801] to infer library correctly)
     _reorder_ipx_file_group
-    
+
     # Print packaged IPX files
     set msg_lines "\[save_package_project\] Following files are referred by the packaged IP-core:\nAll paths relative to root directory (${RootDir})"
     send_msg_id {XTOOLS 1-125} "INFO" [_print_ipx_files $msg_lines]
@@ -709,9 +726,59 @@ proc ::xtools::ip_packager::save_package_project {args} {
     # Update IP catalog to show newly packaged IP core
     update_ip_catalog -rebuild
 
+    # Translate TTCL/XIT into output files and add them to package project
+    # for later validation steps (e.g. simulation/synthesis/implementation).
+    if {[llength $AddedTtclFiles]} {
+
+        send_msg_id {XTOOLS 1-126} "INFO" "\[save_package_project\] Found added TTCL/XIT files which now will be translated into design files and added to the project."
+
+        foreach AddedTtclFile $AddedTtclFiles {
+
+            # Get information from dict
+            set files   [dict get $AddedTtclFile files]
+            set fileset [dict get $AddedTtclFile fileset]
+
+            # Translate all TTCL/XIT files
+            set generatedFiles [list]
+            file delete -force "./tmp"
+            foreach file $files {
+                xit::run_xit \
+                    -name $CurrentCoreName \
+                    -outdir "./tmp" \
+                    -component [get_property xml_file_name [ipx::current_core]] \
+                    $file
+                set generatedFile [list]
+                foreach file [find_files_recursive "./tmp"] {
+                    if {[file tail $file] ni [list \
+                        "${CurrentCoreName}.xci" \
+                        "${CurrentCoreName}.xml" \
+                    ]} {
+                        lappend generatedFile $file
+                    }
+                }
+                if {[set num [llength $generatedFile]] != 1} {send_msg_id {XTOOLS 1-126} "ERROR" "\[save_package_project\] TTCL/XIT conversion failed. Expect exactly one generated file but found ${num} (${generatedFile})."}
+                set targetFile [file join "./gen_ttcl_xit" [path_relative_to "./tmp" $generatedFile]]
+                file mkdir [file dirname $targetFile]
+                file rename -force $generatedFile $targetFile
+                lappend generatedFiles $targetFile
+                file delete -force "./tmp"
+            }
+
+            # Add generated files to package project
+            set addedFiles [add_files -fileset $fileset -norecurse -force $generatedFiles]
+            if {[dict exists $AddedTtclFile used_in         ]} {set_property used_in          [dict get $AddedTtclFile used_in         ] $addedFiles}
+            if {[dict exists $AddedTtclFile processing_order]} {set_property processing_order [dict get $AddedTtclFile processing_order] $addedFiles}
+            if {[dict exists $AddedTtclFile scoped_to_cells ]} {set_property scoped_to_cells  [dict get $AddedTtclFile scoped_to_cells ] $addedFiles}
+            if {[dict exists $AddedTtclFile library         ]} {set_property library          [dict get $AddedTtclFile library         ] [get_files -quiet -filter {file_type =~ "VHDL*"} $addedFiles]}
+            if {[dict exists $AddedTtclFile file_type       ]} {set_property file_type        [dict get $AddedTtclFile file_type       ] $addedFiles}
+            if {[dict exists $AddedTtclFile global_include  ]} {set_property global_include   [dict get $AddedTtclFile global_include  ] $addedFiles}
+            if {[dict exists $AddedTtclFile enabled         ]} {set_property enabled          [dict get $AddedTtclFile enabled         ] $addedFiles}
+        }
+    }
+
     # Archive core if needed
     if {[info exists archive_to]} {
-        set archiveName "[get_property name [ipx::current_core]]_v[string map {. _} [get_property version [ipx::current_core]]].zip"
+        set archiveName "${CurrentCoreName}_v[string map {. _} [get_property version [ipx::current_core]]].zip"
         set archivePath [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
         send_msg_id {XTOOLS 1-126} "INFO" "\[save_package_project\] Archive IP-core to ${archivePath}"
         ipx::archive_core $archivePath

@@ -1,8 +1,32 @@
 <: #Component and file information :>
 <: set ComponentName [getComponentNameString] :>
-<: setOutputDirectory "./" :>
-<: setFileName "ttcl_demo" :>
-<: setFileExtension ".tcl" :>
+<: setOutputDirectory "./xdc" :>
+<: setFileName "ooc" :>
+<: setFileExtension ".xdc" :>
+<: setFileUsedIn "synthesis implementation out_of_context" :>
+<: :>
+# This file is TTCL generated
+
+###################################################################################################
+# Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+###################################################################################################
+
+###################################################################################################
+# Constraints for Out-Of-Context Synthesis and Implementation
+###################################################################################################
+
+# Set clock to 400MHz for OOC to challange routing in an empty device.
+create_clock -period 2.500 -name Axi_Clk  [get_ports Axi_Clk]
+create_clock -period 2.500 -name Axis_Clk [get_ports Axis_Clk]
+create_clock -period 2.500 -name Clk      [get_ports Clk]
+
+# Ignore timing from unconnected input/output ports (because OOC).
+set_false_path -to   [get_ports -filter {DIRECTION == OUT}]
+set_false_path -from [get_ports -filter {DIRECTION == IN}]
+
+###################################################################################################
+# EOF
+###################################################################################################
 
 # setFileArchiveFile
 # setFileDescription
@@ -42,17 +66,17 @@
 # getOutputDirectory       = <=: [getOutputDirectory] :>
 # getFileNetlistSimulation = <=: # [getFileNetlistSimulation] :>
 
-# getStringValue           = <=: [getStringValue String_g] :>
+# getStringValue           = <=: #[getStringValue TestString_p] :>
 # getProjectDevice         = <=: [getProjectDevice] :>
 # getFamily                = <=: [getFamily] :>
-# getIntValue              = <=: [getIntValue Integer_g] :>
+# getIntValue              = <=: [getIntValue Clk_FreqHz_g] :>
 # getProjectFlowVendor     = <=: [getProjectFlowVendor] :>
 # getXCoreInfo             = <=: [getXCoreInfo] :>
 # getSimCoreName           = <=: [getSimCoreName] :>
 # getFileHandle            = <=: [getFileHandle] :>
 # getSystemProperty        = <=: #[getSystemProperty] :>
 # getProjectFamily         = <=: [getProjectFamily] :>
-# getBooleanValue          = <=: [getBooleanValue Boolean_g] :>
+# getBooleanValue          = <=: [getBooleanValue TestSL_g] :>
 # getComponentNameString   = <=: [getComponentNameString] :>
 # getProjectSpeedGrade     = <=: [getProjectSpeedGrade] :>
 # getProjectPackage        = <=: [getProjectPackage] :>

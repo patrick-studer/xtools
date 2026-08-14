@@ -44,6 +44,7 @@ namespace eval ::xtools::ip_packager {
     variable CurrentNamespace       [namespace tail [namespace current]]
     variable CurrentGuiParent       "nullptr"
     variable OldXguiFile            ""
+    variable AddedTtclFiles         [list]
     variable SwDriverTclFile        ""
     variable SwDriverTclBaseValues  [list]
     variable SwDriverTclHighValues  [list]

@@ -60,7 +60,7 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -description    "This is a dummy IPI for testing the IpPackager." \
                                         -display_vendor "XTools" \
                                         -company_url    "https://www.github.com/patrick-studer" \
-                                        -taxonomy       "/XTools/IP_Packager_Testbench"
+                                        -taxonomy       "/XTools/IP_Packager_Testbench" \
                                         # -license_key    "test@1234.99"
 
 ###################################################################################################
@@ -81,10 +81,12 @@ ip_packager::add_design_sources         -files          [list \
                                                         ] \
                                         -copy_to        "hdl" \
 
+
 ip_packager::add_design_sources         -files          [list \
                                                             "${src_dir}/hdl/IpPackager_2020_1_sub.v" \
                                                         ] \
                                         -copy_to        "hdl" \
+
 
 ip_packager::add_design_simulation      -files          [list \
                                                             "${src_dir}/tb/IpPackager_2020_1_ipi_tb.vhd" \
@@ -92,18 +94,14 @@ ip_packager::add_design_simulation      -files          [list \
                                         -copy_to        "tb" \
                                         -file_type      "VHDL 2008" \
 
-ip_packager::add_design_constraints     -files          [list \
-                                                            "${src_dir}/ttcl/ooc_xdc.ttcl" \
-                                                        ] \
-                                        -copy_to        "ttcl" \
-                                        -used_in        "out_of_context" \
 
 ip_packager::add_design_constraints     -files          [list \
-                                                            "${src_dir}/xdc/ooc.xdc" \
+                                                            "${src_dir}/xdc/ooc_xdc.ttcl" \
                                                         ] \
                                         -copy_to        "xdc" \
                                         -used_in        "out_of_context" \
-                                        
+
+
 ip_packager::add_design_constraints     -files          [list \
                                                             "${src_dir}/xdc/synth.xdc" \
                                                         ] \
@@ -600,10 +598,16 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # -------------------------------------------------------------------------------------------------
 
 ###################################################################################################
-# Review and Package
+# Save Package Project
 ###################################################################################################
 
-# ip_packager::simulate_package_project   -generics       [list \
+ip_packager::save_package_project
+
+###################################################################################################
+# Verification and Reporting
+###################################################################################################
+
+ip_packager::simulate_package_project   -generics       [list \
                                                             "Clk_FreqHz_g=100000000" \
                                                             "M_Axi_DataWidth_g=16" \
                                                             "M_Axi_AddrWidth_g=16" \
@@ -617,7 +621,7 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
                                                             "TestSLV_Int_g=3" \
                                                         ] \
 
-# ip_packager::synth_package_project
+ip_packager::synth_package_project
 
 # ip_packager::synth_package_project      -generics       [list \
                                                             "Clk_FreqHz_g=100000000" \
@@ -637,15 +641,17 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 
 # ip_packager::synth_package_project      -part           "xc7z030ifbg484-2L" \
 
-# ip_packager::impl_package_project
+ip_packager::impl_package_project
 
 # ip_packager::impl_package_project       -part           "xczu11eg-ffvb1517-2-e" \
 
 # ip_packager::impl_package_project       -part           "xc7z030ifbg484-2L" \
 
-ip_packager::save_package_project
+###################################################################################################
+# Teardown
+###################################################################################################
 
-# ip_packager::close_package_project      -delete         "false"
+ip_packager::close_package_project      -delete         "false"
 
 ###################################################################################################
 # EOF

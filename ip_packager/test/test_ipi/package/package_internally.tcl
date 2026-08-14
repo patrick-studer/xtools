@@ -57,6 +57,7 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -display_vendor "XTools" \
                                         -company_url    "https://www.github.com/patrick-studer" \
                                         -taxonomy       "/XTools/IP_Packager_Testbench" \
+                                        # -license_key    "test@1234.99"
 
 ###################################################################################################
 # Compatibility
@@ -572,7 +573,13 @@ ip_packager::gui_add_page       -page_name      "Page_BdTclExample" \
 # -------------------------------------------------------------------------------------------------
 
 ###################################################################################################
-# Review and Package
+# Save Package Project
+###################################################################################################
+
+ip_packager::save_package_project
+
+###################################################################################################
+# Verification and Reporting
 ###################################################################################################
 
 ip_packager::simulate_package_project   -generics       [list \
@@ -615,7 +622,9 @@ ip_packager::impl_package_project
 
 # ip_packager::impl_package_project       -part           "xc7z030ifbg484-2L" \
 
-ip_packager::save_package_project
+###################################################################################################
+# Teardown
+###################################################################################################
 
 ip_packager::close_package_project      -delete         "false"
 
