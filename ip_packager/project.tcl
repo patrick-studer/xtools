@@ -1,5 +1,5 @@
 ###################################################################################################
-# Copyright (c) 2024, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
+# Copyright (c) 2026, XTools by Patrick Studer, Switzerland (https://github.com/patrick-studer)
 ###################################################################################################
 
 ###################################################################################################
@@ -195,9 +195,11 @@ proc ::xtools::ip_packager::_impl_checks {} {
 
     # Export reports
     if {$config::ImplReports} {
-        report_methodology    -file "${ReportDir}/[current_run -implementation]_methodology.rpt"
-        report_timing_summary -file "${ReportDir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
-        report_drc            -file "${ReportDir}/[current_run -implementation]_drc.rpt"
+        report_methodology          -file "${ReportDir}/[current_run -implementation]_methodology.rpt"
+        report_timing_summary       -file "${ReportDir}/[current_run -implementation]_timing_summary.rpt" -no_detailed_paths
+        report_drc                  -file "${ReportDir}/[current_run -implementation]_drc.rpt"
+        report_cdc                  -file "${ReportDir}/[current_run -implementation]_cdc.rpt"
+        report_clock_interaction    -file "${ReportDir}/[current_run -implementation]_clock_interaction.rpt"
     }
 
     # Close the implemented design
