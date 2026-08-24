@@ -73,7 +73,7 @@ Help to a specific command can be accessed by tipping `ip_packager::<any-command
 Alternatively, you may consult the exported [Command Reference](doc/CommandReference.txt) to get a full documentation of all commands.
 
 ## Example/Testbench (test)
-Every tagged release of the IP-Packager is verified with a simple dummy IP-core (see [package.tcl](./test/test_ipi/package/package.tcl).
+Every tagged release of the IP-Packager is verified with a simple dummy IP-core (see [package_externally.tcl](./test/test_ipi/package/package_externally.tcl) or [package_internally.tcl](./test/test_ipi/package/package_internally.tcl)).
 This is also a good starting point for newbies of the IP-Packager, since it displays a wide range of features.
 
 To package the test IP-core run the following script in your Vivado TCL console:
@@ -82,8 +82,6 @@ To package the test IP-core run the following script in your Vivado TCL console:
 cd $pkg_dir
 source ./xtools/ip_packager/test/test.tcl
 ```
-**NOTE:** The temporary created `package_prj` will be deleted after successful packaging.
-To evaluate the packaged test IPI, comment out the `ip_packager::close_package_project` command at the end of [package.tcl](./test/test_ipi/package/package.tcl).
 ## Templates
 The IP-Packager provides some useful templates for basic and advanced usage:
 - [package_internally.tcl](./templates/package/package_internally.tcl)
