@@ -41,7 +41,6 @@ if {[lsearch -exact $auto_path $xtools_path] == -1} {lappend auto_path $xtools_p
 ip_packager::create_package_project     -prj_name       "packager_prj" \
                                         -root_dir       $root_dir \
                                         -top_file       "hdl/IpPackager_2020_1_ipi.vhd" \
-                                        -library        "test" \
                                         -part           "xc7z020iclg400-1L"
 
 ###################################################################################################
@@ -57,7 +56,6 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -display_vendor "XTools" \
                                         -company_url    "https://www.github.com/patrick-studer" \
                                         -taxonomy       "/XTools/IP_Packager_Testbench" \
-                                        # -license_key    "test@1234.99"
 
 ###################################################################################################
 # Compatibility
@@ -75,7 +73,6 @@ ip_packager::set_unsupported_simulators                 {xcelium vcs riviera act
 ip_packager::add_design_sources         -files          [list \
                                                             "hdl/IpPackager_2020_1.vhd" \
                                                         ] \
-                                        -library        "test" \
 
 ip_packager::add_design_sources         -files          [list \
                                                             "hdl/IpPackager_2020_1_sub.v"\
@@ -84,11 +81,10 @@ ip_packager::add_design_sources         -files          [list \
 ip_packager::add_design_simulation      -files          [list \
                                                             "tb/IpPackager_2020_1_ipi_tb.vhd"\
                                                         ] \
-                                        -library        "test" \
                                         -file_type      "VHDL 2008" \
 
 ip_packager::add_design_constraints     -files          [list \
-                                                            "xdc/ooc.xdc"\
+                                                            "xdc/ooc_xdc.ttcl"\
                                                         ] \
                                         -used_in        "out_of_context" \
 
@@ -123,6 +119,7 @@ ip_packager::add_changelog              -file           "doc/changelog.txt" \
 # Software Driver Files ---------------------------------------------------------------------------
 ip_packager::add_software_driver        -driver_dir     "drivers" \
                                         -driver_name    "IpPackager_2020_1" \
+                                        -gen_uio_support true \
                                         -parameters     [list \
                                                             "TestBool_p" \
                                                             "TestLong_p" \
@@ -626,6 +623,7 @@ ip_packager::impl_package_project
 # Teardown
 ###################################################################################################
 
+ip_packager::archive_package_project    -output_path    "../output"
 ip_packager::close_package_project      -delete         "false"
 
 ###################################################################################################

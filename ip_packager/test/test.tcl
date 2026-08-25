@@ -8,8 +8,9 @@
 
 # Uninstall the app (in case it already exists)
 ::tclapp::support::appinit::unload_app "::xtools::ip_packager" "ip_packager"
-catch {namespace delete ::ip_packager}
+catch {namespace delete ::xtools::ip_packager}
 catch {namespace delete ::xtools}
+catch {namespace delete ::ip_packager}
 
 # Start the unit tests
 set test_dir [file normalize [file dirname [info script]]]
@@ -24,8 +25,9 @@ source [file join $test_dir "test_ipi" "package" "package_internally.tcl"]
 
 # Uninstall the app
 ::tclapp::support::appinit::unload_app "::xtools::ip_packager" "ip_packager"
-catch {namespace delete ::ip_packager}
+catch {namespace delete ::xtools::ip_packager}
 catch {namespace delete ::xtools}
+catch {namespace delete ::ip_packager}
 
 return 0
 

@@ -61,7 +61,6 @@ ip_packager::set_identification         -vendor         "xtools.ch" \
                                         -display_vendor "XTools" \
                                         -company_url    "https://www.github.com/patrick-studer" \
                                         -taxonomy       "/XTools/IP_Packager_Testbench" \
-                                        # -license_key    "test@1234.99"
 
 ###################################################################################################
 # Compatibility
@@ -140,16 +139,17 @@ ip_packager::add_changelog              -file           "${src_dir}/doc/changelo
 
 
 # Software Driver Files ---------------------------------------------------------------------------
-ip_packager::add_software_driver        -driver_dir     "${src_dir}/drivers" \
-                                        -copy_to        "drivers" \
-                                        -driver_name    "IpPackager_2020_1" \
-                                        -parameters     [list \
-                                                            "TestBool_p" \
-                                                            "TestLong_p" \
-                                                            "TestFloat_p" \
-                                                            "TestBitString_p" \
-                                                            "TestString_p" \
-                                                        ]
+ip_packager::add_software_driver        -driver_dir      "${src_dir}/drivers" \
+                                        -copy_to         "drivers" \
+                                        -driver_name     "IpPackager_2020_1" \
+                                        -gen_uio_support true \
+                                        -parameters      [list \
+                                                             "TestBool_p" \
+                                                             "TestLong_p" \
+                                                             "TestFloat_p" \
+                                                             "TestBitString_p" \
+                                                             "TestString_p" \
+                                                         ]
 
 # Advanced Scripting Files ------------------------------------------------------------------------
 ip_packager::add_bd_tcl                 -file           "${src_dir}/bd/bd.tcl" \
@@ -651,6 +651,7 @@ ip_packager::impl_package_project
 # Teardown
 ###################################################################################################
 
+ip_packager::archive_package_project    -output_path    [file join $root_dir ".." "output"]
 ip_packager::close_package_project      -delete         "false"
 
 ###################################################################################################
