@@ -85,6 +85,9 @@ ip_packager::add_upgrade_tcl              (User-written application)
 ip_packager::add_utility_scripts          (User-written application)
                                           Add utility scripts to the packaged IP-core.
                                           
+ip_packager::archive_package_project      (User-written application)
+                                          Archive the IPI to zip.
+                                          
 ip_packager::associate_clock_reset        (User-written application)
                                           Associate reset to clock.
                                           
@@ -1059,6 +1062,32 @@ xilinxtclstore, ip_packager, user-written
 
 ===================================================================================================
 
+ip_packager::archive_package_project
+
+Description: 
+(User-written application)
+Archive the IPI to zip.
+
+
+Syntax: 
+ip_packager::archive_package_project  -output_path <arg> [-quiet] [-verbose]
+
+Returns: 
+TCL_OK
+
+
+Usage: 
+  Name          Description
+  -------------------------
+  -output_path  Define path to archive the final IPI to.
+  [-quiet]      Ignore command errors
+  [-verbose]    Suspend message limits during command execution
+
+Categories: 
+xilinxtclstore, ip_packager, user-written
+
+===================================================================================================
+
 ip_packager::associate_clock_reset
 
 Description: 
@@ -1645,19 +1674,17 @@ Save package project and generate IP-core. Optionally, archive to zip.
 
 
 Syntax: 
-ip_packager::save_package_project  [-archive_to <arg>] [-quiet] [-verbose]
+ip_packager::save_package_project  [-quiet] [-verbose]
 
 Returns: 
 TCL_OK
 
 
 Usage: 
-  Name           Description
-  --------------------------
-  [-archive_to]  Define path to archive the final IPI to.
-                 Default: None
-  [-quiet]       Ignore command errors
-  [-verbose]     Suspend message limits during command execution
+  Name        Description
+  -----------------------
+  [-quiet]    Ignore command errors
+  [-verbose]  Suspend message limits during command execution
 
 Categories: 
 xilinxtclstore, ip_packager, user-written

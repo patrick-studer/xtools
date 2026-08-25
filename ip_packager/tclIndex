@@ -70,6 +70,7 @@ set auto_index(::xtools::ip_packager::simulate_package_project) [list source [fi
 set auto_index(::xtools::ip_packager::synth_package_project) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::impl_package_project) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::save_package_project) [list source [file join $dir project.tcl]]
+set auto_index(::xtools::ip_packager::archive_package_project) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::close_package_project) [list source [file join $dir project.tcl]]
 set auto_index(::xtools::ip_packager::path_relative_to) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::path_relative_to_pwd) [list source [file join $dir utils.tcl]]
@@ -78,3 +79,4 @@ set auto_index(::xtools::ip_packager::copy_and_replace_tags) [list source [file 
 set auto_index(::xtools::ip_packager::replace_tags) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::_reorder_ipx_file_group) [list source [file join $dir utils.tcl]]
 set auto_index(::xtools::ip_packager::_print_ipx_files) [list source [file join $dir utils.tcl]]
+set auto_index(::xtools::ip_packager::find_files_recursive) [list source [file join $dir utils.tcl]]

@@ -10,10 +10,11 @@ namespace eval ::xtools::ip_packager {
     # Export procs that should be allowed to import into other namespaces
     namespace export    config_package_project \
                         create_package_project \
+                        save_package_project \
                         simulate_package_project \
                         synth_package_project \
                         impl_package_project \
-                        save_package_project \
+                        archive_package_project \
                         close_package_project
 }
 
@@ -642,7 +643,6 @@ proc ::xtools::ip_packager::save_package_project {args} {
     # Summary: Save package project and generate IP-core. Optionally, archive to zip.
 
     # Argument Usage:
-    # [-archive_to <arg>]:  Define path to archive the final IPI to.
 
     # Return Value: TCL_OK
 
@@ -661,7 +661,6 @@ proc ::xtools::ip_packager::save_package_project {args} {
     set num [llength $args]
     for {set i 0} {$i < $num} {incr i} {
         switch -exact -- [set option [string trim [lindex $args $i]]] {
-            -archive_to {incr i; set archive_to [lindex $args $i]}
         }
     }
 
@@ -777,14 +776,40 @@ proc ::xtools::ip_packager::save_package_project {args} {
             if {[dict exists $AddedTtclFile enabled         ]} {set_property enabled          [dict get $AddedTtclFile enabled         ] $addedFiles}
         }
     }
+}
 
-    # Archive core if needed
-    if {[info exists archive_to]} {
-        set archiveName "${CurrentCoreName}_v[string map {. _} [get_property version [ipx::current_core]]].zip"
-        set archivePath [file join [file normalize [path_relative_to_pwd $archive_to]] $archiveName]
-        send_msg_id {XTOOLS 1-126} "INFO" "\[save_package_project\] Archive IP-core to ${archivePath}"
-        ipx::archive_core $archivePath
+proc ::xtools::ip_packager::archive_package_project {args} {
+    # Summary: Archive the IPI to zip.
+
+    # Argument Usage:
+    # -output_path <arg>:  Define path to archive the final IPI to.
+
+    # Return Value: TCL_OK
+
+    # Categories: xilinxtclstore, ip_packager
+
+    # Load global variables
+    variable RootDir
+
+    # Parse optional arguments
+    set num [llength $args]
+    for {set i 0} {$i < $num} {incr i} {
+        switch -exact -- [set option [string trim [lindex $args $i]]] {
+            -output_path {incr i; set output_path [lindex $args $i]}
+        }
     }
+
+    # Check if IPI was saved
+    if {[get_property DIRTY [ipx::current_core]]} {
+        send_msg_id {XTOOLS 1-105} "ERROR" "\[archive_package_project\] IP core not generated yet. Please use ip_packager::save_package_project first!"
+    }
+
+    # Archive IPI core to zip
+    set archiveName "${CurrentCoreName}_v[string map {. _} [get_property version [ipx::current_core]]].zip"
+    set archivePath [file join [file normalize [path_relative_to_pwd $output_path]] $archiveName]
+    send_msg_id {XTOOLS 1-126} "INFO" "\[archive_package_project\] Archive IP-core to ${archivePath}"
+    ipx::archive_core $archivePath
+
 }
 
 proc ::xtools::ip_packager::close_package_project {args} {
