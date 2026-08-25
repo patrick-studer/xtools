@@ -41,7 +41,6 @@ if {[lsearch -exact $auto_path $xtools_path] == -1} {lappend auto_path $xtools_p
 ip_packager::create_package_project     -prj_name       "packager_prj" \
                                         -root_dir       $root_dir \
                                         -top_file       "hdl/IpPackager_2020_1_ipi.vhd" \
-                                        -part           "xc7z020iclg400-1L"
 
 ###################################################################################################
 # Identification
