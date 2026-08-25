@@ -742,7 +742,7 @@ proc ::xtools::ip_packager::save_package_project {args} {
             # Translate all TTCL/XIT files
             set generatedFiles [list]
             file delete -force "./tmp"
-            foreach file $files {
+            foreach file [path_relative_to_pwd $files] {
                 xit::run_xit \
                     -name $CurrentCoreName \
                     -outdir "./tmp" \
@@ -805,6 +805,8 @@ proc ::xtools::ip_packager::archive_package_project {args} {
     }
 
     # Archive IPI core to zip
+    file mkdir $output_path
+    set CurrentCoreName [get_property name [ipx::current_core]]
     set archiveName "${CurrentCoreName}_v[string map {. _} [get_property version [ipx::current_core]]].zip"
     set archivePath [file join [file normalize [path_relative_to_pwd $output_path]] $archiveName]
     send_msg_id {XTOOLS 1-126} "INFO" "\[archive_package_project\] Archive IP-core to ${archivePath}"
