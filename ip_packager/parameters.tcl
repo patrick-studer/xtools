@@ -255,7 +255,11 @@ proc ::xtools::ip_packager::set_param_value {args} {
         if {[info exists value]} {set_property value $value $param}
     }
     # value_tcl_expr only for USER parameter. HDL parameter must stay enabled!
-    if {[info exists tcl_expr]} {set_property enablement_value false $param; set_property value_tcl_expr "expr ${tcl_expr}" $userParam; ipx::update_dependency $userParam}
+    if {[info exists tcl_expr]} {
+        set_property enablement_value false $userParam
+        set_property value_tcl_expr "expr ${tcl_expr}" $userParam
+        ipx::update_dependency $userParam
+    }
 }
 
 proc ::xtools::ip_packager::set_param_format {args} {
